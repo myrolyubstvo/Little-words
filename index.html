@@ -72,7 +72,7 @@ p{color:#64717a;line-height:1.7}
 <div class="layout"><nav class="nav" aria-label="Game sections"><button class="active" data-page="home">Home</button><button data-page="city">Explore the city</button><button data-page="people">People</button><button data-page="life">Daily life</button><button data-page="journal">Journal</button></nav><main>
 <section id="home"><div class="panel hero"><div><div class="eyebrow">Your story starts here</div><h2>A city with a life of its own.</h2><p>Wander sunlit streets, find hidden courtyards and meet the people who call it home.</p><button class="button" data-go="city">Enter the city</button></div></div><div class="panel"><div class="eyebrow">A note for today</div><h2>There is no rush.</h2><p>Wander, meet people and make a life that feels like yours. Exploring is always free.</p></div></section>
 <section id="city" class="hidden">
-<div class="city-heading"><div><div class="eyebrow">Sun-warmed rooftops. Snow-dusted villages.</div><h2>Wish & Wander <span style="font:600 12px Arial,sans-serif;color:#517465">LIVING WORLD</span></h2></div><div class="note">Winding streets · Wildlife · Countryside · A little skyline</div></div>
+<div class="city-heading"><div><div class="eyebrow">Sun-warmed rooftops. Snow-dusted villages.</div><h2>Wish & Wander <span style="font:600 12px Arial,sans-serif;color:#517465">COZY POCKET WORLD</span></h2></div><div class="note">Half the width. Half the height. Fifty new places to discover.</div></div>
 <div class="map-shell" id="map-shell"><svg id="city-art" viewBox="0 0 1000 700" role="img" aria-label="Loading the illustrated city"><rect width="1000" height="700" fill="#dfd4b3"/><text x="500" y="350" text-anchor="middle" fill="#536e5c" font-size="24">Your little world is loading…</text></svg></div>
 <div class="map-legend"><span class="legend-chip">❄ Snowy gardens</span><span class="legend-chip">✿ Spring blossom</span><span class="legend-chip">☀ Sunlit plazas</span><span class="legend-chip">🍂 Autumn courtyards</span><span class="legend-chip">♧ Mediterranean coast</span><span class="legend-chip">Countryside & farms</span><span class="legend-chip">Station & skyline</span></div>
 <div class="place-card" id="place-card"><strong>Welcome to Wish & Wander</strong><p>Wander old-town lanes, the station quarter, working farms and sheltered coves. Tap streets to walk, animals and residents to meet them, or cafés and shops to step inside.</p></div>
@@ -126,12 +126,14 @@ function show(page){document.querySelectorAll("main section").forEach(s=>s.class
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.page)));document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.go)));
  save();renderTasks();
 </script>
-<script src="./world-data.js?v=living-world-9"></script>
-<script src="./world-art.js?v=living-world-9"></script>
-<script src="./world-detail.js?v=living-world-9"></script>
-<script src="./world-render.js?v=living-world-9"></script>
-<script src="./world-wildlife.js?v=living-world-9"></script>
-<script src="./world-play.js?v=living-world-9"></script>
+<script src="./world-buildings.js?v=cozy-world-10"></script>
+<script src="./world-data.js?v=cozy-world-10"></script>
+<script src="./world-art.js?v=cozy-world-10"></script>
+<script src="./world-detail.js?v=cozy-world-10"></script>
+<script src="./world-cozy.js?v=cozy-world-10"></script>
+<script src="./world-render.js?v=cozy-world-10"></script>
+<script src="./world-wildlife.js?v=cozy-world-10"></script>
+<script src="./world-play.js?v=cozy-world-10"></script>
 <script>
 if(location.hash==="#city"||new URLSearchParams(location.search).has("map")){
  document.querySelector('[data-page="city"]').click();

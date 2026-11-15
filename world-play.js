@@ -27,7 +27,15 @@ overviewButton.addEventListener("click",e=>{
  cam.x=W.SIZE/2;cam.y=W.SIZE/2;
  cam.zoom=Math.min(screen.w,screen.h)/W.SIZE*.94;cam.rotation=0;pop.hidden=true;R.markDirty();
 });
-regionNav.append(overviewButton,regionLabel);stage.append(regionNav);
+const placeSelect=document.createElement("select");placeSelect.className="lw-place-select";placeSelect.setAttribute("aria-label","Find a new building");
+const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Find one of 50 new places…";placeSelect.append(placeholder);
+for(const b of W.buildings.filter(b=>b.designId).sort((a,b)=>a.name.localeCompare(b.name))){const option=document.createElement("option");option.value=String(b.id);option.textContent=b.name;placeSelect.append(option);}
+placeSelect.addEventListener("pointerdown",e=>e.stopPropagation());
+placeSelect.addEventListener("change",()=>{
+ if(placeSelect.value==="")return;const b=W.buildings[Number(placeSelect.value)];
+ player.path=[];cam.x=(b.x+b.w/2)*T;cam.y=(b.y+b.h*.65)*T;cam.zoom=R.initialZoom;cam.rotation=0;pop.hidden=true;R.markDirty();
+});
+regionNav.append(overviewButton,placeSelect,regionLabel);stage.append(regionNav);
 const hint=document.createElement("div");hint.className="lw-hint";
 hint.textContent="Drag to explore · Pinch to zoom · Twist two fingers to rotate · Tap streets to walk";
 stage.append(hint);
@@ -102,7 +110,7 @@ const hairs=["#473832","#805946","#c19a68","#302e35","#a16b44"];
 const skins=["#e4b28e","#9a7155","#efc9a5","#bd9071"];
 // Keep the arrival neighbourhood busy, with crowds at landmarks and across town.
 // Spread residents across distinct tiles so they are visible as individuals.
-const spawnCells=new Set(),npcCount=1200;
+const spawnCells=new Set(),npcCount=240;
 function spawnNear(cx,cy,radius,i){
  const angle=W.hash(i,36,14)*Math.PI*2,distance=Math.sqrt(W.hash(i,57,15))*radius;
  return W.closestWalkable(cx+Math.cos(angle)*distance,cy+Math.sin(angle)*distance,true);
@@ -110,14 +118,14 @@ function spawnNear(cx,cy,radius,i){
 const townStreetCells=W.streetCells.filter(k=>W.districts[k]!==W.D.COUNTRY);
 for(let i=0;i<npcCount;i++){
  let position;
- if(i<240)position=spawnNear(W.initial.x,W.initial.y,24,i);
- else if(i<720){
+ if(i<48)position=spawnNear(W.initial.x,W.initial.y,10,i);
+ else if(i<144){
   const l=W.landmarks[i%W.landmarks.length];
-  position=spawnNear(l.x+l.w/2,l.y+l.h/2,22,i);
+  position=spawnNear(l.x+l.w/2,l.y+l.h/2,10,i);
  }
  if(position&&W.districts[W.coord(position.x,position.y)]===W.D.COUNTRY&&W.hash(i,23,14)<.8)position=null;
  if(!position||spawnCells.has(W.coord(position.x,position.y))){
-  const pool=i<1100?townStreetCells:W.streetCells;
+  const pool=i<220?townStreetCells:W.streetCells;
   const start=Math.floor(W.hash(i,21,14)*pool.length);
   for(let j=0;j<pool.length;j++){
    const k=pool[(start+j)%pool.length];
@@ -235,7 +243,7 @@ function startGesture(){
  }else gesture=null;
 }
 function pointerDown(e){
- if(!room.hidden||e.target.closest("button")||e.target.closest(".lw-pop"))return;
+ if(!room.hidden||e.target.closest("button,select,option")||e.target.closest(".lw-pop"))return;
  if(e.pointerType==="mouse"&&e.button!==0)return;
  e.preventDefault();pointers.set(e.pointerId,relative(e));gestureMoved=false;startGesture();
  try{stage.setPointerCapture(e.pointerId)}catch(_){}
@@ -279,6 +287,7 @@ stage.addEventListener("wheel",e=>{
 for(const type of ["gesturestart","gesturechange","gestureend"])stage.addEventListener(type,e=>e.preventDefault(),{passive:false});
 stage.addEventListener("dblclick",e=>e.preventDefault());
 document.addEventListener("keydown",e=>{
+ if(e.target.closest("input,select,textarea"))return;
  if(document.getElementById("city").classList.contains("hidden"))return;
  if(e.key==="Escape"){if(!room.hidden)leave();else pop.hidden=true;return;}
  const dir={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.key];
@@ -333,7 +342,7 @@ updateHUD();R.resize();
 window.LWGame={world:W,renderer:R,player,npcs,animals:Wild?Wild.animals:[],progress,inspectAnimal,
  walk,enter,leave,openPlace,greet,
  getState:()=>({ready:screen.w>0,worldTiles:W.N,area:W.SIZE*W.SIZE,npcCount:npcs.length,
-  animalCount:Wild?Wild.animals.length:0,buildingCount:W.buildings.length,landmarks:W.landmarks.length,interior:!room.hidden,drawCalls}),
+  animalCount:Wild?Wild.animals.length:0,newDesignCount:W.designPlacements.length,buildingCount:W.buildings.length,landmarks:W.landmarks.length,interior:!room.hidden,drawCalls}),
  setCamera:(x,y,zoom)=>{cam.x=x;cam.y=y;if(zoom)cam.zoom=zoom;R.markDirty()},
 };
 requestAnimationFrame(tick);

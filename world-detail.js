@@ -75,7 +75,7 @@ function roadTexture(c,color,metro){
 A.roadSurface=function(c,view){
  const segments=[];
  for(const [width,points] of W.routes)for(let i=0;i<points.length-1;i++){
-  const p0=points[Math.max(0,i-1)],p1=points[i],p2=points[i+1],p3=points[Math.min(points.length-1,i+2)],radius=width*T+13;
+  const p0=points[Math.max(0,i-1)],p1=points[i],p2=points[i+1],p3=points[Math.min(points.length-1,i+2)],radius=Math.max(.58,width)*T+13;
   if(!inView([p0,p1,p2,p3],radius,view))continue;
   const px=Math.max(0,Math.min(W.N-1,Math.round(p1[0]))),py=Math.max(0,Math.min(W.N-1,Math.round(p1[1]))),k=W.coord(px,py);
   segments.push({p0,p1,p2,p3,radius,cold:W.biomes[k]===W.B.WINTER,metro:W.districts[k]===W.D.METRO,trail:width<1.2});
@@ -91,15 +91,15 @@ A.roadSurface=function(c,view){
 };
 A.riverSurface=function(c,view){
  const pts=[];let current=[];
- for(let y=0;y<W.N;y+=2){const x=65+5*Math.sin(y*.065)+y*.025;if(W.shoreAt(x,y)<=.5)current.push([x,y]);else if(current.length){pts.push(current);current=[];}}
- if(current.length)pts.push(current);pts.push([[68,105],[57,103],[48,96],[38,99]]);
+ for(let y=0;y<W.N;y+=Math.max(1,2*W.layoutScale)){const x=W.riverX(y);if(W.shoreAt(x,y)<=.5)current.push([x,y]);else if(current.length){pts.push(current);current=[];}}
+ if(current.length)pts.push(current);pts.push(W.riverBranch);
  c.save();
  for(let pass=0;pass<2;pass++)for(const points of pts){
   if(points.length<2||!inView(points,90,view))continue;
-  const width=points.length>4?135:94;
+  const width=Math.max(55,(points.length>4?135:94)*W.layoutScale);
   A.line(c,points.map(([x,y])=>[x*T+T/2,y*T+T/2]),pass?"#6dafa2":"#9caf8c",width+(pass?0:8));
  }
- A.ellipse(c,37*T+T/2,98*T+T/2,4*T,2.7*T,"#75ad9c","#a0b28a",7);c.restore();
+ A.ellipse(c,W.pond.x*T+T/2,W.pond.y*T+T/2,W.pond.rx*T,W.pond.ry*T,"#75ad9c","#a0b28a",7);c.restore();
 };
 A.bridge=function(c,x,y){
  const xx=x*T,yy=y*T;c.fillStyle="#bba079";c.fillRect(xx,yy,T,T);

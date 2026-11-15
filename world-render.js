@@ -11,6 +11,7 @@ const css=[
 ".lw-stage canvas.lw-actors{pointer-events:none}",
 ".lw-regions{position:absolute;top:51px;left:8px;right:8px;display:flex;flex-wrap:wrap;gap:4px;pointer-events:none;z-index:2}",
 ".lw-regions button{pointer-events:auto;border:1px solid #b5aa88;border-radius:18px;background:#fff7e9f0;color:#425e52;font:600 11px Arial,sans-serif;padding:8px 11px;cursor:pointer}",
+".lw-place-select{pointer-events:auto;max-width:min(260px,100%);border:1px solid #b5aa88;border-radius:16px;background:#fff7e9f2;color:#52674f;padding:6px 9px;font:600 10px Arial,sans-serif}",
 ".lw-region-label{width:100%;font:600 10px Arial,sans-serif;color:#3d574e;text-shadow:0 1px 3px #fff;background:#fff5dfd9;padding:5px 7px;border-radius:5px;width:max-content}",
 ".lw-hud{position:absolute;top:8px;left:8px;display:flex;gap:5px;flex-wrap:wrap;pointer-events:none;z-index:1}",
 ".lw-hud span{font:600 11px/1.35 Arial,sans-serif;border-radius:8px;background:#fff9e9ea;color:#3f5147;padding:7px 9px;border:1px solid #bdad8e}",
@@ -126,7 +127,7 @@ function weather(c,now){
   for(let j=0;j<14;j++){const sx=(w.hash(j,3,311)*screen.w+now*.009+Math.sin(now*.001+j)*12)%screen.w,sy=(w.hash(j,4,312)*screen.h+now*.013)%screen.h;A.ellipse(c,sx,sy,2,1,"#ffe8e2b0");}
  }
  // Soft amber sunlight in the Mediterranean; cool, pale light in snow country.
- const glow=c.createLinearGradient(0,0,screen.w,screen.h);glow.addColorStop(0,biome===B.WINTER?"#e2effa12":"#ffe4aa12");glow.addColorStop(1,"#51483b0a");c.fillStyle=glow;c.fillRect(0,0,screen.w,screen.h);
+ const glow=c.createLinearGradient(0,0,screen.w,screen.h);glow.addColorStop(0,biome===B.WINTER?"#e2effa12":"#ffe4aa20");glow.addColorStop(1,"#51483b0a");c.fillStyle=glow;c.fillRect(0,0,screen.w,screen.h);
 }
 function actors(player,npcs,now,animals=[]){
  if(!screen.w||!screen.h)return;
@@ -159,6 +160,7 @@ const zoomTools=document.createElement("div");zoomTools.className="lw-zoom";
 for(const [label,factor,symbol] of [["Zoom in",1.3,"+"],["Zoom out",1/1.3,"−"]]){const b=document.createElement("button");b.type="button";b.textContent=symbol;b.setAttribute("aria-label",label);b.addEventListener("click",e=>{e.stopPropagation();keepAt({x:camera.x,y:camera.y},screen.w/2,screen.h/2,camera.zoom*factor);});zoomTools.append(b);}stage.append(zoomTools);
 window.addEventListener("lw-art-ready",()=>{cache.clear();overview=null;dirty=true;assetRevision++;});
 function room(canvas,b,playerX,playerY){
+ if(A.cozyRoom&&A.cozyRoom(canvas,b,playerX,playerY))return;
  const c=canvas.getContext("2d");if(!c||!canvas.width)return;
  const W=canvas.width,H=canvas.height,scale=Math.min(W/800,H/750),ox=(W-800*scale)/2,oy=(H-750*scale)/2;
  c.setTransform(1,0,0,1,0,0);c.fillStyle="#3b514a";c.fillRect(0,0,W,H);
