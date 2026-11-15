@@ -72,11 +72,22 @@ const npcs=[],names=["Mila","Nico","Amélie","Hugo","Lina","Theo","Freya","Felix
 const clothes=["#be765d","#68939a","#d2a365","#7d9173","#a57f9b","#d8bfa6","#4e6675","#c48170"];
 const hairs=["#473832","#805946","#c19a68","#302e35","#a16b44"];
 const skins=["#e4b28e","#9a7155","#efc9a5","#bd9071"];
-for(let i=0;i<112;i++){
- const k=W.streetCells[Math.floor(W.hash(i,21,14)*W.streetCells.length)];
- if(k==null)continue;
- const x=k%W.N,y=(k/W.N)|0;
- if(!W.isStreet(x,y))continue;
+// A lively city core: residents gather around landmarks, cafés and public squares.
+ // Others roam the wider districts and beaches. Deterministic spawns.
+for(let i=0;i<288;i++){
+ let x,y;
+ if(i<180){
+  const l=W.landmarks[i%W.landmarks.length];
+  const dx=(W.hash(i,36,14)-.5)*38,dy=(W.hash(i,57,15)-.5)*38;
+  const position=W.closestWalkable(l.x+l.w/2+dx,l.y+l.h/2+dy,true);
+  if(!position)continue;
+  x=position.x;y=position.y;
+ }else{
+  const k=W.streetCells[Math.floor(W.hash(i,21,14)*W.streetCells.length)];
+  if(k==null)continue;
+  x=k%W.N;y=(k/W.N)|0;
+  if(!W.isStreet(x,y))continue;
+ }
  npcs.push({id:i,name:names[i%names.length],x:x*T+T/2,y:y*T+T/2,
   step:0,dest:null,pause:0,speed:49+(i*17)%29,direction:1,
   shirt:clothes[i%clothes.length],hair:hairs[i%hairs.length],skin:skins[i%skins.length]});
