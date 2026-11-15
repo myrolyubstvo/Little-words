@@ -16,7 +16,12 @@ for(const [label,x,y] of [["☀ Barcelona quarter",156,164],["❄ Frostglass",45
   e.stopPropagation();cam.x=Math.round(x*W.designScale)*T+T/2;cam.y=Math.round(y*W.designScale)*T+T/2;cam.zoom=.7;pop.hidden=true;R.markDirty();
  });regionNav.append(button);
 }
-regionNav.append(regionLabel);stage.append(regionNav);
+const overviewButton=document.createElement("button");overviewButton.type="button";overviewButton.textContent="Whole map";
+overviewButton.addEventListener("click",e=>{
+ e.stopPropagation();cam.x=W.SIZE/2;cam.y=W.SIZE/2;
+ cam.zoom=Math.min(screen.w,screen.h)/W.SIZE*.94;cam.rotation=0;pop.hidden=true;R.markDirty();
+});
+regionNav.append(overviewButton,regionLabel);stage.append(regionNav);
 const hint=document.createElement("div");hint.className="lw-hint";
 hint.textContent="Drag to explore · Pinch to zoom · Twist two fingers to rotate · Tap streets to walk";
 stage.append(hint);

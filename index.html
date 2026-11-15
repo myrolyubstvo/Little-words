@@ -72,7 +72,7 @@ p{color:#64717a;line-height:1.7}
 <div class="layout"><nav class="nav" aria-label="Game sections"><button class="active" data-page="home">Home</button><button data-page="city">Explore the city</button><button data-page="people">People</button><button data-page="life">Daily life</button><button data-page="journal">Journal</button></nav><main>
 <section id="home"><div class="panel hero"><div><div class="eyebrow">Your story starts here</div><h2>A city with a life of its own.</h2><p>Wander sunlit streets, find hidden courtyards and meet the people who call it home.</p><button class="button" data-go="city">Enter the city</button></div></div><div class="panel"><div class="eyebrow">A note for today</div><h2>There is no rush.</h2><p>Wander, meet people and make a life that feels like yours. Exploring is always free.</p></div></section>
 <section id="city" class="hidden">
-<div class="city-heading"><div><div class="eyebrow">A Mediterranean city, made for wandering</div><h2>Wish & Wander</h2></div><div class="note">A real square pixel-art world · Walk, drag, pinch and twist</div></div>
+<div class="city-heading"><div><div class="eyebrow">A Mediterranean city, made for wandering</div><h2>Wish & Wander <span style="font:600 12px Arial,sans-serif;color:#517465">COMPACT EDITION</span></h2></div><div class="note">Compact map · Half the original area · Detailed climate regions</div></div>
 <div class="map-shell" id="map-shell"><svg id="city-art" viewBox="0 0 33600 24600" role="img" aria-label="Pixel-art Mediterranean city with Barcelona-inspired architecture, scattered seasonal gardens, beach, plazas and walking residents">
 <defs>
 <pattern id="sand" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#e6d0a8"/><path d="M3 5h3M15 17h4M8 21h2" stroke="#c9b184" stroke-width="2"/></pattern>
@@ -640,7 +640,12 @@ svg.addEventListener("dblclick",e=>e.preventDefault());
  for(const name of ["gesturestart","gesturechange","gestureend"]){svg.addEventListener(name,e=>e.preventDefault(),{passive:false})}
  save();renderTasks();
 </script>
-<script src="./world-data.js?v=5"></script>
-<script src="./world-render.js?v=5"></script>
-<script src="./world-play.js?v=5"></script>
+<script src="./world-data.js?v=compact-6"></script>
+<script src="./world-render.js?v=compact-6"></script>
+<script src="./world-play.js?v=compact-6"></script>
+<script>
+if(location.hash==="#city"||new URLSearchParams(location.search).has("map")){
+ document.querySelector('[data-page="city"]').click();
+}
+</script>
 </body></html>
