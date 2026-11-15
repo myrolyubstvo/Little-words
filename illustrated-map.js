@@ -53,7 +53,7 @@ for(const [i,p] of locations.entries()){
   "aria-label":"Explore "+p.name,
   style:"cursor:pointer"
  },placeLayer);
- node("circle",{r:96,fill:"transparent","pointer-events":"all"},g);
+ node("circle",{r:285,fill:"transparent","pointer-events":"all"},g);
  node("circle",{r:38,fill:"#fff4d5","fill-opacity":".88",stroke:"#765c4a","stroke-width":8},g);
  node("circle",{r:14,fill:i%3===0?"#bc7560":"#759c7a"},g);
  const action=e=>{e.stopPropagation();selectPlace({name:p.name,desc:p.desc})};
