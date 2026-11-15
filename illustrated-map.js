@@ -114,7 +114,7 @@ function animate(t){
  lastTime=t;
  frame++;
  for(const p of actors){
-  const u=t*.00011*p.speed+p.phase;
+  const u=t*.0012*p.speed+p.phase;
   const v=Math.sin(u);
   const xx=p.worldPoint.x+p.dx*v;
   const yy=p.worldPoint.y+p.dy*v;
