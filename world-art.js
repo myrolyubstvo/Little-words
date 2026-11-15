@@ -193,6 +193,160 @@ const manifest={
         "h": 421
       }
     ]
+  },
+  "urban": {
+    "url": "./assets/urban.webp",
+    "frames": [
+      {
+        "x": 67,
+        "y": 8,
+        "w": 304,
+        "h": 431
+      },
+      {
+        "x": 455,
+        "y": 12,
+        "w": 425,
+        "h": 423
+      },
+      {
+        "x": 988,
+        "y": 9,
+        "w": 243,
+        "h": 425
+      },
+      {
+        "x": 1445,
+        "y": 6,
+        "w": 215,
+        "h": 430
+      },
+      {
+        "x": 15,
+        "y": 501,
+        "w": 408,
+        "h": 356
+      },
+      {
+        "x": 458,
+        "y": 453,
+        "w": 413,
+        "h": 419
+      },
+      {
+        "x": 896,
+        "y": 486,
+        "w": 418,
+        "h": 373
+      },
+      {
+        "x": 1338,
+        "y": 471,
+        "w": 428,
+        "h": 387
+      }
+    ]
+  },
+  "animals": {
+    "url": "./assets/animals.webp",
+    "frames": [
+      {
+        "x": 21,
+        "y": 41,
+        "w": 276,
+        "h": 233
+      },
+      {
+        "x": 351,
+        "y": 48,
+        "w": 261,
+        "h": 222
+      },
+      {
+        "x": 652,
+        "y": 59,
+        "w": 275,
+        "h": 213
+      },
+      {
+        "x": 981,
+        "y": 56,
+        "w": 261,
+        "h": 218
+      },
+      {
+        "x": 15,
+        "y": 339,
+        "w": 283,
+        "h": 248
+      },
+      {
+        "x": 341,
+        "y": 343,
+        "w": 273,
+        "h": 242
+      },
+      {
+        "x": 656,
+        "y": 345,
+        "w": 272,
+        "h": 240
+      },
+      {
+        "x": 973,
+        "y": 343,
+        "w": 271,
+        "h": 242
+      },
+      {
+        "x": 22,
+        "y": 679,
+        "w": 258,
+        "h": 206
+      },
+      {
+        "x": 345,
+        "y": 679,
+        "w": 251,
+        "h": 205
+      },
+      {
+        "x": 657,
+        "y": 679,
+        "w": 254,
+        "h": 208
+      },
+      {
+        "x": 976,
+        "y": 679,
+        "w": 250,
+        "h": 203
+      },
+      {
+        "x": 29,
+        "y": 975,
+        "w": 246,
+        "h": 235
+      },
+      {
+        "x": 326,
+        "y": 974,
+        "w": 281,
+        "h": 235
+      },
+      {
+        "x": 634,
+        "y": 977,
+        "w": 300,
+        "h": 232
+      },
+      {
+        "x": 954,
+        "y": 983,
+        "w": 287,
+        "h": 226
+      }
+    ]
   }
 };
 const images={},spriteCache=new Map(),state={ready:false,failed:false};
@@ -227,8 +381,8 @@ function sprite(c,group,index,x,base,width,height,flip=false){
  c.save();c.translate(x,base);if(flip)c.scale(-1,1);c.imageSmoothingEnabled=true;c.drawImage(cutout,-dw/2,-dh,dw,dh);c.restore();return true;
 }
 function groundColor(t,b){const p=palette[b];return t===TT.WATER||t===TT.RIVER?p.water:t===TT.SAND?"#f1d395":t===TT.BRIDGE?"#b99a72":t===TT.PLAZA?p.stone:t===TT.ROAD||t===TT.PATH?p.path:p.grass;}
-function tile(c,x,y){
- const k=W.coord(x,y),b=W.biomes[k],t=W.terrain[k],p=palette[b],xx=x*T,yy=y*T,seed=hash(x,y,8);
+function tile(c,x,y,terrainOverride=null){
+ const k=W.coord(x,y),b=W.biomes[k],t=terrainOverride===null?W.terrain[k]:terrainOverride,p=palette[b],xx=x*T,yy=y*T,seed=hash(x,y,8);
  c.fillStyle=groundColor(t,b);c.fillRect(xx,yy,T+.5,T+.5);
  const water=t===TT.WATER||t===TT.RIVER,paved=t===TT.ROAD||t===TT.PLAZA||t===TT.PATH;
  if(water){

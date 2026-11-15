@@ -33,3 +33,29 @@ test('buildings and decoration stay inside the world and preserve streets',()=>{
  for(const k of w.streetCells)assert(w.isStreet(k%w.N,Math.floor(k/w.N)));
  for(const o of w.objects){assert(w.inBounds(o.x,o.y));assert.equal(w.occupied[w.coord(o.x,o.y)],-1,'Decoration must not spawn inside buildings');}
 });
+
+// The bounding grid stays compact, but the playable land and road network are irregular.
+test('island coastline has bays, countryside and a limited skyline',()=>{
+ assert.equal(w.info.square,false);
+ for(const [x,y] of [[0,0],[0,w.N-1],[w.N-1,0],[w.N-1,w.N-1]])assert.equal(w.terrain[w.coord(x,y)],w.TERRAIN.WATER);
+ const edges=new Set();
+ for(let y=5;y<w.N-5;y++){let first=-1;for(let x=0;x<w.N;x++)if(w.isLand(x,y)){first=x;break;}if(first>=0)edges.add(first);}
+ assert(edges.size>20,'The coastline must not be a rectangle');
+ assert.equal(w.buildings.filter(b=>b.kind==='skyscraper').length,5);
+ assert(w.buildings.filter(b=>b.kind==='farm'||b.kind==='barn').length>=10);
+ assert(w.buildings.filter(b=>b.kind==='cafe').length>=40);
+ assert(w.fields.length>=6);
+});
+
+vm.runInContext(fs.readFileSync(path.join(__dirname,'../world-wildlife.js'),'utf8'),context);
+const wildlife=context.window.LWWildlife;
+test('all wildlife moves while respecting buildings, water and farm habitats',()=>{
+ assert.equal(wildlife.animals.length,280);
+ const before=wildlife.animals.map(a=>({x:a.x,y:a.y}));
+ for(let step=0;step<1200;step++){
+  wildlife.update(1/60);
+  if(step%30===0)for(const a of wildlife.animals)assert(wildlife.canWalk(a.kind,Math.floor(a.x/w.T),Math.floor(a.y/w.T)),a.kind+' crossed a habitat or collision boundary');
+ }
+ assert(wildlife.animals.filter((a,i)=>Math.hypot(a.x-before[i].x,a.y-before[i].y)>10).length>250);
+ for(const kind of ['dog','cat','pigeon','chicken','sheep','cow'])assert(wildlife.animals.some(a=>a.kind===kind&&a.step>0),kind+' must walk');
+});

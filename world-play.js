@@ -2,7 +2,7 @@
    interiors, location discoveries, levels, XP and starter quests. */
 (()=>{
 "use strict";
-const R=window.LWRenderer,W=window.LWWorldData;
+const R=window.LWRenderer,W=window.LWWorldData,Wild=window.LWWildlife;
 if(!R||!W)return;
 const T=W.T,stage=R.stage,cam=R.camera,screen=R.screen;
 const hud=document.createElement("div"),levelBadge=document.createElement("span"),questBadge=document.createElement("span");
@@ -10,7 +10,7 @@ hud.className="lw-hud";hud.append(levelBadge,questBadge);stage.append(hud);
 const regionNav=document.createElement("div");regionNav.className="lw-regions";
 regionNav.setAttribute("aria-label","Explore climate regions");
 const regionLabel=document.createElement("span");regionLabel.className="lw-region-label";
-for(const [label,x,y] of [["☀ Barcelona quarter",145,175],["❄ Frostglass",45,48],["❄ Snowbell",165,248],["☀ Mediterranean coast",270,185]]){
+for(const [label,x,y] of [["☀ Barcelona quarter",145,175],["❄ Frostglass",45,48],["❄ Snowbell",165,248],["☀ Mediterranean coast",270,185],["Countryside",W.districtAnchors.country.x/W.designScale,W.districtAnchors.country.y/W.designScale],["Station & skyline",W.districtAnchors.metro.x/W.designScale,W.districtAnchors.metro.y/W.designScale]]){
  const button=document.createElement("button");button.type="button";button.textContent=label;
  button.addEventListener("click",e=>{
   e.stopPropagation();player.path=[];
@@ -36,6 +36,13 @@ const close=document.createElement("button");close.className="lw-close";close.ty
 close.textContent="×";close.setAttribute("aria-label","Close details");
 const heading=document.createElement("h3"),desc=document.createElement("p"),buttons=document.createElement("div"),small=document.createElement("div");
 buttons.className="lw-actions";small.className="lw-quest";
+// A touch can synthesize a click after its pointer-up opens this card underneath the finger.
+// Only accept pointer clicks preceded by an actual press on the currently open card.
+let cardOpenedAt=0,cardPointerDownAt=-1;
+pop.addEventListener("pointerdown",()=>{cardPointerDownAt=performance.now()});
+pop.addEventListener("click",e=>{
+ if(e.detail>0&&cardPointerDownAt<cardOpenedAt){e.preventDefault();e.stopImmediatePropagation();}
+},true);
 pop.append(close,heading,desc,buttons,small);stage.append(pop);
 close.addEventListener("click",e=>{e.stopPropagation();pop.hidden=true});
 const room=document.createElement("div");room.className="lw-room";room.hidden=true;
@@ -84,7 +91,7 @@ function action(label,func,secondary=false){
  buttons.appendChild(button);
 }
 function showCard(name,description,actions=[],footer=""){
- pop.hidden=false;heading.textContent=name;desc.textContent=description;
+ cardOpenedAt=performance.now();pop.hidden=false;heading.textContent=name;desc.textContent=description;
  buttons.replaceChildren();small.textContent=footer;
  for(const a of actions)action(a[0],a[1],a[2]);
 }
@@ -100,6 +107,7 @@ function spawnNear(cx,cy,radius,i){
  const angle=W.hash(i,36,14)*Math.PI*2,distance=Math.sqrt(W.hash(i,57,15))*radius;
  return W.closestWalkable(cx+Math.cos(angle)*distance,cy+Math.sin(angle)*distance,true);
 }
+const townStreetCells=W.streetCells.filter(k=>W.districts[k]!==W.D.COUNTRY);
 for(let i=0;i<npcCount;i++){
  let position;
  if(i<240)position=spawnNear(W.initial.x,W.initial.y,24,i);
@@ -107,10 +115,12 @@ for(let i=0;i<npcCount;i++){
   const l=W.landmarks[i%W.landmarks.length];
   position=spawnNear(l.x+l.w/2,l.y+l.h/2,22,i);
  }
+ if(position&&W.districts[W.coord(position.x,position.y)]===W.D.COUNTRY&&W.hash(i,23,14)<.8)position=null;
  if(!position||spawnCells.has(W.coord(position.x,position.y))){
-  const start=Math.floor(W.hash(i,21,14)*W.streetCells.length);
-  for(let j=0;j<W.streetCells.length;j++){
-   const k=W.streetCells[(start+j)%W.streetCells.length];
+  const pool=i<1100?townStreetCells:W.streetCells;
+  const start=Math.floor(W.hash(i,21,14)*pool.length);
+  for(let j=0;j<pool.length;j++){
+   const k=pool[(start+j)%pool.length];
    if(!spawnCells.has(k)){position={x:k%W.N,y:(k/W.N)|0};break;}
   }
  }
@@ -205,6 +215,11 @@ function greet(n){
   "Hello again! It's always nice to see a familiar face in the neighbourhood.",
   [["Chat",()=>{desc.textContent="You share a little story about your favourite corners of the city."}]],newFriend?"New friend · +18 XP":"Friendship growing");
 }
+function inspectAnimal(a){
+ const info=Wild.species[a.kind];a.pause=2;a.moving=false;
+ showCard(info.label+" · "+(["chicken","cow","sheep"].includes(a.kind)?"Countryside":"Neighbourhood wildlife"),info.description,
+  [[a.kind==="dog"||a.kind==="cat"?"Say hello":"Watch quietly",()=>{a.pause=3;desc.textContent=info.description+" You pause for a quiet moment together."}],["Let it wander",()=>{a.pause=0;pop.hidden=true},true]],"Animals follow their own paths around the world");
+}
 const pointers=new Map();let gesture=null,gestureMoved=false;
 function relative(e){
  const r=stage.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};
@@ -245,8 +260,9 @@ function pointerUp(e){
  const pt=relative(e),tap=!gestureMoved&&pointers.size===1;
  pointers.delete(e.pointerId);
  if(tap&&room.hidden){
-  const p=R.worldAt(pt.x,pt.y),n=npcAt(p.x,p.y),b=buildingAt(p.x,p.y);
-  if(n)greet(n);
+  const p=R.worldAt(pt.x,pt.y),animal=Wild&&Wild.at(p.x,p.y),n=npcAt(p.x,p.y),b=buildingAt(p.x,p.y);
+  if(animal)inspectAnimal(animal);
+  else if(n)greet(n);
   else if(b)openPlace(b);
   else if(walk(p.x,p.y)){pop.hidden=true;hint.textContent="Walking · Tap a café, shop, home, landmark or resident to interact";}
  }
@@ -304,17 +320,20 @@ function tick(time){
   if(!n.dest)npcTarget(n);
   else if(moveTowards(n,n.dest,dt,n.speed)){n.dest=null;n.step++;if(n.step%8===0)n.pause=.4+W.hash(n.id,n.step,3)*.9;}
  }
+ if(Wild)Wild.update(dt);
  if(R.dirty()){R.draw();drawCalls++;}
  const biome=W.biomes[W.coord(Math.max(0,Math.min(W.N-1,Math.floor(cam.x/T))),Math.max(0,Math.min(W.N-1,Math.floor(cam.y/T))))];
- const climate=["Barcelona quarter · Sunny & warm","Blossom district · Mild spring","Old quarter · Crisp autumn","Snow country · Freezing","Mediterranean coast · Hot & sunny"][biome];
+ const climateName=["Barcelona quarter · Sunny & warm","Blossom district · Mild spring","Old quarter · Crisp autumn","Snow country · Freezing","Mediterranean coast · Hot & sunny"][biome];
+ const district=W.districts[W.coord(Math.max(0,Math.min(W.N-1,Math.floor(cam.x/T))),Math.max(0,Math.min(W.N-1,Math.floor(cam.y/T))))];
+ const climate=district===W.D.COUNTRY?"Countryside · Farms, orchards & animals":district===W.D.METRO?"Station quarter · Shops & skyline":climateName;
  if(regionLabel.textContent!==climate)regionLabel.textContent=climate;
- R.actors(player,npcs,time);
+ R.actors(player,npcs,time,Wild?Wild.animals:[]);
 }
 updateHUD();R.resize();
-window.LWGame={world:W,renderer:R,player,npcs,progress,
+window.LWGame={world:W,renderer:R,player,npcs,animals:Wild?Wild.animals:[],progress,inspectAnimal,
  walk,enter,leave,openPlace,greet,
  getState:()=>({ready:screen.w>0,worldTiles:W.N,area:W.SIZE*W.SIZE,npcCount:npcs.length,
-  buildingCount:W.buildings.length,landmarks:W.landmarks.length,interior:!room.hidden,drawCalls}),
+  animalCount:Wild?Wild.animals.length:0,buildingCount:W.buildings.length,landmarks:W.landmarks.length,interior:!room.hidden,drawCalls}),
  setCamera:(x,y,zoom)=>{cam.x=x;cam.y=y;if(zoom)cam.zoom=zoom;R.markDirty()},
 };
 requestAnimationFrame(tick);

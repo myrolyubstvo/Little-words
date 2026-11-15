@@ -5,7 +5,7 @@
 (() => {
 "use strict";
 const N=160, T=48, LENGTH=N*N, designScale=N/320;
-const TERRAIN={GRASS:0,ROAD:1,SAND:2,WATER:3,PARK:4,RIVER:5,BRIDGE:6,PLAZA:7,PATH:8};
+const TERRAIN={GRASS:0,ROAD:1,SAND:2,WATER:3,PARK:4,RIVER:5,BRIDGE:6,PLAZA:7,PATH:8,FIELD:9,ORCHARD:10,CLIFF:11,MEADOW:12};
 const B={SUMMER:0,SPRING:1,AUTUMN:2,WINTER:3,COAST:4};
 const terrain=new Uint8Array(LENGTH), biomes=new Uint8Array(LENGTH);
 const occupied=new Int32Array(LENGTH); occupied.fill(-1);
@@ -21,56 +21,92 @@ function hash(x,y,offset=0){let h=Math.imul(x+offset*37,374761393)+Math.imul(y+o
 function between(a,b,r){return a+(b-a)*r}
 function coord(x,y){return y*N+x}
 function inBounds(x,y){return x>=0&&y>=0&&x<N&&y<N}
-function coastX(y){return 283+Math.sin(y*.046)*10+Math.sin(y*.112)*5-19*Math.exp(-Math.pow((y-177)/35,2))}
-function coastY(x){return 289+Math.cos(x*.047)*9+Math.sin(x*.123)*5-6*Math.exp(-Math.pow((x-240)/50,2))}
-function deltaSea(x,y){return Math.max(x-coastX(y),y-coastY(x))}
+// An irregular island: headlands, a sheltered eastern harbour and three cut-in bays.
+function deltaSea(x,y){
+ const dx=x-78,dy=y-78,a=Math.atan2(dy/67,dx/64);
+ let d=(Math.hypot(dx/64,dy/67)-1)*64-2.7*Math.sin(a*5+.5)-1.4*Math.cos(a*9);
+ for(const [cx,cy,r] of [[31,31,27],[120,32,26],[39,112,24],[122,120,25]])d=Math.min(d,Math.hypot(x-cx,y-cy)-r-1.3*Math.sin(a*7));
+ for(const [cx,cy,r] of [[5,77,19],[154,78,20],[86,158,21],[74,1,15]])d=Math.max(d,r-Math.hypot(x-cx,y-cy));
+ return d;
+}
 function nearestBiome(x,y){
  let best=Infinity,chosen=B.SUMMER;
- const wiggleX=(hash(Math.floor(x/7),Math.floor(y/7),7)-.5)*20;
- const wiggleY=(hash(Math.floor(x/7),Math.floor(y/7),13)-.5)*20;
- for(const s of sources){
-  const dx=x-s[0]+wiggleX,dy=y-s[1]+wiggleY;
-  const d=dx*dx+dy*dy;
-  if(d<best){best=d;chosen=s[2];}
- }
+ const wiggleX=Math.sin(y*.045)*4+Math.cos(x*.071)*3,wiggleY=Math.cos(x*.053)*4;
+ for(const [sx,sy,b] of sources){const d=(x-sx+wiggleX)**2+(y-sy+wiggleY)**2;if(d<best){best=d;chosen=b;}}
  return chosen;
 }
-function streetDistance(v,step){const m=((v%step)+step)%step;return Math.min(m,step-m)}
-const parks=[[46,49,13],[104,59,16],[62,193,15],[245,233,15],[208,136,12],[165,249,13],[235,75,13],[83,258,12],[120,115,11]];
-const plazas=[[156,151,13],[209,112,8],[226,176,9],[115,163,8],[259,194,7]];
-function circleIn(x,y,centers){
- for(const [cx,cy,r] of centers)if((x-cx)**2+(y-cy)**2 < r*r)return true;
- return false;
-}
-function street(x,y){
- const vertical=streetDistance(x+Math.sin(y*.067)*2.0+Math.sin(y*.017)*2.7-11,22)<1.65;
- const horizontal=streetDistance(y+Math.sin(x*.056)*2.4-10,22)<1.65;
- const diagonal=Math.abs(y-(.58*x+22))<1.25||Math.abs(y-(-.38*x+259))<1.3;
- return vertical||horizontal||diagonal;
-}
-function rivX(y){return 111+16*Math.sin(y*.055)+8*Math.cos(y*.025)+y*.075}
+const D={TOWN:0,COUNTRY:1,METRO:2,FOREST:3,HARBOUR:4};
+const districts=new Uint8Array(LENGTH),shoreDistance=new Float32Array(LENGTH);
+const districtAnchors={town:{x:79,y:85},country:{x:43,y:106},metro:{x:99,y:56},harbour:{x:131,y:95}};
+function distanceToSegment(x,y,ax,ay,bx,by){const dx=bx-ax,dy=by-ay,t=Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-ax-dx*t,y-ay-dy*t);}
+function polyDistance(x,y,points){let d=Infinity;for(let i=1;i<points.length;i++)d=Math.min(d,distanceToSegment(x,y,...points[i-1],...points[i]));return d;}
+const fields=[
+ {x:35,y:101,rx:6,ry:4,angle:-.22,crop:"wheat"},{x:48,y:111,rx:7,ry:4,angle:.28,crop:"vegetables"},
+ {x:48,y:94,rx:5,ry:4,angle:.12,crop:"lavender"},{x:31,y:114,rx:5,ry:4,angle:-.4,crop:"wheat"},
+ {x:56,y:103,rx:5,ry:6,angle:.35,crop:"orchard"},{x:41,y:122,rx:5,ry:3,angle:-.22,crop:"vegetables"}
+];
+function fieldAt(x,y){for(const f of fields){const dx=x-f.x,dy=y-f.y,c=Math.cos(f.angle),s=Math.sin(f.angle);if(((dx*c+dy*s)/f.rx)**2+((-dx*s+dy*c)/f.ry)**2<1)return f;}return null;}
 for(let y=0;y<N;y++)for(let x=0;x<N;x++){
- const k=coord(x,y),d=deltaSea(x/designScale,y/designScale)*designScale;
+ const k=coord(x,y),d=deltaSea(x,y);shoreDistance[k]=d;
  let biome=nearestBiome(x/designScale,y/designScale);
- if(d>-13)biome=B.COAST;
- biomes[k]=biome;
- let t=TERRAIN.GRASS;
- const isStreet=street(x/designScale,y/designScale);
- if(d>0)t=TERRAIN.WATER;
- else if(d>-7)t=TERRAIN.SAND;
- else if(circleIn(x/designScale,y/designScale,plazas))t=TERRAIN.PLAZA;
- else if(circleIn(x/designScale,y/designScale,parks))t=TERRAIN.PARK;
- else if(isStreet)t=TERRAIN.ROAD;
- // A long river threads the old quarter, with functional crossing bridges.
- if(y<225*designScale&&d<=-7&&Math.abs(x-rivX(y/designScale)*designScale)<1.65){
-  t=(t===TERRAIN.ROAD||t===TERRAIN.PLAZA)?TERRAIN.BRIDGE:TERRAIN.RIVER;
+ if(d>3||d>-5&&biome!==B.WINTER)biome=B.COAST;biomes[k]=biome;
+ const country=((x-44)/25)**2+((y-105)/29)**2<1;
+ const metro=((x-107)/21)**2+((y-65)/22)**2<1;
+ districts[k]=country?D.COUNTRY:metro?D.METRO:d>-9&&x>115?D.HARBOUR:biome===B.WINTER||biome===B.SPRING?D.FOREST:D.TOWN;
+ let t=d>0?TERRAIN.WATER:d>-2.6?TERRAIN.SAND:TERRAIN.GRASS;
+ if(d<=-2.6){
+  const f=country&&fieldAt(x,y);
+  if(f)t=f.crop==="orchard"?TERRAIN.ORCHARD:TERRAIN.FIELD;
+  else if(country)t=TERRAIN.MEADOW;
+  else if((biome===B.WINTER&&d>-5)||((x-19)/8)**2+((y-58)/18)**2<1)t=TERRAIN.CLIFF;
+  else if(biome===B.SPRING&&hash(Math.floor(x/8),Math.floor(y/8),24)>.3)t=TERRAIN.PARK;
+  for(const [cx,cy,rx,ry] of [[77,75,10,8],[105,66,8,7],[129,94,7,6],[58,83,6,5]])if(((x-cx)/rx)**2+((y-cy)/ry)**2<1)t=TERRAIN.PLAZA;
+  if(Math.abs(x-(65+5*Math.sin(y*.065)+y*.025))<1.2||polyDistance(x,y,[[68,105],[57,103],[48,96],[38,99]])<.8||((x-37)/4)**2+((y-98)/2.7)**2<1)t=TERRAIN.RIVER;
  }
- // Walkable promenades follow the curved coastline.
- if(d<=-7&&d>=-11)t=TERRAIN.PATH;
- if(t===TERRAIN.PARK&&Math.abs((x-y)*.7%13)<1.4)t=TERRAIN.PATH;
  terrain[k]=t;
- if(t===TERRAIN.ROAD||t===TERRAIN.PLAZA||t===TERRAIN.PATH||t===TERRAIN.BRIDGE)roadCells.push(k);
 }
+const baseTerrain=terrain.slice();
+// Catmull-Rom roads form an uneven connected network instead of a repeating grid.
+const routes=[
+ [2.0,[[69,65],[84,62],[96,68],[98,80],[88,91],[74,94],[63,84],[64,73],[69,65]]],
+ [1.25,[[69,65],[73,75],[70,86],[74,94]]],[1.15,[[82,63],[81,73],[88,78],[88,91]]],
+ [1.25,[[64,73],[73,76],[88,78],[98,80]]],
+ [1.8,[[64,73],[59,60],[51,48],[53,33],[43,21],[30,24],[22,30]]],
+ [1.8,[[96,68],[108,59],[114,45],[124,35],[124,23]]],
+ [1.4,[[53,33],[71,26],[91,32],[114,45]]],
+ [1.8,[[74,94],[79,108],[84,123],[96,132],[114,128],[129,119],[137,128]]],
+ [1.15,[[63,84],[56,90],[47,103],[41,114],[28,120],[22,110]]],
+ [1.05,[[47,103],[39,90],[26,85],[25,70],[30,54],[42,48],[51,48]]],
+ [.95,[[47,103],[51,115],[63,121],[76,115],[79,108]]],
+ [1.9,[[98,80],[112,83],[125,92],[133,100],[131,112],[129,119]]],
+ [1.4,[[108,59],[126,63],[133,61],[134,51]]],
+ [1.2,[[96,68],[104,74],[115,72],[126,63]]],
+ [1.3,[[103,53],[106,63],[105,74],[112,83]]],
+ [1.2,[[115,53],[117,62],[115,72],[122,80],[125,92]]],
+ [1.1,[[98,58],[106,63],[117,62],[128,69]]],
+ [1.0,[[103,89],[99,102],[109,114],[114,128]]],
+ [1.0,[[30,24],[26,37],[39,43],[51,48]]],
+ [.95,[[84,123],[74,130],[63,121]]]
+];
+function stampRoad(x,y,r,kind){
+ for(let yy=Math.floor(y-r-1);yy<=Math.ceil(y+r+1);yy++)for(let xx=Math.floor(x-r-1);xx<=Math.ceil(x+r+1);xx++){
+  if(!inBounds(xx,yy)||Math.hypot(xx-x,yy-y)>r+.2)continue;
+  const k=coord(xx,yy);if(shoreDistance[k]>0)continue;
+  const old=terrain[k];terrain[k]=old===TERRAIN.RIVER?TERRAIN.BRIDGE:old===TERRAIN.PLAZA?old:kind;
+ }
+}
+for(const route of routes)route[0]*=.72;
+for(const [width,points] of routes)for(let i=0;i<points.length-1;i++){
+ const p0=points[Math.max(0,i-1)],p1=points[i],p2=points[i+1],p3=points[Math.min(points.length-1,i+2)];
+ for(let j=0;j<=30;j++){
+  const t=j/30,t2=t*t,t3=t2*t;
+  const value=a=>.5*(2*p1[a]+(-p0[a]+p2[a])*t+(2*p0[a]-5*p1[a]+4*p2[a]-p3[a])*t2+(-p0[a]+3*p1[a]-3*p2[a]+p3[a])*t3);
+  stampRoad(value(0),value(1),width,width<1.2?TERRAIN.PATH:TERRAIN.ROAD);
+ }
+}
+// Short farm approaches and an orchard lane connect to the country road.
+for(const f of fields){const road=routes[8][1].reduce((best,p)=>Math.hypot(p[0]-f.x,p[1]-f.y)<Math.hypot(best[0]-f.x,best[1]-f.y)?p:best,routes[8][1][0]);for(let j=0;j<=30;j++)stampRoad(f.x+(road[0]-f.x)*j/30,f.y+(road[1]-f.y)*j/30,.65,TERRAIN.PATH);routes.push([.65,[[f.x,f.y],road]]);}
+for(let y=0;y<N;y++)for(let x=0;x<N;x++){const k=coord(x,y);if([TERRAIN.ROAD,TERRAIN.PLAZA,TERRAIN.PATH,TERRAIN.BRIDGE].includes(terrain[k]))roadCells.push(k);}
 function isLand(x,y){
  if(!inBounds(x,y))return false;
  const t=terrain[coord(x,y)];
@@ -163,44 +199,47 @@ const labels={
  shop:["Botiga de Somnis","La Llibreria","Mercat Petit","Casa Ceràmica","Atelier Azul","Botiga del Mar"],
  bakery:["Forn de la Rosa","Panadería Sol","Forn del Raval","La Crosta Daurada"]
 };
-let created=0;
-for(let by=8;by<N-8;by+=10){
- for(let bx=8;bx<N-8;bx+=10){
-  for(let q=0;q<4;q++){
-   const r=hash(bx,by,q+17);
-   if(r<.15)continue;
-   const w=3+Math.floor(hash(bx,by,q+31)*2),h=3+Math.floor(hash(bx,by,q+37)*2);
-   const x=bx+(q%2?6:0)+Math.floor(hash(bx,by,q+42)*2),
-    y=by+(q>=2?6:1)+Math.floor(hash(bx,by,q+43)*2);
-   if(!clearFootprint(x,y,w,h))continue;
-   const nearby=doorFor({x,y,w,h});
-   if(Math.abs(nearby.x-(x+w/2))+Math.abs(nearby.y-(y+h))>14)continue;
-   const t=hash(bx,by,q+47);
-   const kind=t<.57?"house":t<.73?"cafe":t<.84?"shop":t<.93?"restaurant":"bakery";
-   const options=labels[kind],name=options[Math.floor(hash(bx,by,q+50)*options.length)];
-   const b=occupy({x,y,w,h,kind,name,biome:biomes[coord(x,y)],description:
-    kind==="house"?"A welcoming home with tiled roofs and flower boxes.":
-    kind==="cafe"?"A cosy café with pastries, coffee and little terrace tables.":
-    kind==="restaurant"?"A neighbourhood restaurant with Mediterranean dishes.":
-    kind==="bakery"?"Fresh bread and pastries from a traditional bakery.":
-    "A colourful independent local shop.",enterable:true,landmark:false});
-   b.door=doorFor(b);created++;
-  }
- }
+// Frontages follow the winding streets; neither lots nor building sizes repeat on a grid.
+function addNeighbourhoodBuilding(x,y,w,h,kind,name,style){
+ const b=occupy({x,y,w,h,kind,name,style,biome:biomes[coord(x,y)],district:districts[coord(x,y)],description:
+  kind==="skyscraper"?"A slender city tower with rooftop machinery, fire escapes and independent businesses at street level.":
+  kind==="barn"?"A working farm barn with hay, tools and animals wandering nearby.":
+  kind==="farm"?"A countryside farmhouse beside winding lanes, orchards and vegetable fields.":
+  kind==="cafe"?"A neighbourhood café with outdoor tables, tiny signs, warm windows and freshly brewed coffee.":
+  kind==="bakery"?"An independent bakery with pastries, bread crates and a welcoming shopfront.":
+  kind==="house"?"A lived-in home with an uneven roofline, balconies and a little garden.":
+  "An independent local business with a weathered shopfront and a street full of little details.",enterable:true,landmark:false});
+ b.door=doorFor(b);return b;
 }
-// Street-facing infill keeps the compact town composed as neighbourhoods, not isolated houses.
-let infillCount=0;
-for(let y=7;y<N-8;y+=5)for(let x=7;x<N-8;x+=5){
- if(infillCount>=200||hash(x,y,601)>.74)continue;
- const bw=3,bh=3;
- if(!clearFootprint(x,y,bw,bh))continue;
- let park=false;for(let yy=y;yy<y+bh;yy++)for(let xx=x;xx<x+bw;xx++)if(terrain[coord(xx,yy)]===TERRAIN.PARK)park=true;
- if(park)continue;
- const door=doorFor({x,y,w:bw,h:bh});
- if(Math.abs(door.x-(x+bw/2))+Math.abs(door.y-(y+bh))>5)continue;
- const r=hash(x,y,602),kind=r<.45?"house":r<.67?"cafe":r<.83?"shop":"bakery";
- const name=labels[kind][Math.floor(hash(x,y,603)*labels[kind].length)];
- occupy({x,y,w:bw,h:bh,kind,name,door,biome:biomes[coord(x,y)],description:kind==="house"?"A lovingly kept home with flowering balconies and a quiet little courtyard.":"An independent neighbourhood shop with a welcoming doorway and a sunlit display.",enterable:true,landmark:false});infillCount++;
+let towerCount=0;
+for(let i=0;i<800&&towerCount<5;i++){
+ const x=91+Math.floor(hash(i,614,1)*31),y=49+Math.floor(hash(i,614,2)*29),w=3+(i%2),h=3;
+ if(!inBounds(x+w,y+h)||districts[coord(x,y)]!==D.METRO||!clearFootprint(x,y,w,h))continue;
+ const d=doorFor({x,y,w,h});if(Math.abs(d.x-x-w/2)+Math.abs(d.y-y-h)>7)continue;
+ const b=addNeighbourhoodBuilding(x,y,w,h,"skyscraper",["Aurora House","Meridian Tower","The Glass Arcade","Olive Skyline","Tramway House"][towerCount],"urban");
+ b.floors=8+towerCount;towerCount++;
+}
+let countryBuildings=0;
+for(let i=0;i<5000;i++){
+ const x=5+Math.floor(hash(i,620,1)*(N-13)),y=5+Math.floor(hash(i,620,2)*(N-13));
+ const district=districts[coord(x,y)],w=3+(hash(i,620,3)>.75?1:0),h=3+(hash(i,620,4)>.65?1:0);
+ if(!clearFootprint(x,y,w,h))continue;
+ if(district===D.FOREST&&hash(i,620,5)>.5)continue;
+ let cultivated=false;for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++)if([TERRAIN.FIELD,TERRAIN.ORCHARD,TERRAIN.CLIFF].includes(terrain[coord(xx,yy)]))cultivated=true;
+ if(cultivated||district===D.COUNTRY&&countryBuildings>=12)continue;
+ const d=doorFor({x,y,w,h});if(Math.abs(d.x-x-w/2)+Math.abs(d.y-y-h)>5)continue;
+ const r=hash(i,620,6);let kind=r<.31?"house":r<.55?"cafe":r<.76?"shop":r<.89?"bakery":"restaurant";
+ if(district===D.COUNTRY){kind=countryBuildings%3===0?"barn":"farm";countryBuildings++;}
+ const choices=labels[kind]||[kind==="barn"?"Meadow Barn":"Willow Farmhouse"],name=choices[Math.floor(hash(i,620,7)*choices.length)];
+ addNeighbourhoodBuilding(x,y,w,h,kind,name,district===D.METRO?"urban":district===D.COUNTRY?"country":district===D.TOWN&&hash(i,620,8)>.68?"urban":"village");
+}
+// Small, uneven storefronts fill gaps along the old town lanes and station quarter.
+for(let i=0;i<3500;i++){
+ const x=8+Math.floor(hash(i,634,1)*(N-18)),y=8+Math.floor(hash(i,634,2)*(N-18)),district=districts[coord(x,y)];
+ if(![D.TOWN,D.METRO,D.HARBOUR].includes(district)||!clearFootprint(x,y,2,2))continue;
+ const d=doorFor({x,y,w:2,h:2});if(Math.abs(d.x-x-1)+Math.abs(d.y-y-2)>3)continue;
+ const r=hash(i,634,3),kind=r<.45?"shop":r<.8?"cafe":"bakery",choices=labels[kind];
+ addNeighbourhoodBuilding(x,y,2,2,kind,choices[Math.floor(hash(i,634,4)*choices.length)],district===D.METRO||hash(i,634,5)>.6?"urban":"village");
 }
 // Deterministic independent ground objects: rocks, flowers, trees, palms, benches and lamps.
 for(let y=3;y<N-3;y+=2){
@@ -271,6 +310,37 @@ for(const b of buildings){
   objects.push({x,y,kind:b.biome===B.WINTER&&kind==="garden"?"logpile":kind,biome:b.biome,variant:b.id%4});
  }
 }
+// Layered frontages: shop signs, service equipment, bins, steps and small utilities.
+function dress(x,y,kind,variant=0,ox=0,oy=0){
+ if(!inBounds(x,y))return;
+ const k=coord(x,y);if(occupied[k]>=0||[TERRAIN.WATER,TERRAIN.RIVER].includes(terrain[k]))return;
+ objects.push({x,y,kind,variant,ox,oy,biome:biomes[k]});
+}
+for(const b of buildings){
+ const urban=b.style==="urban"||b.district===D.METRO,business=["shop","cafe","bakery","restaurant","market"].includes(b.kind);
+ if(b.kind==="farm"||b.kind==="barn"){
+  for(const [dx,dy,kind] of [[-1,0,"haybale"],[b.w,1,"beehive"],[0,b.h,"well"],[b.w-1,b.h,"crate"],[-1,b.h-1,"gate"]])dress(b.x+dx,b.y+dy,kind,b.id);
+ }else if(urban||business){
+  for(const [dx,dy,kind,ox,oy] of [[-1,0,urban?"vending":"chalkboard",15,0],[b.w,0,"utility",-13,0],[-1,b.h-1,"posterwall",15,0],[b.w,b.h-1,"crate",-13,0],[0,b.h,"bin",0,-15],[b.w-1,b.h,"hydrant",0,-15],[-1,Math.floor(b.h/2),urban?"stairway":"chalkboard",12,0],[Math.floor(b.w/2),-1,"wires",0,8]])dress(b.x+dx,b.y+dy,kind,b.id,ox,oy);
+ }
+}
+for(const f of fields){
+ for(let j=0;j<10;j++){
+  const a=j*Math.PI/5,c=Math.cos(f.angle),s=Math.sin(f.angle),dx=Math.cos(a)*(f.rx+.7),dy=Math.sin(a)*(f.ry+.7);
+  const x=Math.round(f.x+dx*c-dy*s),y=Math.round(f.y+dx*s+dy*c);
+  if(![TERRAIN.PATH,TERRAIN.ROAD,TERRAIN.BRIDGE].includes(terrain[coord(x,y)]))dress(x,y,j===0?"gate":"farmfence",j);
+ }
+ dress(Math.round(f.x-f.rx-1),Math.round(f.y),"scarecrow",1);
+}
+for(let y=2;y<N-2;y++)for(let x=2;x<N-2;x++){
+ const k=coord(x,y),t=terrain[k],r=hash(x,y,720);
+ if(occupied[k]>=0||t===TERRAIN.WATER||t===TERRAIN.RIVER)continue;
+ if(t===TERRAIN.CLIFF&&r<.55)dress(x,y,"coastRock",Math.floor(r*16));
+ else if(shoreDistance[k]>-3&&r<.15)dress(x,y,"coastRock",Math.floor(r*16));
+ else if(districts[k]===D.COUNTRY&&[TERRAIN.MEADOW,TERRAIN.GRASS].includes(t)&&r<.1)dress(x,y,"drygrass",Math.floor(r*20));
+ else if([TERRAIN.GRASS,TERRAIN.MEADOW,TERRAIN.PARK].includes(t)&&r<.12&&[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>terrain[coord(x+dx,y+dy)]===TERRAIN.RIVER))dress(x,y,"reeds",0);
+ else if(t===TERRAIN.PLAZA&&r<.035)dress(x,y,"bicycle",0);
+}
 const streetCells=roadCells.filter(k=>{
  const x=k%N,y=(k/N)|0;return isStreet(x,y);
 });
@@ -319,13 +389,13 @@ function findPath(ax,ay,bx,by){
  for(let p=g;p>=0;p=prev[p]){route.push({x:p%N,y:(p/N)|0});if(p===s)break}
  route.reverse();return route;
 }
-const initial=closestWalkable(145*designScale,175*designScale,true)||closestWalkable(145*designScale,175*designScale);
+const initial=closestWalkable(101,70,true)||closestWalkable(101,70);
 const seasonCounts=[0,0,0,0,0];
 for(let i=0;i<LENGTH;i++)if(terrain[i]!==TERRAIN.WATER)seasonCounts[biomes[i]]++;
 window.LWWorldData={
- N,T,designScale,SIZE:N*T,TERRAIN,B,terrain,biomes,occupied,buildings,landmarks,objects,streetCells,
- initial,seasonCounts,hash,coord,inBounds,isWalkable,isStreet,closestWalkable,findPath,
- info:{square:true,regionCount:5,buildings:buildings.length,landmarks:landmarks.length,
+ N,T,designScale,D,districts,districtAnchors,baseTerrain,shoreAt:deltaSea,shoreDistance,fields,fieldAt,routes,SIZE:N*T,TERRAIN,B,terrain,biomes,occupied,buildings,landmarks,objects,streetCells,
+ initial,seasonCounts,hash,coord,inBounds,isLand,isWalkable,isStreet,closestWalkable,findPath,
+ info:{square:false,regionCount:5,buildings:buildings.length,landmarks:landmarks.length,
  tileCount:LENGTH,worldArea:N*T*N*T,previousArtArea:11200*8200}
 };
 })();

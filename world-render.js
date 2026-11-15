@@ -56,7 +56,10 @@ function addNode(type,item,x0,y0,x1,y1,depth){
   const key=cx+","+cy;if(!buckets.has(key))buckets.set(key,[]);buckets.get(key).push(node);
  }
 }
-w.buildings.forEach(b=>addNode("building",b,Math.min(b.x*T-35,b.door.x*T-25),Math.min(b.y*T-100,b.door.y*T-25),Math.max((b.x+b.w)*T+35,b.door.x*T+60),Math.max((b.y+b.h)*T+20,b.door.y*T+60),(b.y+b.h)*T-8));
+w.buildings.forEach(b=>{
+ const m=A.buildingMetrics(b);
+ addNode("building",b,Math.min(b.x*T-35,b.door.x*T-25),Math.min(b.y*T-100,m.base-m.height-15,b.door.y*T-25),Math.max((b.x+b.w)*T+35,b.door.x*T+60),Math.max((b.y+b.h)*T+20,b.door.y*T+60),(b.y+b.h)*T-8);
+});
 w.objects.forEach(o=>addNode("object",o,o.x*T-90,o.y*T-150,o.x*T+120,o.y*T+60,o.y*T+T/2));
 w.landmarks.filter(l=>l.id<0).forEach(l=>addNode("scenic",l,l.x*T-70,l.y*T-180,(l.x+l.w)*T+50,(l.y+l.h)*T+20,(l.y+l.h)*T));
 function resize(){
@@ -79,6 +82,9 @@ function chunk(cx,cy){
  const can=document.createElement("canvas");can.width=can.height=CP;
  const c=can.getContext("2d",{alpha:false});c.fillStyle="#64aaa5";c.fillRect(0,0,CP,CP);c.translate(-cx*CP,-cy*CP);
  for(let y=cy*CH;y<Math.min(w.N,(cy+1)*CH);y++)for(let x=cx*CH;x<Math.min(w.N,(cx+1)*CH);x++)A.tile(c,x,y);
+ const view={x0:cx*CP,y0:cy*CP,x1:(cx+1)*CP,y1:(cy+1)*CP};
+ A.riverSurface(c,view);A.roadSurface(c,view);
+ for(let y=cy*CH;y<Math.min(w.N,(cy+1)*CH);y++)for(let x=cx*CH;x<Math.min(w.N,(cx+1)*CH);x++){if(w.terrain[w.coord(x,y)]===TT.BRIDGE)A.bridge(c,x,y);A.streetMarks(c,x,y);}
  // Include approaches in every intersecting chunk to prevent seams across chunk borders.
  const group=buckets.get(key)||[];
  for(const n of group)if(n.type==="building")A.decal(c,n.item);
@@ -87,9 +93,10 @@ function chunk(cx,cy){
 function drawNode(c,n){if(n.type==="building")A.building(c,n.item);else if(n.type==="object")A.object(c,n.item);else A.scenic(c,n.item);}
 function overviewArt(){
  if(overview)return overview;
- overview=document.createElement("canvas");overview.width=overview.height=1808;
+ overview=document.createElement("canvas");overview.width=overview.height=w.N*10;
  const c=overview.getContext("2d",{alpha:false}),scale=overview.width/S;c.scale(scale,scale);c.imageSmoothingEnabled=true;
- for(let y=0;y<w.N;y++)for(let x=0;x<w.N;x++){c.fillStyle=A.groundColor(w.terrain[w.coord(x,y)],w.biomes[w.coord(x,y)]);c.fillRect(x*T,y*T,T+.5,T+.5);}
+ for(let y=0;y<w.N;y++)for(let x=0;x<w.N;x++){if(Math.abs(w.shoreDistance[w.coord(x,y)])<1.4)A.tile(c,x,y);else{const t=w.terrain[w.coord(x,y)],under=[TT.ROAD,TT.PATH].includes(t)?w.baseTerrain[w.coord(x,y)]:t;c.fillStyle=A.groundColor(under===TT.RIVER?TT.GRASS:under,w.biomes[w.coord(x,y)]);c.fillRect(x*T,y*T,T+.5,T+.5);}}
+ A.riverSurface(c);A.roadSurface(c);
  for(const b of w.buildings)A.decal(c,b);
  // Tiny ground ornaments are below a pixel here; preserve architecture and tree silhouettes.
  const silhouettes=new Set(["tree","pine","palm","bush","citrus","fountain","fruitstall","terrace"]);
@@ -121,7 +128,7 @@ function weather(c,now){
  // Soft amber sunlight in the Mediterranean; cool, pale light in snow country.
  const glow=c.createLinearGradient(0,0,screen.w,screen.h);glow.addColorStop(0,biome===B.WINTER?"#e2effa12":"#ffe4aa12");glow.addColorStop(1,"#51483b0a");c.fillStyle=glow;c.fillRect(0,0,screen.w,screen.h);
 }
-function actors(player,npcs,now){
+function actors(player,npcs,now,animals=[]){
  if(!screen.w||!screen.h)return;
  actx.setTransform(1,0,0,1,0,0);actx.clearRect(0,0,people.width,people.height);setup(actx);
  if(camera.zoom<.23){
@@ -130,12 +137,14 @@ function actors(player,npcs,now){
  }
  const v=viewBounds||bounds(),moving=[];
  for(const n of npcs)if(n.x>v.x0&&n.x<v.x1&&n.y>v.y0&&n.y<v.y1)moving.push(n);
+ for(const a of animals)if(a.x>v.x0&&a.x<v.x1&&a.y>v.y0&&a.y<v.y1)moving.push(a);
  moving.push({...player,isPlayer:true,id:-1,shirt:"#bd7457",skin:"#e5b990",hair:"#594333"});moving.sort((a,b)=>a.y-b.y);
  let ni=0,ai=0;
  while(ni<visibleNodes.length||ai<moving.length){
   if(ni<visibleNodes.length&&(ai>=moving.length||visibleNodes[ni].depth<=moving[ai].y)){drawNode(actx,visibleNodes[ni++]);}
   else{
    const n=moving[ai++],tx=Math.max(0,Math.min(w.N-1,Math.floor(n.x/T))),ty=Math.max(0,Math.min(w.N-1,Math.floor(n.y/T))),cold=w.biomes[w.coord(tx,ty)]===B.WINTER;
+   if(n.kind){A.animal(actx,n,now);continue;}
    A.actor(actx,n.x,n.y,n.shirt,n.skin,n.hair,(n.isPlayer?player.path.length:n.dest&&n.pause<=0)&&Math.sin(now*.012+n.id)>0,n.isPlayer,n.direction||1,cold,n.id);
   }
  }
