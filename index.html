@@ -11,7 +11,7 @@ header{padding:16px clamp(16px,4vw,48px);display:flex;justify-content:space-betw
 h1{font-size:clamp(23px,4vw,33px);font-weight:normal;margin:0;letter-spacing:-1px}header small{color:var(--muted);font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase}.wallet{font:13px Arial,sans-serif;background:#f1e5d4;border:1px solid #e1d0bb;border-radius:30px;padding:9px 14px}
 .layout{max-width:1450px;margin:18px auto;padding:0 16px;display:grid;grid-template-columns:165px minmax(0,1fr);gap:18px}.nav{display:flex;flex-direction:column;gap:7px}.nav button{border:0;text-align:left;background:transparent;padding:11px 13px;border-radius:12px;color:var(--muted)}.nav button.active,.nav button:hover{background:#e9ddca;color:var(--ink)}main{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px;margin-bottom:16px}
 .eyebrow{font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}h2{font-size:26px;font-weight:normal;margin:5px 0 10px}p{margin:7px 0;color:#655d53}.hero{min-height:250px;background:linear-gradient(120deg,#e8c9ad,#d8e3d3 55%,#b9d4d3);display:flex;align-items:flex-end;position:relative;overflow:hidden}.hero h2{font-size:36px}.button{border:0;border-radius:24px;background:#51483e;color:#fff8ed;padding:10px 16px;margin-top:10px}.button.secondary{background:#eee2d0;color:var(--ink)}
-.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.note,.map-help{font:11px Arial,sans-serif;color:#746b60}.map-shell{position:relative;border:2px solid #cbb99f;border-radius:16px;overflow:hidden;background:#b6d5d1;touch-action:none;overscroll-behavior:contain;-webkit-user-select:none;user-select:none;box-shadow:0 12px 34px rgba(78,65,49,.13)}#city-art{display:block;width:100%;height:min(76vh,820px);min-height:500px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;background:#d9d7bd;shape-rendering:geometricPrecision}#city-art.dragging{cursor:grabbing;transition:none}.map-tools{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:10px;background:#f4ecdf;border:1px solid #ddcfbb;border-top:0;border-radius:0 0 14px 14px}.map-tools button{min-width:42px;min-height:40px;border:1px solid #cbb99f;border-radius:10px;background:#fffaf1;color:#51483e;font-size:19px;cursor:pointer}.map-tools button:active{background:#e6d8c3}.map-tools .control-label{font:12px Arial,sans-serif;color:#746b60;margin:0 5px}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#eee6d9;padding:6px 10px;border-radius:20px}.place-card{background:#f7efe2;border:1px solid #e6d8c5;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}
+.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.note,.map-help{font:11px Arial,sans-serif;color:#746b60}.map-shell{position:relative;border:2px solid #cbb99f;border-radius:16px;overflow:hidden;background:#b6d5d1;touch-action:none;overscroll-behavior:contain;-webkit-user-select:none;user-select:none;box-shadow:0 12px 34px rgba(78,65,49,.13)}#city-art{display:block;width:100%;height:min(76vh,820px);min-height:500px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;background:#d9d7bd;shape-rendering:geometricPrecision}#city-art.dragging{cursor:grabbing;transition:none}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#eee6d9;padding:6px 10px;border-radius:20px}.place-card{background:#f7efe2;border:1px solid #e6d8c5;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}
 @media(max-width:700px){.layout{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.panel{padding:15px}#city-art{height:68vh;min-height:440px}}
 
 /* Editorial character interface */
@@ -131,10 +131,10 @@ p{color:#64717a;line-height:1.7}
 <g transform="translate(1260 1370)"><rect x="-105" y="-22" width="210" height="38" rx="18" fill="#fff5e5"/><text y="4" font-size="20" letter-spacing="2">AUTUMN SQUARE</text></g>
 <g transform="translate(2040 1480)"><rect x="-90" y="-22" width="180" height="38" rx="18" fill="#fff5e5"/><text y="4" font-size="20" letter-spacing="2">THE BEACH</text></g>
 </g>
-</svg><div class="map-tools" aria-label="Map controls"><span class="control-label">Move</span><button type="button" data-pan="0,-1" aria-label="Move map up">↑</button><button type="button" data-pan="-1,0" aria-label="Move map left">←</button><button type="button" data-pan="1,0" aria-label="Move map right">→</button><button type="button" data-pan="0,1" aria-label="Move map down">↓</button><span class="control-label">Zoom</span><button type="button" data-zoom="in" aria-label="Zoom in">＋</button><button type="button" data-zoom="out" aria-label="Zoom out">−</button><span class="control-label">Rotate</span><button type="button" data-rotate="-15" aria-label="Rotate left">↶</button><button type="button" data-rotate="15" aria-label="Rotate right">↷</button><button type="button" data-reset-view aria-label="Reset map view">Reset</button></div></div>
+</svg></div>
 <div class="map-legend"><span class="legend-chip">❄ Snowy gardens</span><span class="legend-chip">✿ Spring blossom</span><span class="legend-chip">☀ Sunlit plazas</span><span class="legend-chip">🍂 Autumn courtyards</span><span class="legend-chip">♧ Mediterranean coast</span></div>
 <div class="place-card" id="place-card"><strong>Welcome to Wish & Wander</strong><p>One connected city of winding streets, old squares, seasonal gardens, a river, a harbour and a long sandy beach. Tap a place marker to explore.</p></div>
-<p class="map-help">One finger moves the map. Two fingers zoom and rotate. Tap a marker to discover a place. The whole city is visible when you first arrive.</p>
+<p class="map-help">Drag with one finger to move around the city. Pinch two fingers to zoom and twist them to rotate. Tap a marker to discover a place.</p>
 </section>
 <section id="people" class="hidden">
 <div class="city-heading"><div><div class="eyebrow">The residents of Wish & Wander</div><h2>People & stories</h2><p>Get to know the people who make the city feel alive.</p></div><div class="note">CHARACTER COLLECTION · 01 RESIDENT</div></div>
@@ -515,99 +515,128 @@ const newPlaces=[
 newPlaces.forEach((p,i)=>{const g=el("g",{transform:"translate("+p.x+" "+p.y+")",tabindex:"0",role:"button",style:"cursor:pointer"},fresh);el("circle",{r:24,fill:"#fff7e8",stroke:"#85684f","stroke-width":5},g);el("circle",{r:9,fill:i%2?"#bd765d":"#789778"},g);el("path",{d:"M-7 23L0 35 7 23",fill:"#fff7e8",stroke:"#85684f","stroke-width":3},g);g.addEventListener("click",e=>{e.stopPropagation();selectPlace(p)});g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectPlace(p)}})});
 
 let tick=0;function animatePeople(){tick+=1;sprites.forEach((s,i)=>{const r=s.route,phase=(tick*s.speed+s.offset)%(r.length*2),back=phase>r.length,dist=back?r.length*2-phase:phase,x=r.x+(r.dx?dist*r.dx:0),y=r.y+(r.dy?dist*r.dy:0);s.g.setAttribute("transform","translate("+x+" "+y+")"+(back?" scale(-1 1)":""));const leg=(Math.floor(tick/5+i)%2)?1:-1;s.g.children[5].setAttribute("x",-3+leg);s.g.children[6].setAttribute("x",2-leg)});requestAnimationFrame(animatePeople)}requestAnimationFrame(animatePeople);
-// Gesture camera: one-finger pan; two-finger pinch zoom and twist rotation.
-let view={x:0,y:0,w:19800,h:13860},rotation=0,mouseDrag=null,touchGesture=null;
+// Map camera: directly manipulated by touch or mouse, with no on-screen controls.
+let view={x:0,y:0,w:19800,h:13860},rotation=0;
 const WORLD_W=19800,WORLD_H=13860;
-function applyView(){svg.setAttribute("viewBox",view.x+" "+view.y+" "+view.w+" "+view.h)}
-function clampView(){view.x=Math.max(0,Math.min(WORLD_W-view.w,view.x));view.y=Math.max(0,Math.min(WORLD_H-view.h,view.y))}
-function zoomAt(f,cx,cy){const nw=Math.max(520,Math.min(WORLD_W,view.w*f)),nh=nw*WORLD_H/WORLD_W;view.x=cx-(cx-view.x)*nw/view.w;view.y=cy-(cy-view.y)*nh/view.h;view.w=nw;view.h=nh;clampView();applyView()}
-function setRotation(deg){rotation=deg;world.setAttribute("transform","rotate("+rotation+" 9900 6930) scale(3)")}
-function pointInWorld(clientX,clientY){const r=svg.getBoundingClientRect();return{x:view.x+(clientX-r.left)/r.width*view.w,y:view.y+(clientY-r.top)/r.height*view.h}}
-function touchMetrics(touches){const a=touches[0],b=touches[1],cx=(a.clientX+b.clientX)/2,cy=(a.clientY+b.clientY)/2;return{cx,cy,d:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),angle:Math.atan2(b.clientY-a.clientY,b.clientX-a.clientX)}}
-// Direct map manipulation: one pointer pans; two pointers pinch and twist.
-// A tap never changes zoom. Movement starts only after the pointer actually moves.
-const activePointers=new Map();let gestureBase=null,dragged=false,suppressClickUntil=0;
-function pointerSnapshot(){return [...activePointers.values()]}
-function beginGesture(){
- const pts=pointerSnapshot();
- if(pts.length===1){const p=pts[0];gestureBase={mode:"pan",x:p.x,y:p.y,view:{...view}}}
- else if(pts.length>=2){const a=pts[0],b=pts[1];gestureBase={mode:"transform",view:{...view},rotation,midX:(a.x+b.x)/2,midY:(a.y+b.y)/2,d:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle:Math.atan2(b.y-a.y,b.x-a.x)}}
+function clampView(){
+ view.x=Math.max(0,Math.min(WORLD_W-view.w,view.x));
+ view.y=Math.max(0,Math.min(WORLD_H-view.h,view.y));
 }
+function applyView(){
+ svg.setAttribute("viewBox",view.x+" "+view.y+" "+view.w+" "+view.h);
+ // Rotating around the visible camera centre keeps a zoomed-in neighbourhood in view.
+ const cx=view.x+view.w/2,cy=view.y+view.h/2;
+ world.setAttribute("transform","translate("+cx+" "+cy+") rotate("+rotation+") translate("+(-cx)+" "+(-cy)+") scale(3)");
+}
+function rotatedOffset(x,y,degrees){
+ const a=degrees*Math.PI/180,c=Math.cos(a),s=Math.sin(a);
+ return{x:x*c-y*s,y:x*s+y*c};
+}
+function mapUnitsPerPixel(camera,rect){
+ // SVG uses xMidYMid meet: account for the letterbox on differently shaped screens.
+ return Math.max(camera.w/Math.max(1,rect.width),camera.h/Math.max(1,rect.height));
+}
+function pointInWorld(clientX,clientY){
+ const rect=svg.getBoundingClientRect(),unit=mapUnitsPerPixel(view,rect);
+ const p=rotatedOffset((clientX-rect.left-rect.width/2)*unit,(clientY-rect.top-rect.height/2)*unit,-rotation);
+ return{x:view.x+view.w/2+p.x,y:view.y+view.h/2+p.y};
+}
+function focusOnWorldPoint(anchor,clientX,clientY){
+ const rect=svg.getBoundingClientRect(),unit=mapUnitsPerPixel(view,rect);
+ const p=rotatedOffset((clientX-rect.left-rect.width/2)*unit,(clientY-rect.top-rect.height/2)*unit,-rotation);
+ view.x=anchor.x-p.x-view.w/2;
+ view.y=anchor.y-p.y-view.h/2;
+ clampView();applyView();
+}
+function zoomAt(f,clientX,clientY){
+ const anchor=pointInWorld(clientX,clientY);
+ view.w=Math.max(520,Math.min(WORLD_W,view.w*f));
+ view.h=view.w*WORLD_H/WORLD_W;
+ focusOnWorldPoint(anchor,clientX,clientY);
+}
+// Mouse drag and wheel zoom for laptops and desktop browsers.
+let mouseGesture=null,suppressClickUntil=0;
 svg.addEventListener("pointerdown",e=>{
- if(e.pointerType!=="mouse")return;
- if(e.target.closest("[role=button]"))return;
- if(e.pointerType==="mouse"&&e.button!==0)return;
- activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ if(e.pointerType!=="mouse"||e.button!==0||e.target.closest("[role=button]"))return;
+ mouseGesture={id:e.pointerId,startX:e.clientX,startY:e.clientY,anchor:pointInWorld(e.clientX,e.clientY),view:{...view},rotation,moved:false};
  try{svg.setPointerCapture(e.pointerId)}catch(_){}
- dragged=false;beginGesture();svg.classList.add("dragging");
+ svg.classList.add("dragging");
 });
 svg.addEventListener("pointermove",e=>{
- if(e.pointerType!=="mouse"||!activePointers.has(e.pointerId))return;
- activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
- const pts=pointerSnapshot(),rect=svg.getBoundingClientRect();
- if(!gestureBase||!rect.width||!rect.height)return;
- if(gestureBase.mode==="pan"&&pts.length===1){
-   const p=pts[0],dx=p.x-gestureBase.x,dy=p.y-gestureBase.y;
-   if(Math.hypot(dx,dy)>5)dragged=true;
-   if(dragged){view={...gestureBase.view,x:gestureBase.view.x-dx/rect.width*gestureBase.view.w,y:gestureBase.view.y-dy/rect.height*gestureBase.view.h};clampView();applyView()}
- }else if(pts.length>=2){
-   const a=pts[0],b=pts[1],midX=(a.x+b.x)/2,midY=(a.y+b.y)/2,d=Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle=Math.atan2(b.y-a.y,b.x-a.x);
-   const deltaDistance=Math.abs(d-gestureBase.d),deltaAngle=Math.abs(angle-gestureBase.angle);
-   if(deltaDistance>2||deltaAngle>.015||Math.hypot(midX-gestureBase.midX,midY-gestureBase.midY)>3)dragged=true;
-   const ratio=d/gestureBase.d,nw=Math.max(520,Math.min(WORLD_W,gestureBase.view.w/ratio)),nh=nw*WORLD_H/WORLD_W;
-   const dx=(midX-gestureBase.midX)/rect.width*gestureBase.view.w,dy=(midY-gestureBase.midY)/rect.height*gestureBase.view.h;
-   view={x:gestureBase.view.x-dx,y:gestureBase.view.y-dy,w:nw,h:nh};clampView();applyView();
-   let da=angle-gestureBase.angle;while(da>Math.PI)da-=Math.PI*2;while(da< -Math.PI)da+=Math.PI*2;
-   setRotation(gestureBase.rotation+da*180/Math.PI);
- }
- if(dragged)e.preventDefault();
+ const g=mouseGesture;
+ if(!g||e.pointerId!==g.id)return;
+ if(Math.hypot(e.clientX-g.startX,e.clientY-g.startY)>4)g.moved=true;
+ if(!g.moved)return;
+ view={...g.view};rotation=g.rotation;
+ focusOnWorldPoint(g.anchor,e.clientX,e.clientY);
+ e.preventDefault();
 });
-function endPointer(e){
- if(e.pointerType!=="mouse"||!activePointers.has(e.pointerId))return;
- activePointers.delete(e.pointerId);
- if(dragged)suppressClickUntil=Date.now()+350;
- if(activePointers.size===0){gestureBase=null;svg.classList.remove("dragging")}
- else beginGesture();
+function endMouseGesture(e){
+ if(!mouseGesture||e.pointerId!==mouseGesture.id)return;
+ if(mouseGesture.moved)suppressClickUntil=Date.now()+350;
+ mouseGesture=null;svg.classList.remove("dragging");
 }
-svg.addEventListener("pointerup",endPointer);svg.addEventListener("pointercancel",endPointer);
-svg.addEventListener("click",e=>{if(Date.now()<suppressClickUntil){e.preventDefault();e.stopPropagation()}},true);
-svg.addEventListener("wheel",e=>{e.preventDefault();const p=pointInWorld(e.clientX,e.clientY);zoomAt(e.deltaY<0?.9:1.1,p.x,p.y)},{passive:false});
-// Prevent Safari's native page-level pinch and double-tap zoom while interacting with the map.
-// Dedicated iPad touch handling: taps never zoom; one finger pans; two fingers pinch and rotate.
- let touchBase=null,touchMoved=false;
- function touchPoints(list){return Array.from(list).map(p=>({x:p.clientX,y:p.clientY}))}
- function startTouch(e){
-  if(e.target.closest("[role=button]")){touchBase=null;return}
-  e.preventDefault();const pts=touchPoints(e.touches);touchMoved=false;
-  if(pts.length===1)touchBase={mode:"pan",pts,view:{...view}};
-  else if(pts.length>=2){const a=pts[0],b=pts[1];touchBase={mode:"transform",view:{...view},rotation,midX:(a.x+b.x)/2,midY:(a.y+b.y)/2,d:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle:Math.atan2(b.y-a.y,b.x-a.x)}}
+svg.addEventListener("pointerup",endMouseGesture);
+svg.addEventListener("pointercancel",endMouseGesture);
+svg.addEventListener("click",e=>{
+ if(Date.now()<suppressClickUntil){e.preventDefault();e.stopPropagation()}
+},true);
+svg.addEventListener("wheel",e=>{
+ e.preventDefault();zoomAt(e.deltaY<0?.9:1.1,e.clientX,e.clientY);
+},{passive:false});
+// iPad Safari: one-finger drag, two-finger pinch and two-finger twist.
+// The gesture's starting world point remains under the fingers while manipulating the map.
+let touchBase=null,touchMoved=false;
+function touchPoints(list){return Array.from(list).map(p=>({x:p.clientX,y:p.clientY}))}
+function startTouch(e){
+ // A single tap on a place marker still opens its place card.
+ if(e.touches.length===1&&e.target.closest("[role=button]")){touchBase=null;return}
+ e.preventDefault();
+ const pts=touchPoints(e.touches);
+ touchMoved=false;
+ if(pts.length===1){
+  touchBase={mode:"pan",view:{...view},rotation,anchor:pointInWorld(pts[0].x,pts[0].y),x:pts[0].x,y:pts[0].y};
+ }else if(pts.length>=2){
+  const a=pts[0],b=pts[1],mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+  touchBase={mode:"transform",view:{...view},rotation,anchor:pointInWorld(mx,my),midX:mx,midY:my,d:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle:Math.atan2(b.y-a.y,b.x-a.x)};
  }
- function moveTouch(e){
-  e.preventDefault();if(!touchBase)return;const pts=touchPoints(e.touches),rect=svg.getBoundingClientRect();if(!rect.width||!rect.height)return;
-  if(touchBase.mode==="pan"&&pts.length===1){
-   const dx=pts[0].x-touchBase.pts[0].x,dy=pts[0].y-touchBase.pts[0].y;if(Math.hypot(dx,dy)>3)touchMoved=true;
-   if(touchMoved){view={...touchBase.view,x:touchBase.view.x-dx/rect.width*touchBase.view.w,y:touchBase.view.y-dy/rect.height*touchBase.view.h};clampView();applyView()}
-  }else if(pts.length>=2){
-   const a=pts[0],b=pts[1],mx=(a.x+b.x)/2,my=(a.y+b.y)/2,d=Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle=Math.atan2(b.y-a.y,b.x-a.x);
-   if(Math.abs(d-touchBase.d)>2||Math.abs(angle-touchBase.angle)>.012||Math.hypot(mx-touchBase.midX,my-touchBase.midY)>3)touchMoved=true;
-   const ratio=d/touchBase.d,nw=Math.max(520,Math.min(WORLD_W,touchBase.view.w/ratio)),nh=nw*WORLD_H/WORLD_W,dx=(mx-touchBase.midX)/rect.width*touchBase.view.w,dy=(my-touchBase.midY)/rect.height*touchBase.view.h;
-   view={x:touchBase.view.x-dx,y:touchBase.view.y-dy,w:nw,h:nh};clampView();applyView();
-   let da=angle-touchBase.angle;while(da>Math.PI)da-=Math.PI*2;while(da< -Math.PI)da+=Math.PI*2;setRotation(touchBase.rotation+da*180/Math.PI);
-  }
+}
+function moveTouch(e){
+ if(!touchBase)return;
+ e.preventDefault();
+ const pts=touchPoints(e.touches),g=touchBase;
+ if(g.mode==="pan"&&pts.length===1){
+  if(Math.hypot(pts[0].x-g.x,pts[0].y-g.y)>3)touchMoved=true;
+  if(!touchMoved)return;
+  view={...g.view};rotation=g.rotation;
+  focusOnWorldPoint(g.anchor,pts[0].x,pts[0].y);
+ }else if(g.mode==="transform"&&pts.length>=2){
+  const a=pts[0],b=pts[1],mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+  const d=Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle=Math.atan2(b.y-a.y,b.x-a.x);
+  let da=angle-g.angle;
+  while(da>Math.PI)da-=2*Math.PI;
+  while(da< -Math.PI)da+=2*Math.PI;
+  if(Math.abs(d-g.d)>2||Math.abs(da)>.012||Math.hypot(mx-g.midX,my-g.midY)>3)touchMoved=true;
+  if(!touchMoved)return;
+  const ratio=d/g.d;
+  view={...g.view,w:Math.max(520,Math.min(WORLD_W,g.view.w/ratio))};
+  view.h=view.w*WORLD_H/WORLD_W;
+  rotation=g.rotation+da*180/Math.PI;
+  focusOnWorldPoint(g.anchor,mx,my);
  }
- function endTouch(e){if(!touchBase)return;e.preventDefault();if(e.touches.length===0)touchBase=null;else startTouch(e)}
- const mapShell=document.getElementById("map-shell");
- mapShell.addEventListener("touchstart",startTouch,{passive:false});
- mapShell.addEventListener("touchmove",moveTouch,{passive:false});
- mapShell.addEventListener("touchend",endTouch,{passive:false});
- mapShell.addEventListener("touchcancel",endTouch,{passive:false});
- // Always-available controls complement direct touch gestures on iPad.
- function nudgeMap(dx,dy){const f=.16;view.x+=dx*view.w*f;view.y+=dy*view.h*f;clampView();applyView()}
- mapShell.parentElement.querySelectorAll("[data-pan]").forEach(b=>b.addEventListener("click",()=>{const [dx,dy]=b.dataset.pan.split(",").map(Number);nudgeMap(dx,dy)}));
- mapShell.parentElement.querySelectorAll("[data-zoom]").forEach(b=>b.addEventListener("click",()=>{zoomAt(b.dataset.zoom==="in"?.72:1.38,view.x+view.w/2,view.y+view.h/2)}));
- mapShell.parentElement.querySelectorAll("[data-rotate]").forEach(b=>b.addEventListener("click",()=>setRotation(rotation+Number(b.dataset.rotate))));
- mapShell.parentElement.querySelector("[data-reset-view]").addEventListener("click",()=>{view={x:0,y:0,w:WORLD_W,h:WORLD_H};setRotation(0);world.setAttribute("transform","scale(3)");applyView()});
- svg.addEventListener("dblclick",e=>e.preventDefault());
+}
+function endTouch(e){
+ if(!touchBase)return;
+ e.preventDefault();
+ if(e.touches.length===0)touchBase=null;
+ else startTouch(e);
+}
+const mapShell=document.getElementById("map-shell");
+mapShell.addEventListener("touchstart",startTouch,{passive:false});
+mapShell.addEventListener("touchmove",moveTouch,{passive:false});
+mapShell.addEventListener("touchend",endTouch,{passive:false});
+mapShell.addEventListener("touchcancel",endTouch,{passive:false});
+svg.addEventListener("dblclick",e=>e.preventDefault());
  for(const name of ["gesturestart","gesturechange","gestureend"]){svg.addEventListener(name,e=>e.preventDefault(),{passive:false})}
  save();renderTasks();
 </script></body></html>
