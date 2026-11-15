@@ -215,6 +215,31 @@ for(let y=3;y<N-3;y+=2){
   else if(r<dense+.27)objects.push({x,y,kind:"stone",biome:biomes[k]});
  }
 }
+// Regional street dressing stays outside building footprints and leaves routes open.
+// Decorative objects never alter collision or pathfinding.
+for(let y=4;y<N-4;y+=2)for(let x=4;x<N-4;x+=2){
+ const k=coord(x,y),t=terrain[k],biome=biomes[k],r=hash(x,y,181);
+ if(occupied[k]>=0||t===TERRAIN.WATER||t===TERRAIN.RIVER||t===TERRAIN.BRIDGE)continue;
+ const winter=biome===B.WINTER,warm=biome===B.SUMMER||biome===B.COAST;
+ const paved=t===TERRAIN.ROAD||t===TERRAIN.PATH||t===TERRAIN.PLAZA;
+ let kind;
+ if(paved){
+  if(r<.04)kind=winter?"snowman":"planter";
+  else if(r<.075)kind=winter?"logpile":"terrace";
+  else if(r<.10)kind="bicycle";
+  else if(r<.125)kind="signpost";
+  else if(r<.15)kind=winter?"lantern":"fruitstall";
+  else if(r<.17)kind="fountain";
+ }else if(t===TERRAIN.SAND){
+  if(r<.08)kind="lounger";else if(r<.13)kind="boat";
+ }else{
+  if(r<.09)kind=winter?"pine":warm?"citrus":"planter";
+  else if(r<.14)kind=winter?"snowman":"fence";
+  else if(r<.19)kind=winter?"logpile":"garden";
+  else if(r<.23)kind="lantern";
+ }
+ if(kind)objects.push({x,y,kind,biome,variant:Math.floor(hash(x,y,182)*4)});
+}
 const streetCells=roadCells.filter(k=>{
  const x=k%N,y=(k/N)|0;return isStreet(x,y);
 });

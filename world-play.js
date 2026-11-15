@@ -7,6 +7,16 @@ if(!R||!W)return;
 const T=W.T,stage=R.stage,cam=R.camera,screen=R.screen;
 const hud=document.createElement("div"),levelBadge=document.createElement("span"),questBadge=document.createElement("span");
 hud.className="lw-hud";hud.append(levelBadge,questBadge);stage.append(hud);
+const regionNav=document.createElement("div");regionNav.className="lw-regions";
+regionNav.setAttribute("aria-label","Explore climate regions");
+const regionLabel=document.createElement("span");regionLabel.className="lw-region-label";
+for(const [label,x,y] of [["☀ Barcelona quarter",156,164],["❄ Frostglass",45,48],["❄ Snowbell",165,248],["☀ Mediterranean coast",270,185]]){
+ const button=document.createElement("button");button.type="button";button.textContent=label;
+ button.addEventListener("click",e=>{
+  e.stopPropagation();cam.x=x*T+T/2;cam.y=y*T+T/2;cam.zoom=.7;pop.hidden=true;R.markDirty();
+ });regionNav.append(button);
+}
+regionNav.append(regionLabel);stage.append(regionNav);
 const hint=document.createElement("div");hint.className="lw-hint";
 hint.textContent="Drag to explore · Pinch to zoom · Twist two fingers to rotate · Tap streets to walk";
 stage.append(hint);
@@ -72,24 +82,31 @@ const npcs=[],names=["Mila","Nico","Amélie","Hugo","Lina","Theo","Freya","Felix
 const clothes=["#be765d","#68939a","#d2a365","#7d9173","#a57f9b","#d8bfa6","#4e6675","#c48170"];
 const hairs=["#473832","#805946","#c19a68","#302e35","#a16b44"];
 const skins=["#e4b28e","#9a7155","#efc9a5","#bd9071"];
-// A lively city core: residents gather around landmarks, cafés and public squares.
- // Others roam the wider districts and beaches. Deterministic spawns.
-for(let i=0;i<288;i++){
- let x,y;
- if(i<180){
+// Keep the arrival neighbourhood busy, with crowds at landmarks and across town.
+// Spread residents across distinct tiles so they are visible as individuals.
+const spawnCells=new Set(),npcCount=1200;
+function spawnNear(cx,cy,radius,i){
+ const angle=W.hash(i,36,14)*Math.PI*2,distance=Math.sqrt(W.hash(i,57,15))*radius;
+ return W.closestWalkable(cx+Math.cos(angle)*distance,cy+Math.sin(angle)*distance,true);
+}
+for(let i=0;i<npcCount;i++){
+ let position;
+ if(i<240)position=spawnNear(W.initial.x,W.initial.y,24,i);
+ else if(i<720){
   const l=W.landmarks[i%W.landmarks.length];
-  const dx=(W.hash(i,36,14)-.5)*38,dy=(W.hash(i,57,15)-.5)*38;
-  const position=W.closestWalkable(l.x+l.w/2+dx,l.y+l.h/2+dy,true);
-  if(!position)continue;
-  x=position.x;y=position.y;
- }else{
-  const k=W.streetCells[Math.floor(W.hash(i,21,14)*W.streetCells.length)];
-  if(k==null)continue;
-  x=k%W.N;y=(k/W.N)|0;
-  if(!W.isStreet(x,y))continue;
+  position=spawnNear(l.x+l.w/2,l.y+l.h/2,22,i);
  }
+ if(!position||spawnCells.has(W.coord(position.x,position.y))){
+  const start=Math.floor(W.hash(i,21,14)*W.streetCells.length);
+  for(let j=0;j<W.streetCells.length;j++){
+   const k=W.streetCells[(start+j)%W.streetCells.length];
+   if(!spawnCells.has(k)){position={x:k%W.N,y:(k/W.N)|0};break;}
+  }
+ }
+ if(!position||spawnCells.has(W.coord(position.x,position.y)))continue;
+ const {x,y}=position;spawnCells.add(W.coord(x,y));
  npcs.push({id:i,name:names[i%names.length],x:x*T+T/2,y:y*T+T/2,
-  step:0,dest:null,pause:0,speed:49+(i*17)%29,direction:1,
+  step:0,dest:null,previous:null,pause:0,speed:49+(i*17)%29,direction:1,
   shirt:clothes[i%clothes.length],hair:hairs[i%hairs.length],skin:skins[i%skins.length]});
 }
 function neighbours(x,y){
@@ -102,7 +119,13 @@ function neighbours(x,y){
 function npcTarget(n){
  const x=Math.floor(n.x/T),y=Math.floor(n.y/T),steps=neighbours(x,y);
  if(!steps.length){n.pause=1;return;}
- n.dest=steps[Math.floor(W.hash(x+n.id*3,y+n.id*7,n.step+4)*steps.length)];
+ // Keep walking along a street; turn at junctions and reverse only at dead ends.
+ const onward=steps.filter(p=>!n.previous||p.x!==n.previous.x||p.y!==n.previous.y);
+ const choices=onward.length?onward:steps;
+ const straight=n.previous&&choices.find(p=>p.x-x===x-n.previous.x&&p.y-y===y-n.previous.y);
+ const turn=W.hash(x+n.id*3,y+n.id*7,n.step+4);
+ n.dest=straight&&turn<.7?straight:choices[Math.floor(turn*choices.length)];
+ n.previous={x,y};
 }
 function moveTowards(entity,target,dt,speed){
  if(!target)return true;
@@ -271,6 +294,9 @@ function tick(time){
   else if(moveTowards(n,n.dest,dt,n.speed)){n.dest=null;n.step++;if(n.step%8===0)n.pause=.4+W.hash(n.id,n.step,3)*.9;}
  }
  if(R.dirty()){R.draw();drawCalls++;}
+ const biome=W.biomes[W.coord(Math.max(0,Math.min(W.N-1,Math.floor(cam.x/T))),Math.max(0,Math.min(W.N-1,Math.floor(cam.y/T))))];
+ const climate=["Barcelona quarter · Sunny & warm","Blossom district · Mild spring","Old quarter · Crisp autumn","Snow country · Freezing","Mediterranean coast · Hot & sunny"][biome];
+ if(regionLabel.textContent!==climate)regionLabel.textContent=climate;
  R.actors(player,npcs,time);
 }
 updateHUD();R.resize();
