@@ -13,6 +13,59 @@ h1{font-size:clamp(23px,4vw,33px);font-weight:normal;margin:0;letter-spacing:-1p
 .eyebrow{font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}h2{font-size:26px;font-weight:normal;margin:5px 0 10px}p{margin:7px 0;color:#655d53}.hero{min-height:250px;background:linear-gradient(120deg,#e8c9ad,#d8e3d3 55%,#b9d4d3);display:flex;align-items:flex-end;position:relative;overflow:hidden}.hero h2{font-size:36px}.button{border:0;border-radius:24px;background:#51483e;color:#fff8ed;padding:10px 16px;margin-top:10px}.button.secondary{background:#eee2d0;color:var(--ink)}
 .city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.note,.map-help{font:11px Arial,sans-serif;color:#746b60}.map-shell{position:relative;border:2px solid #cbb99f;border-radius:16px;overflow:hidden;background:#b6d5d1;touch-action:none;box-shadow:0 12px 34px rgba(78,65,49,.13)}#city-art{display:block;width:100%;height:min(76vh,820px);min-height:500px;cursor:grab;touch-action:none;user-select:none;transform-origin:50% 50%;transition:transform .18s ease;shape-rendering:crispEdges}#city-art.dragging{cursor:grabbing;transition:none}.map-tools{display:flex;justify-content:space-between;gap:7px;flex-wrap:wrap;margin:0 0 8px}.tool-group{display:flex;gap:7px}.map-tools button{border:1px solid #d7c8b4;background:#fff9ee;border-radius:20px;padding:7px 13px;color:#65584c}.map-tools button:hover{background:#eee1ce}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#eee6d9;padding:6px 10px;border-radius:20px}.place-card{background:#f7efe2;border:1px solid #e6d8c5;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}
 @media(max-width:700px){.layout{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.panel{padding:15px}#city-art{height:68vh;min-height:440px}}
+
+/* Editorial character interface */
+:root{--ink:#202a35;--muted:#77818b;--paper:#f2f3f1;--panel:#fff;--line:#e0e4e5;--accent:#b76d59;--navy:#263746;--soft:#e8edef}
+body{background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;letter-spacing:.005em}
+header{background:#fff;border-bottom:1px solid var(--line);padding:18px clamp(18px,4vw,54px)}
+header h1{font-family:Georgia,serif;font-size:30px;letter-spacing:-1.2px;color:var(--navy)}
+header small,.eyebrow{font-family:Arial,sans-serif;letter-spacing:2.1px;font-size:9px;font-weight:700;color:#7e8991}
+.wallet{background:#f3f0e9;border:1px solid #e8e0d5;color:#62594d;border-radius:5px;font-weight:700}
+.layout{max-width:1500px;grid-template-columns:190px minmax(0,1fr);gap:30px;margin:28px auto}
+.nav{border-right:1px solid var(--line);padding:5px 18px 5px 0;gap:5px}
+.nav button{border-radius:5px;padding:12px 14px;font:600 12px Arial,sans-serif;letter-spacing:.04em;color:#78838c}
+.nav button.active,.nav button:hover{background:var(--navy);color:white}
+.panel{background:white;border:1px solid var(--line);border-radius:7px;padding:25px;margin-bottom:18px;box-shadow:0 8px 28px rgba(31,47,57,.035)}
+h2{font-family:Georgia,serif;font-size:32px;letter-spacing:-.8px;color:var(--navy)}
+p{color:#64717a;line-height:1.7}
+.hero{min-height:350px;border:0;border-radius:8px;background:linear-gradient(112deg,#e7e8e2 0%,#d7e1e2 54%,#b6c8c9 100%);padding:38px}
+.hero h2{font-size:clamp(38px,5vw,58px);max-width:520px;line-height:1.05}
+.button{border-radius:4px;background:var(--navy);padding:12px 19px;font:700 11px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.button.secondary{background:#eef1f1;color:var(--navy)}
+.city-heading h2{font-size:34px}
+.person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:17px}
+.character-card{padding:0;border:1px solid var(--line);background:white;border-radius:7px;overflow:hidden;cursor:pointer;text-align:left;color:inherit;transition:transform .18s ease,box-shadow .18s ease}
+.character-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px #26374616}
+.character-art{height:280px;position:relative;overflow:hidden;background:linear-gradient(145deg,#d9e1df,#b8c9c8 52%,#8d9d9b)}
+.character-art:before{content:"";position:absolute;width:154px;height:154px;border-radius:50%;background:#e6d5c1;left:50%;top:39px;transform:translateX(-50%);opacity:.9}
+.character-art:after{content:"";position:absolute;width:190px;height:190px;border-radius:48% 48% 8% 8%;background:#334b50;left:50%;bottom:-76px;transform:translateX(-50%)}
+.character-art .art-note{position:absolute;z-index:2;left:14px;top:13px;color:#34464b;font-size:9px;letter-spacing:1.8px;font-weight:700}
+.character-art .monogram{position:absolute;z-index:3;left:50%;top:86px;transform:translateX(-50%);font:italic 44px Georgia,serif;color:#485b5d}
+.character-meta{padding:17px 18px 19px}
+.character-meta .name{font:26px Georgia,serif;color:var(--navy);display:block}
+.character-meta .role{font-size:11px;color:#75818a;display:block;margin-top:5px}
+.character-meta .card-foot{display:flex;justify-content:space-between;align-items:center;margin-top:17px;padding-top:12px;border-top:1px solid var(--line);font-size:9px;letter-spacing:1.5px;font-weight:700;color:#78838b}
+.character-detail{background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.detail-top{display:grid;grid-template-columns:minmax(230px,.8fr) 1.2fr;min-height:390px}
+.detail-art{position:relative;min-height:390px;background:linear-gradient(150deg,#dce5e2,#b9c9c5 55%,#718b8a);display:flex;align-items:flex-end;padding:24px}
+.detail-art:before{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:#ead8c4;top:48px;left:50%;transform:translateX(-50%)}
+.detail-art:after{content:"";position:absolute;width:245px;height:210px;border-radius:48% 48% 0 0;background:#354e50;bottom:0;left:50%;transform:translateX(-50%)}
+.detail-art span{position:relative;z-index:2;color:#fff;font-size:9px;letter-spacing:2px;font-weight:700}
+.detail-intro{padding:clamp(24px,4vw,48px);display:flex;flex-direction:column;justify-content:center}
+.detail-intro h2{font-size:clamp(42px,5vw,62px);margin:9px 0 2px}
+.detail-role{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#7c878e}
+.detail-description{max-width:560px;margin-top:22px}
+.detail-facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.fact-pill{padding:8px 11px;background:#eef1f0;color:#53636a;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.06em}
+.detail-content{padding:26px;display:grid;grid-template-columns:1.1fr .9fr;gap:28px;border-top:1px solid var(--line)}
+.detail-content h3{font:22px Georgia,serif;color:var(--navy);margin:0 0 9px}
+.info-block{padding:0 0 20px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.info-block:last-child{border:0;margin:0}
+.back-link{border:0;background:transparent;color:#6e7d84;font:700 10px Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;padding:0 0 16px;cursor:pointer}
+.profile-label{font-size:9px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase;color:#8a9499}
+.tag{font:700 9px Arial,sans-serif;letter-spacing:1.5px;color:#9b6b58}
+@media(max-width:800px){.layout{grid-template-columns:1fr;gap:15px}.nav{border-right:0;border-bottom:1px solid var(--line);padding:0 0 10px;flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.detail-top{grid-template-columns:1fr}.detail-art{min-height:270px}.detail-content{grid-template-columns:1fr}.panel{padding:19px}}
+
 </style></head>
 <body>
 <header><div><small>A little life, at your own pace</small><h1>Little Worlds <span style="color:#bd898a">✳</span></h1></div><div class="wallet">✦ <b id="points">0</b> wishes</div></header>
@@ -84,13 +137,47 @@ h1{font-size:clamp(23px,4vw,33px);font-weight:normal;margin:0;letter-spacing:-1p
 <div class="place-card" id="place-card"><strong>Welcome to Wish & Wander</strong><p>A sunlit city of tiled façades, little plazas, leafy courtyards and seaside streets. Tap a place marker to explore.</p></div>
 <p class="map-help">The map is a playable prototype: zoom, rotate, discover places and watch residents move through the streets. More interiors and character stories can be added as the world expands.</p>
 </section>
-<section id="people" class="hidden"><div class="panel"><div class="eyebrow">People in your world</div><h2>Someone you might meet</h2><div class="person"><strong>Astrid Yun</strong><small>Violinist · Norway</small><p>Quiet and thoughtful, with a love for classical music, theatre, ballet and classic literature. She has a home full of animals and a life shaped by music and family.</p><span class="tag">CHARACTER PROFILE · STORY IN PROGRESS</span></div><p class="note">Full illustrated character designs and storylines are still to come.</p></div></section>
+<section id="people" class="hidden">
+<div class="city-heading"><div><div class="eyebrow">The residents of Wish & Wander</div><h2>People & stories</h2><p>Get to know the people who make the city feel alive.</p></div><div class="note">CHARACTER COLLECTION · 01 RESIDENT</div></div>
+<div id="character-gallery" class="person-grid">
+<button class="character-card" type="button" onclick="openCharacter('astrid')">
+<div class="character-art"><span class="art-note">CHARACTER ARTWORK TO COME</span><span class="monogram">AY</span></div>
+<div class="character-meta"><span class="name">Astrid Yun</span><span class="role">Professional violinist · Norway</span><div class="card-foot"><span>RESIDENT PROFILE</span><span>VIEW PROFILE ↗</span></div></div>
+</button>
+</div>
+<div id="character-profile" class="hidden">
+<button class="back-link" type="button" onclick="closeCharacter()">← BACK TO PEOPLE</button>
+<article class="character-detail">
+<div class="detail-top">
+<div class="detail-art"><span>PORTRAIT ARTWORK TO BE ADDED</span></div>
+<div class="detail-intro"><div class="eyebrow">Resident profile · Music & the arts</div><h2>Astrid Yun</h2><div class="detail-role">Professional violinist · Norwegian–Chinese</div>
+<p class="detail-description">A thoughtful, introverted musician with a deep attachment to classical music and the performing arts. Astrid is often more comfortable expressing herself through music than through conversation.</p>
+<div class="detail-facts"><span class="fact-pill">CLASSICAL MUSIC</span><span class="fact-pill">THEATRE & BALLET</span><span class="fact-pill">CLASSIC LITERATURE</span><span class="fact-pill">NORWAY ↔ CHINA</span></div></div>
+</div>
+<div class="detail-content">
+<div>
+<div class="info-block"><div class="profile-label">Background</div><h3>Between two cultures</h3><p>Astrid is half Chinese and half Norwegian. She was born and raised in Norway, speaks Chinese and travels to China frequently. Both sides of her heritage are part of her life and identity.</p></div>
+<div class="info-block"><div class="profile-label">Career</div><h3>A life in music</h3><p>A professional violinist, Astrid has built her life around music. She loves classical repertoire, theatre and ballet, and has a particular affection for classic literature.</p></div>
+<div class="info-block"><div class="profile-label">Personality</div><h3>Quiet, observant, melancholic</h3><p>Introverted and often melancholic, Astrid tends to observe before she joins in. She values privacy, familiar routines and relationships that develop slowly. She is an atheist.</p></div>
+</div>
+<div>
+<div class="info-block"><div class="profile-label">Home</div><h3>A wooden house</h3><p>She lives in a two-storey wooden house. It is also home to a small menagerie: cold-climate dogs such as huskies, rabbits and fish.</p></div>
+<div class="info-block"><div class="profile-label">Family</div><h3>A complicated history</h3><p>Astrid was raised by her Chinese father after her Norwegian mother died shortly after her birth. Her father's second marriage became an unhappy and harmful period in her childhood; he eventually discovered what was happening, ended the marriage and later built a kinder family life with his new wife and their son.</p><p>Astrid moved out when her younger half-brother was eighteen. Her family history matters to her, but it does not define the whole of her life.</p></div>
+<div class="info-block"><div class="profile-label">Story potential</div><h3>Getting to know her</h3><p>Build trust through quiet conversations, music, visits to performances and learning about the places that matter to her. Her personal storyline will explore independence, family, artistic ambition and friendship.</p></div>
+</div>
+</div>
+</article>
+</div>
+</section>
 <section id="life" class="hidden"><div class="panel"><div class="eyebrow">Small things count</div><h2>Daily life</h2><p>Complete a task to earn wishes. These are optional and never required to explore the city.</p><div class="grid" id="tasks"></div></div></section>
 <section id="journal" class="hidden"><div class="panel"><div class="eyebrow">Your journal</div><h2>Little moments</h2><p id="journal-text">Your story is waiting to be written.</p><p class="note">Your progress is saved in this browser on this device.</p></div></section>
 </main></div>
 <script>
 const taskList=[["Tidy one small space",5],["Read for ten minutes",10],["Go for a short walk",10],["Finish something you started",20],["Do something you've been putting off",20]];
 let state={points:Number(localStorage.getItem("lw-points")||0),done:JSON.parse(localStorage.getItem("lw-done")||"[]"),visits:JSON.parse(localStorage.getItem("lw-visits")||"[]")};
+
+function openCharacter(id){if(id!=="astrid")return;document.getElementById("character-gallery").classList.add("hidden");document.getElementById("character-profile").classList.remove("hidden");}
+function closeCharacter(){document.getElementById("character-profile").classList.add("hidden");document.getElementById("character-gallery").classList.remove("hidden");}
 function save(){localStorage.setItem("lw-points",state.points);localStorage.setItem("lw-done",JSON.stringify(state.done));localStorage.setItem("lw-visits",JSON.stringify(state.visits));document.getElementById("points").textContent=state.points}
 function renderTasks(){document.getElementById("tasks").innerHTML=taskList.map(([name,value],i)=>'<div class="task '+(state.done.includes(i)?"done":"")+'"><button '+(state.done.includes(i)?"disabled":"")+' onclick="complete('+i+')">'+(state.done.includes(i)?"Done":"+"+value)+'</button><strong>'+name+'</strong><small>'+value+' wishes</small></div>').join("")}
 function complete(i){if(state.done.includes(i))return;state.done.push(i);state.points+=taskList[i][1];save();renderTasks()}
