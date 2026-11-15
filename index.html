@@ -11,7 +11,7 @@ header{padding:16px clamp(16px,4vw,48px);display:flex;justify-content:space-betw
 h1{font-size:clamp(23px,4vw,33px);font-weight:normal;margin:0;letter-spacing:-1px}header small{color:var(--muted);font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase}.wallet{font:13px Arial,sans-serif;background:#f1e5d4;border:1px solid #e1d0bb;border-radius:30px;padding:9px 14px}
 .layout{max-width:1450px;margin:18px auto;padding:0 16px;display:grid;grid-template-columns:165px minmax(0,1fr);gap:18px}.nav{display:flex;flex-direction:column;gap:7px}.nav button{border:0;text-align:left;background:transparent;padding:11px 13px;border-radius:12px;color:var(--muted)}.nav button.active,.nav button:hover{background:#e9ddca;color:var(--ink)}main{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px;margin-bottom:16px}
 .eyebrow{font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}h2{font-size:26px;font-weight:normal;margin:5px 0 10px}p{margin:7px 0;color:#655d53}.hero{min-height:250px;background:linear-gradient(120deg,#e8c9ad,#d8e3d3 55%,#b9d4d3);display:flex;align-items:flex-end;position:relative;overflow:hidden}.hero h2{font-size:36px}.button{border:0;border-radius:24px;background:#51483e;color:#fff8ed;padding:10px 16px;margin-top:10px}.button.secondary{background:#eee2d0;color:var(--ink)}
-.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.note,.map-help{font:11px Arial,sans-serif;color:#746b60}.map-shell{position:relative;border:2px solid #cbb99f;border-radius:16px;overflow:hidden;background:#b6d5d1;touch-action:none;overscroll-behavior:contain;-webkit-user-select:none;user-select:none;box-shadow:0 12px 34px rgba(78,65,49,.13)}#city-art{display:block;width:100%;height:min(76vh,820px);min-height:500px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;background:#e5d8c2;shape-rendering:crispEdges}#city-art.dragging{cursor:grabbing;transition:none}.map-tools{display:none}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#eee6d9;padding:6px 10px;border-radius:20px}.place-card{background:#f7efe2;border:1px solid #e6d8c5;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}
+.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.note,.map-help{font:11px Arial,sans-serif;color:#746b60}.map-shell{position:relative;border:2px solid #cbb99f;border-radius:16px;overflow:hidden;background:#b6d5d1;touch-action:none;overscroll-behavior:contain;-webkit-user-select:none;user-select:none;box-shadow:0 12px 34px rgba(78,65,49,.13)}#city-art{display:block;width:100%;height:min(76vh,820px);min-height:500px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;background:#d9d7bd;shape-rendering:crispEdges}#city-art.dragging{cursor:grabbing;transition:none}.map-tools{display:none}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#eee6d9;padding:6px 10px;border-radius:20px}.place-card{background:#f7efe2;border:1px solid #e6d8c5;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}
 @media(max-width:700px){.layout{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.panel{padding:15px}#city-art{height:68vh;min-height:440px}}
 
 /* Editorial character interface */
@@ -187,7 +187,7 @@ const world=document.createElementNS(NS,"g");
 const defs=svg.querySelector("defs");
 [...svg.children].forEach(node=>{if(node!==defs)world.appendChild(node)});
 svg.appendChild(world);
-const worldGround=document.createElementNS(NS,"rect");worldGround.setAttribute("x","0");worldGround.setAttribute("y","0");worldGround.setAttribute("width","6600");worldGround.setAttribute("height","4620");worldGround.setAttribute("fill","#e5d8c2");world.insertBefore(worldGround,world.firstChild);
+const worldGround=document.createElementNS(NS,"rect");worldGround.setAttribute("x","-300");worldGround.setAttribute("y","-300");worldGround.setAttribute("width","7200");worldGround.setAttribute("height","5220");worldGround.setAttribute("fill","#e5d8c2");world.insertBefore(worldGround,world.firstChild);
 world.setAttribute("transform","scale(3)");
 const arch=document.getElementById("architecture"),green=document.getElementById("greenery"),land=document.getElementById("landmarks"),people=document.getElementById("residents"),markers=document.getElementById("markers");
 function el(tag,a,parent){let n=document.createElementNS(NS,tag);for(const k in a)n.setAttribute(k,a[k]);(parent||world).appendChild(n);return n}
@@ -238,13 +238,13 @@ const districtData=[
 const districtMarkers=[];
 districtData.forEach((d,di)=>{
  const root=el("g",{transform:"translate("+d.ox+" "+d.oy+")"},world);
- el("rect",{x:0,y:0,width:2200,height:1540,fill:d.ground,stroke:"#b8a58e","stroke-width":8},root);
+ el("rect",{x:0,y:0,width:2200,height:1540,fill:d.ground,stroke:"none"},root);
  // Quiet, consistent street hierarchy; buildings occupy plots between roads.
  const roads=el("g",{fill:"none","stroke-linecap":"square"},root);
- const streetPath="M-20 410H2220M-20 820H2220M-20 1230H2220M330 -30V1570M720 -30V1570M1110 -30V1570M1500 -30V1570M1890 -30V1570";
- el("path",{d:streetPath,stroke:"#b7a58c","stroke-width":96},roads);
- el("path",{d:streetPath,stroke:"#f5ead8","stroke-width":82},roads);
- el("path",{d:streetPath,stroke:"#d7c7af","stroke-width":2,"stroke-dasharray":"5 20"},roads);
+ const streetPath="M-40 360C350 330 620 425 980 390S1740 330 2240 390M-40 1040C360 980 620 1090 1020 1030S1780 960 2240 1050M280 -40C340 300 250 560 360 820S470 1280 410 1580M1050 -40C980 300 1110 570 1030 850S1000 1280 1080 1580M1760 -40C1690 320 1830 610 1740 900S1720 1290 1800 1580M-30 1450C460 1280 770 1320 1140 1400S1830 1330 2230 1450";
+ el("path",{d:streetPath,stroke:"#b7a58c","stroke-width":88,"stroke-linecap":"round","stroke-linejoin":"round"},roads);
+ el("path",{d:streetPath,stroke:"#f5ead8","stroke-width":75,"stroke-linecap":"round","stroke-linejoin":"round"},roads);
+ el("path",{d:streetPath,stroke:"#d7c7af","stroke-width":2,"stroke-dasharray":"5 20","stroke-linecap":"round"},roads);
  const green=el("g",{},root),buildings=el("g",{"data-style":di},root),details=el("g",{},root),crowd=el("g",{},root);
  // Two clearly bounded public gardens in every district.
  el("rect",{x:380,y:470,width:270,height:290,rx:8,fill:di===0?"#cbdad9":di===3?"#c5d8ad":di===6?"#d7bd91":"#b9c99f",stroke:"#91a181","stroke-width":7},green);
@@ -337,6 +337,7 @@ function beginGesture(){
  else if(pts.length>=2){const a=pts[0],b=pts[1];gestureBase={mode:"transform",view:{...view},rotation,midX:(a.x+b.x)/2,midY:(a.y+b.y)/2,d:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle:Math.atan2(b.y-a.y,b.x-a.x)}}
 }
 svg.addEventListener("pointerdown",e=>{
+ if(e.pointerType!=="mouse")return;
  if(e.target.closest("[role=button]"))return;
  if(e.pointerType==="mouse"&&e.button!==0)return;
  activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
@@ -344,7 +345,7 @@ svg.addEventListener("pointerdown",e=>{
  dragged=false;beginGesture();svg.classList.add("dragging");
 });
 svg.addEventListener("pointermove",e=>{
- if(!activePointers.has(e.pointerId))return;
+ if(e.pointerType!=="mouse"||!activePointers.has(e.pointerId))return;
  activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
  const pts=pointerSnapshot(),rect=svg.getBoundingClientRect();
  if(!gestureBase||!rect.width||!rect.height)return;
@@ -365,7 +366,7 @@ svg.addEventListener("pointermove",e=>{
  if(dragged)e.preventDefault();
 });
 function endPointer(e){
- if(!activePointers.has(e.pointerId))return;
+ if(e.pointerType!=="mouse"||!activePointers.has(e.pointerId))return;
  activePointers.delete(e.pointerId);
  if(dragged)suppressClickUntil=Date.now()+350;
  if(activePointers.size===0){gestureBase=null;svg.classList.remove("dragging")}
@@ -375,6 +376,30 @@ svg.addEventListener("pointerup",endPointer);svg.addEventListener("pointercancel
 svg.addEventListener("click",e=>{if(Date.now()<suppressClickUntil){e.preventDefault();e.stopPropagation()}},true);
 svg.addEventListener("wheel",e=>{e.preventDefault();const p=pointInWorld(e.clientX,e.clientY);zoomAt(e.deltaY<0?.9:1.1,p.x,p.y)},{passive:false});
 // Prevent Safari's native page-level pinch and double-tap zoom while interacting with the map.
-for(const name of ["gesturestart","gesturechange","gestureend"]){svg.addEventListener(name,e=>e.preventDefault(),{passive:false})}
-save();renderTasks();
+// Dedicated iPad touch handling: taps never zoom; one finger pans; two fingers pinch and rotate.
+ let touchBase=null,touchMoved=false;
+ function touchPoints(list){return Array.from(list).map(p=>({x:p.clientX,y:p.clientY}))}
+ function startTouch(e){
+  e.preventDefault();const pts=touchPoints(e.touches);touchMoved=false;
+  if(pts.length===1)touchBase={mode:"pan",pts,view:{...view}};
+  else if(pts.length>=2){const a=pts[0],b=pts[1];touchBase={mode:"transform",view:{...view},rotation,midX:(a.x+b.x)/2,midY:(a.y+b.y)/2,d:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle:Math.atan2(b.y-a.y,b.x-a.x)}}
+ }
+ function moveTouch(e){
+  e.preventDefault();if(!touchBase)return;const pts=touchPoints(e.touches),rect=svg.getBoundingClientRect();if(!rect.width||!rect.height)return;
+  if(touchBase.mode==="pan"&&pts.length===1){
+   const dx=pts[0].x-touchBase.pts[0].x,dy=pts[0].y-touchBase.pts[0].y;if(Math.hypot(dx,dy)>3)touchMoved=true;
+   if(touchMoved){view={...touchBase.view,x:touchBase.view.x-dx/rect.width*touchBase.view.w,y:touchBase.view.y-dy/rect.height*touchBase.view.h};clampView();applyView()}
+  }else if(pts.length>=2){
+   const a=pts[0],b=pts[1],mx=(a.x+b.x)/2,my=(a.y+b.y)/2,d=Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle=Math.atan2(b.y-a.y,b.x-a.x);
+   if(Math.abs(d-touchBase.d)>2||Math.abs(angle-touchBase.angle)>.012||Math.hypot(mx-touchBase.midX,my-touchBase.midY)>3)touchMoved=true;
+   const ratio=d/touchBase.d,nw=Math.max(520,Math.min(WORLD_W,touchBase.view.w/ratio)),nh=nw*WORLD_H/WORLD_W,dx=(mx-touchBase.midX)/rect.width*touchBase.view.w,dy=(my-touchBase.midY)/rect.height*touchBase.view.h;
+   view={x:touchBase.view.x-dx,y:touchBase.view.y-dy,w:nw,h:nh};clampView();applyView();
+   let da=angle-touchBase.angle;while(da>Math.PI)da-=Math.PI*2;while(da< -Math.PI)da+=Math.PI*2;setRotation(touchBase.rotation+da*180/Math.PI);
+  }
+ }
+ function endTouch(e){e.preventDefault();if(e.touches.length===0)touchBase=null;else startTouch(e)}
+ svg.addEventListener("touchstart",startTouch,{passive:false});svg.addEventListener("touchmove",moveTouch,{passive:false});svg.addEventListener("touchend",endTouch,{passive:false});svg.addEventListener("touchcancel",endTouch,{passive:false});
+ svg.addEventListener("dblclick",e=>e.preventDefault());
+ for(const name of ["gesturestart","gesturechange","gestureend"]){svg.addEventListener(name,e=>e.preventDefault(),{passive:false})}
+ save();renderTasks();
 </script></body></html>
