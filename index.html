@@ -405,6 +405,7 @@ svg.addEventListener("wheel",e=>{e.preventDefault();const p=pointInWorld(e.clien
  let touchBase=null,touchMoved=false;
  function touchPoints(list){return Array.from(list).map(p=>({x:p.clientX,y:p.clientY}))}
  function startTouch(e){
+  if(e.target.closest("[role=button]")){touchBase=null;return}
   e.preventDefault();const pts=touchPoints(e.touches);touchMoved=false;
   if(pts.length===1)touchBase={mode:"pan",pts,view:{...view}};
   else if(pts.length>=2){const a=pts[0],b=pts[1];touchBase={mode:"transform",view:{...view},rotation,midX:(a.x+b.x)/2,midY:(a.y+b.y)/2,d:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle:Math.atan2(b.y-a.y,b.x-a.x)}}
@@ -422,7 +423,7 @@ svg.addEventListener("wheel",e=>{e.preventDefault();const p=pointInWorld(e.clien
    let da=angle-touchBase.angle;while(da>Math.PI)da-=Math.PI*2;while(da< -Math.PI)da+=Math.PI*2;setRotation(touchBase.rotation+da*180/Math.PI);
   }
  }
- function endTouch(e){e.preventDefault();if(e.touches.length===0)touchBase=null;else startTouch(e)}
+ function endTouch(e){if(!touchBase)return;e.preventDefault();if(e.touches.length===0)touchBase=null;else startTouch(e)}
  svg.addEventListener("touchstart",startTouch,{passive:false});svg.addEventListener("touchmove",moveTouch,{passive:false});svg.addEventListener("touchend",endTouch,{passive:false});svg.addEventListener("touchcancel",endTouch,{passive:false});
  svg.addEventListener("dblclick",e=>e.preventDefault());
  for(const name of ["gesturestart","gesturechange","gestureend"]){svg.addEventListener(name,e=>e.preventDefault(),{passive:false})}
