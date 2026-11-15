@@ -129,13 +129,26 @@ const landmarkSeeds=[
  ["Petal Gardens","greenhouse",244,230,9,8,"Spring flowers, fountains and soft pink blossom."],
  ["Sunset Lighthouse","lighthouse",277,112,6,7,"A lighthouse overlooking the warm eastern shore."]
 ];
+function findBuildingPlot(x,y,w,h,allowPlaza=false){
+ for(let radius=0;radius<=35;radius++){
+  for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+   if(Math.max(Math.abs(dx),Math.abs(dy))!==radius)continue;
+   if(clearFootprint(x+dx,y+dy,w,h,allowPlaza))return {x:x+dx,y:y+dy};
+  }
+ }
+ return null;
+}
 for(const [name,kind,x,y,w,h,description] of landmarkSeeds){
- if(!clearFootprint(x,y,w,h,true))continue;
- const b=occupy({x,y,w,h,name,kind,description,biome:biomes[coord(x,y)],landmark:true,enterable:!["beach","lighthouse","harbour"].includes(kind)});
- b.door=doorFor(b);
+ const scenic=["beach","lighthouse","harbour"].includes(kind);
+ const plot=scenic?(closestWalkable(x,y)||{x,y}):findBuildingPlot(x,y,w,h,true);
+ if(!plot)continue;
+ const px=plot.x,py=plot.y;
+ const b=scenic?{id:-1,x:px,y:py,w,h,name,kind,description,biome:biomes[coord(px,py)],landmark:true,enterable:false}:
+  occupy({x:px,y:py,w,h,name,kind,description,biome:biomes[coord(px,py)],landmark:true,enterable:true});
+ b.door=scenic?{x:px,y:py}:doorFor(b);
  landmarks.push(b);
  // Squares and paths around landmark buildings.
- for(let j=y-3;j<y+h+4;j++)for(let i=x-3;i<x+w+4;i++){
+ for(let j=py-3;j<py+h+4;j++)for(let i=px-3;i<px+w+4;i++){
   if(!inBounds(i,j)||occupied[coord(i,j)]>=0)continue;
   if(isLand(i,j)&&hash(i,j,9)>.32&&terrain[coord(i,j)]===TERRAIN.GRASS)terrain[coord(i,j)]=TERRAIN.PLAZA;
  }
@@ -150,12 +163,12 @@ const labels={
 let created=0;
 for(let by=8;by<304;by+=12){
  for(let bx=8;bx<304;bx+=12){
-  for(let q=0;q<2;q++){
+  for(let q=0;q<4;q++){
    const r=hash(bx,by,q+17);
    if(r<.15)continue;
    const w=3+Math.floor(hash(bx,by,q+31)*2),h=3+Math.floor(hash(bx,by,q+37)*2);
-   const x=bx+(q===0?0:6)+Math.floor(hash(bx,by,q+42)*2),
-    y=by+(q===0?1:6)+Math.floor(hash(bx,by,q+43)*2);
+   const x=bx+(q%2?6:0)+Math.floor(hash(bx,by,q+42)*2),
+    y=by+(q>=2?6:1)+Math.floor(hash(bx,by,q+43)*2);
    if(!clearFootprint(x,y,w,h))continue;
    const nearby=doorFor({x,y,w,h});
    if(Math.abs(nearby.x-(x+w/2))+Math.abs(nearby.y-(y+h))>14)continue;
