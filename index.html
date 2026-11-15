@@ -2,98 +2,87 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f5eee6">
+<meta name="theme-color" content="#f4e9d6">
 <title>Little Worlds: Wish & Wander</title>
 <style>
-:root{--ink:#292b35;--muted:#777783;--paper:#fbf8f3;--panel:#fffdf9;--line:#e9e1d8;--rose:#d98e91}
+:root{--ink:#39352f;--muted:#81776b;--paper:#f5efe5;--panel:#fffaf1;--line:#e4d8c7;--terracotta:#b96f57;--sea:#82b9c0}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Georgia,serif}button{font:inherit;cursor:pointer}
-header{padding:18px clamp(16px,4vw,48px);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);background:#fffdf9}
-h1{font-size:clamp(22px,4vw,32px);font-weight:normal;margin:0;letter-spacing:-1px}header small{color:var(--muted);font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase}
-.wallet{font:13px Arial,sans-serif;background:#f4eee6;border-radius:30px;padding:9px 14px}
-.layout{max-width:1300px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:165px minmax(0,1fr);gap:18px}
-.nav{display:flex;flex-direction:column;gap:7px}.nav button{border:0;text-align:left;background:transparent;padding:11px 13px;border-radius:12px;color:var(--muted)}.nav button.active,.nav button:hover{background:#eee8e0;color:var(--ink)}
-main{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px;margin-bottom:16px}
-.eyebrow{font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}h2{font-size:26px;font-weight:normal;margin:5px 0 10px}p{margin:7px 0;color:#5f606a}
-.hero{min-height:220px;background:linear-gradient(120deg,#e9e1d9,#dce5e4 55%,#e9d9d3);display:flex;align-items:flex-end;position:relative;overflow:hidden}.hero h2{font-size:34px}.button{border:0;border-radius:24px;background:var(--ink);color:white;padding:10px 16px;margin-top:10px}.button.secondary{background:#eee8e0;color:var(--ink)}
-.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.map-shell{position:relative;border:1px solid #d5cbbb;border-radius:18px;overflow:hidden;background:#d8d9bb;touch-action:none;box-shadow:0 12px 34px rgba(78,65,49,.12)}
-#city-art{display:block;width:100%;height:min(74vh,760px);min-height:480px;cursor:grab;touch-action:none;user-select:none}#city-art.dragging{cursor:grabbing}.map-tools{display:flex;justify-content:flex-end;gap:7px;margin:0 0 8px}.map-tools button{border:1px solid #ded4c7;background:#fffaf1;border-radius:20px;padding:6px 13px;color:#65584c}.map-tools button:hover{background:#eee3d3}
-#city-map{display:block;width:100%;height:min(70vh,690px);min-height:430px;cursor:grab}#city-map.dragging{cursor:grabbing}
-.map-help{font:11px Arial,sans-serif;color:#6d7075;margin:8px 2px}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#f0ece5;padding:6px 10px;border-radius:20px}
-.place-card{background:#f8f4ee;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}.note{font:12px Arial,sans-serif;color:var(--muted)}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.panel{padding:16px}#city-art{height:66vh;min-height:430px}}
+header{padding:16px clamp(16px,4vw,48px);display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #e6d8c4;background:#fffaf1}
+h1{font-size:clamp(23px,4vw,33px);font-weight:normal;margin:0;letter-spacing:-1px}header small{color:var(--muted);font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase}.wallet{font:13px Arial,sans-serif;background:#f1e5d4;border:1px solid #e1d0bb;border-radius:30px;padding:9px 14px}
+.layout{max-width:1450px;margin:18px auto;padding:0 16px;display:grid;grid-template-columns:165px minmax(0,1fr);gap:18px}.nav{display:flex;flex-direction:column;gap:7px}.nav button{border:0;text-align:left;background:transparent;padding:11px 13px;border-radius:12px;color:var(--muted)}.nav button.active,.nav button:hover{background:#e9ddca;color:var(--ink)}main{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px;margin-bottom:16px}
+.eyebrow{font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}h2{font-size:26px;font-weight:normal;margin:5px 0 10px}p{margin:7px 0;color:#655d53}.hero{min-height:250px;background:linear-gradient(120deg,#e8c9ad,#d8e3d3 55%,#b9d4d3);display:flex;align-items:flex-end;position:relative;overflow:hidden}.hero h2{font-size:36px}.button{border:0;border-radius:24px;background:#51483e;color:#fff8ed;padding:10px 16px;margin-top:10px}.button.secondary{background:#eee2d0;color:var(--ink)}
+.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.note,.map-help{font:11px Arial,sans-serif;color:#746b60}.map-shell{position:relative;border:2px solid #cbb99f;border-radius:16px;overflow:hidden;background:#b6d5d1;touch-action:none;box-shadow:0 12px 34px rgba(78,65,49,.13)}#city-art{display:block;width:100%;height:min(76vh,820px);min-height:500px;cursor:grab;touch-action:none;user-select:none;transform-origin:50% 50%;transition:transform .18s ease;shape-rendering:crispEdges}#city-art.dragging{cursor:grabbing;transition:none}.map-tools{display:flex;justify-content:space-between;gap:7px;flex-wrap:wrap;margin:0 0 8px}.tool-group{display:flex;gap:7px}.map-tools button{border:1px solid #d7c8b4;background:#fff9ee;border-radius:20px;padding:7px 13px;color:#65584c}.map-tools button:hover{background:#eee1ce}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#eee6d9;padding:6px 10px;border-radius:20px}.place-card{background:#f7efe2;border:1px solid #e6d8c5;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.panel{padding:15px}#city-art{height:68vh;min-height:440px}}
 </style></head>
 <body>
 <header><div><small>A little life, at your own pace</small><h1>Little Worlds <span style="color:#bd898a">✳</span></h1></div><div class="wallet">✦ <b id="points">0</b> wishes</div></header>
-<div class="layout">
-<nav class="nav" aria-label="Game sections"><button class="active" data-page="home">Home</button><button data-page="city">Explore the city</button><button data-page="people">People</button><button data-page="life">Daily life</button><button data-page="journal">Journal</button></nav>
-<main>
-<section id="home"><div class="panel hero"><div><div class="eyebrow">Your story starts here</div><h2>A whole city to discover.</h2><p>Five different districts, familiar landmarks and little places waiting to be found.</p><button class="button" data-go="city">Enter the city</button></div></div><div class="panel"><div class="eyebrow">A note for today</div><h2>There is no rush.</h2><p>Wander, meet people and make a life that feels like yours. Exploring is always free.</p></div></section>
+<div class="layout"><nav class="nav" aria-label="Game sections"><button class="active" data-page="home">Home</button><button data-page="city">Explore the city</button><button data-page="people">People</button><button data-page="life">Daily life</button><button data-page="journal">Journal</button></nav><main>
+<section id="home"><div class="panel hero"><div><div class="eyebrow">Your story starts here</div><h2>A city with a life of its own.</h2><p>Wander sunlit streets, find hidden courtyards and meet the people who call it home.</p><button class="button" data-go="city">Enter the city</button></div></div><div class="panel"><div class="eyebrow">A note for today</div><h2>There is no rush.</h2><p>Wander, meet people and make a life that feels like yours. Exploring is always free.</p></div></section>
 <section id="city" class="hidden">
-<div class="city-heading"><div><div class="eyebrow">A city made for wandering</div><h2>Wish & Wander</h2></div><div class="note">Drag to wander · Pinch or use + / − to zoom · Tap a place</div></div>
-<div class="map-tools"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-in" aria-label="Zoom in">+</button><button id="map-home">Reset view</button></div>
-<div class="map-shell" id="map-shell"><svg id="city-art" viewBox="0 0 1800 1160" role="img" aria-label="A large illustrated European city with five seasonal districts, connected streets, gardens, landmarks and a coast"><defs>
-<linearGradient id="land" x2="0" y2="1"><stop stop-color="#e9e1c9"/><stop offset="1" stop-color="#d9d6b8"/></linearGradient>
-<linearGradient id="sea" x2="0" y2="1"><stop stop-color="#8dbbc4"/><stop offset="1" stop-color="#5f9eae"/></linearGradient>
-<linearGradient id="roofRed" x2="0" y2="1"><stop stop-color="#bd7666"/><stop offset="1" stop-color="#89544d"/></linearGradient>
-<linearGradient id="roofBlue" x2="0" y2="1"><stop stop-color="#718b91"/><stop offset="1" stop-color="#4d6970"/></linearGradient>
-<linearGradient id="wall" x2="0" y2="1"><stop stop-color="#f4e8d5"/><stop offset="1" stop-color="#d6bda0"/></linearGradient>
-<pattern id="waterlines" width="100" height="44" patternUnits="userSpaceOnUse"><path d="M5 15q18-8 38 0t42 0M-20 34q18-8 38 0t42 0" fill="none" stroke="#d5ece9" stroke-width="3" opacity=".38"/></pattern>
-<pattern id="cobble" width="28" height="18" patternUnits="userSpaceOnUse"><path d="M2 5h10m4 8h10" stroke="#8d8172" stroke-width="1.5" opacity=".18"/></pattern>
-<filter id="shadow" x="-30%" y="-30%" width="170%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+<div class="city-heading"><div><div class="eyebrow">A Mediterranean city, made for wandering</div><h2>Wish & Wander</h2></div><div class="note">Drag to move · Pinch or use + / − · Rotate with ↶ / ↷ · Tap a place</div></div>
+<div class="map-tools"><div class="tool-group"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-in" aria-label="Zoom in">+</button><button id="map-home">Reset</button></div><div class="tool-group"><button id="rotate-left" aria-label="Rotate map left">↶ Rotate</button><button id="rotate-right" aria-label="Rotate map right">Rotate ↷</button></div></div>
+<div class="map-shell" id="map-shell"><svg id="city-art" viewBox="0 0 2200 1540" role="img" aria-label="Pixel-art Mediterranean city with Barcelona-inspired architecture, scattered seasonal gardens, beach, plazas and walking residents">
+<defs>
+<pattern id="sand" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#e6d0a8"/><path d="M3 5h3M15 17h4M8 21h2" stroke="#c9b184" stroke-width="2"/></pattern>
+<pattern id="paving" width="32" height="24" patternUnits="userSpaceOnUse"><rect width="32" height="24" fill="#e7d8c3"/><path d="M0 12h16M16 0v12M16 12v12M0 0h16M16 12h16" fill="none" stroke="#cbbba4" stroke-width="1.5"/></pattern>
+<pattern id="water" width="96" height="42" patternUnits="userSpaceOnUse"><rect width="96" height="42" fill="#83b9c0"/><path d="M5 10h28m18 0h25M-10 29h32m20 0h34" stroke="#b9d9d5" stroke-width="3"/></pattern>
+<pattern id="tiles" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="#d28a70"/><path d="M0 8L8 0l8 8-8 8Z" fill="none" stroke="#f0c7a8" stroke-width="2"/></pattern>
+<filter id="softshadow" x="-20%" y="-20%" width="150%" height="160%"><feGaussianBlur stdDeviation="5"/></filter>
 </defs>
-<rect width="1800" height="1160" fill="url(#land)"/>
-<path d="M0 0H1800V270Q1690 310 1650 420T1690 660Q1740 820 1600 1160H0Z" fill="#d8d9bb"/>
-<!-- districts as soft, irregular landscape regions -->
-<path d="M0 0H660Q620 160 700 300T610 590L0 650Z" fill="#dce4df"/>
-<path d="M0 580Q240 480 500 570T890 630L820 1160H0Z" fill="#d9e2c9"/>
-<path d="M550 0H1170Q1100 220 1210 420T1120 770L740 720Q650 490 590 350Z" fill="#e7d6ae"/>
-<path d="M960 0H1800V520Q1570 490 1470 650T1240 760L1100 510Z" fill="#e6c9a9"/>
-<path d="M1040 600Q1320 490 1600 620T1800 900V1160H920Z" fill="#e3d0a7"/>
-<!-- sea and natural coastline -->
-<path d="M1800 230V1160H1510Q1570 1060 1510 970T1530 790Q1580 680 1510 580T1530 400Q1580 300 1800 230Z" fill="url(#sea)"/>
-<path d="M1800 230V1160H1510Q1570 1060 1510 970T1530 790Q1580 680 1510 580T1530 400Q1580 300 1800 230Z" fill="url(#waterlines)"/>
-<path d="M1510 1160Q1570 1060 1510 970T1530 790Q1580 680 1510 580T1530 400Q1580 300 1800 230" fill="none" stroke="#f7e5bd" stroke-width="28"/>
-<path d="M1510 1160Q1570 1060 1510 970T1530 790Q1580 680 1510 580T1530 400Q1580 300 1800 230" fill="none" stroke="#c4a783" stroke-width="4" stroke-dasharray="5 12"/>
-<!-- parks and planted squares -->
-<g id="parks">
-<path d="M95 105Q220 60 345 130L370 310Q260 370 110 300Z" fill="#a9c59b" stroke="#839e7b" stroke-width="5"/>
-<path d="M110 700Q280 620 430 700L455 930Q270 1010 100 900Z" fill="#9dbd8c" stroke="#809e73" stroke-width="5"/>
-<path d="M790 130Q920 75 1050 145L1070 330Q920 390 790 315Z" fill="#9ebd8e" stroke="#819e76" stroke-width="5"/>
-<path d="M1070 760Q1210 690 1360 770L1375 980Q1200 1040 1060 950Z" fill="#a3bd8d" stroke="#819b72" stroke-width="5"/>
-<path d="M160 205Q230 175 300 205M160 245Q230 215 300 245M175 285Q235 260 305 285" stroke="#e8dfc8" stroke-width="13" fill="none" stroke-linecap="round"/>
-<path d="M170 780Q270 740 380 800M165 855Q275 820 390 875" stroke="#e8dfc8" stroke-width="13" fill="none" stroke-linecap="round"/>
+<rect width="2200" height="1540" fill="#e8d8bc"/>
+<!-- sea and coast -->
+<path d="M1780 0H2200V1540H1660Q1720 1440 1660 1320T1710 1080Q1650 930 1730 780T1680 520Q1730 360 1680 210Z" fill="url(#water)"/>
+<path d="M1660 1540Q1720 1440 1660 1320T1710 1080Q1650 930 1730 780T1680 520Q1730 360 1680 210" fill="none" stroke="#f0dfb9" stroke-width="42"/>
+<path d="M1640 1540Q1700 1440 1640 1320T1690 1080Q1630 930 1710 780T1660 520Q1710 360 1660 210" fill="none" stroke="#c9ad83" stroke-width="5" stroke-dasharray="8 12"/>
+<path d="M1730 850Q1900 820 2200 890V1540H1700Q1760 1440 1700 1320T1750 1080Z" fill="url(#sand)" opacity=".95"/>
+<!-- city ground -->
+<rect x="0" y="0" width="1690" height="1540" fill="#d8d5b5"/>
+<!-- Seasonal pockets are scattered gardens, not separate bands -->
+<g id="season-patches">
+<path d="M80 90Q230 35 360 130L390 300Q260 390 100 300Z" fill="#d7e5e1"/>
+<path d="M470 1000Q620 900 780 1010L800 1200Q620 1310 460 1190Z" fill="#d8e6c8"/>
+<path d="M1050 170Q1190 90 1320 190L1350 360Q1210 450 1060 350Z" fill="#e8d5a7"/>
+<path d="M1110 1100Q1260 1020 1400 1120L1430 1310Q1280 1390 1110 1290Z" fill="#e4c5a9"/>
+<path d="M770 540Q880 475 980 560L1000 690Q890 770 770 690Z" fill="#c8d9b7"/>
 </g>
-<!-- connected, gently curving street network -->
-<g fill="none" stroke-linecap="round" stroke-linejoin="round">
-<g stroke="#b6a38b" stroke-width="92"><path d="M-30 455C250 380 410 500 640 440S1030 350 1260 420 1510 510 1630 470"/><path d="M350 -30C400 180 330 340 430 520S550 850 500 1190"/><path d="M930 -20C850 190 980 330 900 510S850 850 940 1190"/><path d="M-20 880C250 820 450 920 690 850S1080 770 1260 850 1470 920 1600 870"/><path d="M1280 -20C1210 190 1320 350 1260 540S1300 780 1350 940"/></g>
-<g stroke="#f2e6d3" stroke-width="78"><path d="M-30 455C250 380 410 500 640 440S1030 350 1260 420 1510 510 1630 470"/><path d="M350 -30C400 180 330 340 430 520S550 850 500 1190"/><path d="M930 -20C850 190 980 330 900 510S850 850 940 1190"/><path d="M-20 880C250 820 450 920 690 850S1080 770 1260 850 1470 920 1600 870"/><path d="M1280 -20C1210 190 1320 350 1260 540S1300 780 1350 940"/></g>
-<g stroke="#d4c4ac" stroke-width="2" stroke-dasharray="4 16"><path d="M-30 455C250 380 410 500 640 440S1030 350 1260 420 1510 510 1630 470"/><path d="M350 -30C400 180 330 340 430 520S550 850 500 1190"/><path d="M930 -20C850 190 980 330 900 510S850 850 940 1190"/><path d="M-20 880C250 820 450 920 690 850S1080 770 1260 850 1470 920 1600 870"/><path d="M1280 -20C1210 190 1320 350 1260 540S1300 780 1350 940"/></g>
+<!-- Eixample-inspired street grid, chamfered blocks and diagonal avenues -->
+<g fill="none" stroke-linecap="square">
+<g stroke="#b7a58c" stroke-width="94"><path d="M-20 410H1680M-20 820H1680M-20 1230H1680M330 -30V1570M720 -30V1570M1110 -30V1570M1500 -30V1570"/><path d="M-80 1450L1570 -100M-80 80L1580 1660"/></g>
+<g stroke="#f3e8d5" stroke-width="82"><path d="M-20 410H1680M-20 820H1680M-20 1230H1680M330 -30V1570M720 -30V1570M1110 -30V1570M1500 -30V1570"/><path d="M-80 1450L1570 -100M-80 80L1580 1660"/></g>
+<g stroke="#d2c1a8" stroke-width="2" stroke-dasharray="6 18"><path d="M-20 410H1680M-20 820H1680M-20 1230H1680M330 -30V1570M720 -30V1570M1110 -30V1570M1500 -30V1570"/></g>
 </g>
-<!-- small lanes linking blocks -->
-<g stroke="#f3e7d6" stroke-width="26" fill="none" stroke-linecap="round"><path d="M80 175Q250 230 350 180T610 210"/><path d="M570 80Q690 160 760 300T900 370"/><path d="M1040 120Q1130 210 1130 320T1250 420"/><path d="M650 600Q760 650 840 600T1030 650"/><path d="M1020 1000Q1120 920 1190 960T1400 1030"/><path d="M70 1020Q210 970 340 1020T520 1060"/></g>
-<g id="buildings"></g>
-<g id="trees"></g>
-<!-- promenade, piers, marina -->
-<path d="M1530 355Q1580 390 1550 450T1540 585Q1580 640 1550 720T1550 860Q1590 920 1540 1020" fill="none" stroke="#f9edcf" stroke-width="18"/>
-<g fill="#9b785b" stroke="#f4e3c4" stroke-width="5"><path d="M1540 495l180-28 8 22-180 30z"/><path d="M1540 690l170-18 8 22-170 20z"/><path d="M1540 895l190-25 8 22-190 28z"/></g>
-<g fill="#f2e5cf" stroke="#b08e6c" stroke-width="3"><path d="M1610 470l22-10 18 12-22 11z"/><path d="M1670 460l22-10 18 12-22 11z"/><path d="M1610 670l22-10 18 12-22 11z"/><path d="M1680 660l22-10 18 12-22 11z"/></g>
+<!-- Plazas and gardens -->
+<g id="plazas">
+<rect x="370" y="445" width="300" height="330" rx="12" fill="url(#paving)" stroke="#bca98e" stroke-width="8"/>
+<rect x="760" y="80" width="290" height="285" rx="12" fill="#a9c69b" stroke="#8ba77f" stroke-width="8"/>
+<rect x="1150" y="860" width="300" height="320" rx="12" fill="#a9c69b" stroke="#8ba77f" stroke-width="8"/>
+<rect x="60" y="850" width="220" height="300" rx="10" fill="#a8c79a" stroke="#8ba77f" stroke-width="7"/>
+<rect x="790" y="1260" width="260" height="210" rx="10" fill="#b4c99a" stroke="#8ba77f" stroke-width="7"/>
+<path d="M390 600h260M520 460v300M800 220h210M905 100v250M1180 1015h240M1300 880v280" stroke="#eadfc9" stroke-width="14" fill="none"/>
+<!-- fountains -->
+<g fill="#78b5bb" stroke="#f1e2c7" stroke-width="6"><circle cx="520" cy="610" r="34"/><circle cx="905" cy="220" r="27"/><circle cx="1300" cy="1020" r="31"/></g>
+<g fill="#d4e8d9"><circle cx="520" cy="610" r="13"/><circle cx="905" cy="220" r="11"/><circle cx="1300" cy="1020" r="12"/></g>
+</g>
+<!-- promenade, marina and piers -->
+<path d="M1690 460Q1740 520 1700 610T1720 800Q1770 900 1730 1020" fill="none" stroke="#f7e7c8" stroke-width="24"/>
+<g fill="#9b7655" stroke="#f4e4c8" stroke-width="6"><path d="M1710 550l230-25 10 26-230 27Z"/><path d="M1710 740l210-20 10 26-210 22Z"/><path d="M1740 1170l250-20 10 26-250 22Z"/></g>
+<!-- small boats -->
+<g fill="#f5ead6" stroke="#826b53" stroke-width="4"><path d="M1860 390q45 16 90 0l-14 24h-62Z"/><path d="M1980 650q45 16 90 0l-14 24h-62Z"/><path d="M1880 1010q45 16 90 0l-14 24h-62Z"/></g>
 <!-- beach umbrellas -->
-<g id="beach"></g>
-<!-- clock tower and amphitheatre landmarks -->
-<g id="landmarks"></g>
-<!-- labels -->
-<g font-family="Georgia,serif" fill="#62564a" text-anchor="middle">
-<g transform="translate(245 75)"><rect x="-112" y="-23" width="224" height="42" rx="20" fill="#fff9ed" opacity=".92"/><text y="5" font-size="22" letter-spacing="3">FROSTWOOD</text></g>
-<g transform="translate(300 650)"><rect x="-128" y="-23" width="256" height="42" rx="20" fill="#fff9ed" opacity=".92"/><text y="5" font-size="22" letter-spacing="3">SPRING GARDENS</text></g>
-<g transform="translate(730 720)"><rect x="-108" y="-23" width="216" height="42" rx="20" fill="#fff9ed" opacity=".92"/><text y="5" font-size="22" letter-spacing="3">SUNMARKET</text></g>
-<g transform="translate(1390 180)"><rect x="-150" y="-23" width="300" height="42" rx="20" fill="#fff9ed" opacity=".92"/><text y="5" font-size="21" letter-spacing="2">OLD AUTUMN QUARTER</text></g>
-<g transform="translate(1650 1090)"><rect x="-95" y="-23" width="190" height="42" rx="20" fill="#fff9ed" opacity=".92"/><text y="5" font-size="22" letter-spacing="3">THE COAST</text></g>
+<g id="beach"><g fill="#d78370" stroke="#fff0d9" stroke-width="4"><path d="M1810 900q30-48 60 0Z"/><path d="M1970 1080q30-48 60 0Z"/><path d="M1810 1290q30-48 60 0Z"/></g><g fill="#f1d59b" stroke="#fff0d9" stroke-width="4"><path d="M1970 900q30-48 60 0Z"/><path d="M1810 1100q30-48 60 0Z"/><path d="M1980 1370q30-48 60 0Z"/></g></g>
+<!-- Buildings and trees are generated as richly layered pixel-art blocks -->
+<g id="architecture"></g><g id="greenery"></g><g id="landmarks"></g><g id="residents"></g><g id="markers"></g>
+<g font-family="Georgia,serif" fill="#655344" text-anchor="middle">
+<g transform="translate(210 65)"><rect x="-100" y="-22" width="200" height="38" rx="18" fill="#fff5e5"/><text y="4" font-size="20" letter-spacing="2">NORTH GARDENS</text></g>
+<g transform="translate(520 860)"><rect x="-100" y="-22" width="200" height="38" rx="18" fill="#fff5e5"/><text y="4" font-size="20" letter-spacing="2">BLOSSOM PARK</text></g>
+<g transform="translate(1200 95)"><rect x="-100" y="-22" width="200" height="38" rx="18" fill="#fff5e5"/><text y="4" font-size="20" letter-spacing="2">GOLDEN GARDEN</text></g>
+<g transform="translate(1260 1370)"><rect x="-105" y="-22" width="210" height="38" rx="18" fill="#fff5e5"/><text y="4" font-size="20" letter-spacing="2">AUTUMN SQUARE</text></g>
+<g transform="translate(2040 1480)"><rect x="-90" y="-22" width="180" height="38" rx="18" fill="#fff5e5"/><text y="4" font-size="20" letter-spacing="2">THE BEACH</text></g>
 </g>
 </svg></div>
-<div class="map-legend"><span class="legend-chip">❄ Frostwood</span><span class="legend-chip">✿ Spring Gardens</span><span class="legend-chip">☀ Sunmarket</span><span class="legend-chip">🍂 Old Autumn Quarter</span><span class="legend-chip">♧ The Coast</span></div>
-<div class="place-card" id="place-card"><strong>Welcome to Wish & Wander</strong><p>Follow the streets, discover little squares and visit the landmarks. Tap a marker to learn more.</p></div>
-<p class="map-help">This is the illustrated city map. More playable interiors, residents and activities can be added as the world expands.</p>
+<div class="map-legend"><span class="legend-chip">❄ Snowy gardens</span><span class="legend-chip">✿ Spring blossom</span><span class="legend-chip">☀ Sunlit plazas</span><span class="legend-chip">🍂 Autumn courtyards</span><span class="legend-chip">♧ Mediterranean coast</span></div>
+<div class="place-card" id="place-card"><strong>Welcome to Wish & Wander</strong><p>A sunlit city of tiled façades, little plazas, leafy courtyards and seaside streets. Tap a place marker to explore.</p></div>
+<p class="map-help">The map is a playable prototype: zoom, rotate, discover places and watch residents move through the streets. More interiors and character stories can be added as the world expands.</p>
 </section>
 <section id="people" class="hidden"><div class="panel"><div class="eyebrow">People in your world</div><h2>Someone you might meet</h2><div class="person"><strong>Astrid Yun</strong><small>Violinist · Norway</small><p>Quiet and thoughtful, with a love for classical music, theatre, ballet and classic literature. She has a home full of animals and a life shaped by music and family.</p><span class="tag">CHARACTER PROFILE · STORY IN PROGRESS</span></div><p class="note">Full illustrated character designs and storylines are still to come.</p></div></section>
 <section id="life" class="hidden"><div class="panel"><div class="eyebrow">Small things count</div><h2>Daily life</h2><p>Complete a task to earn wishes. These are optional and never required to explore the city.</p><div class="grid" id="tasks"></div></div></section>
@@ -105,36 +94,54 @@ let state={points:Number(localStorage.getItem("lw-points")||0),done:JSON.parse(l
 function save(){localStorage.setItem("lw-points",state.points);localStorage.setItem("lw-done",JSON.stringify(state.done));localStorage.setItem("lw-visits",JSON.stringify(state.visits));document.getElementById("points").textContent=state.points}
 function renderTasks(){document.getElementById("tasks").innerHTML=taskList.map(([name,value],i)=>'<div class="task '+(state.done.includes(i)?"done":"")+'"><button '+(state.done.includes(i)?"disabled":"")+' onclick="complete('+i+')">'+(state.done.includes(i)?"Done":"+"+value)+'</button><strong>'+name+'</strong><small>'+value+' wishes</small></div>').join("")}
 function complete(i){if(state.done.includes(i))return;state.done.push(i);state.points+=taskList[i][1];save();renderTasks()}
-function show(page){document.querySelectorAll("main section").forEach(s=>s.classList.toggle("hidden",s.id!==page));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));if(page==="city")setTimeout(resizeMap,30)}
+function show(page){document.querySelectorAll("main section").forEach(s=>s.classList.toggle("hidden",s.id!==page));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page))}
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.page)));document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.go)));
-
-const svg=document.getElementById("city-art"),buildings=document.getElementById("buildings"),trees=document.getElementById("trees"),landmarks=document.getElementById("landmarks"),beach=document.getElementById("beach");
-const NS="http://www.w3.org/2000/svg";let view={x:0,y:0,w:1800,h:1160},pointer=null,activePlace=null;
-function el(tag,attrs,parent){let n=document.createElementNS(NS,tag);for(let k in attrs)n.setAttribute(k,attrs[k]);(parent||svg).appendChild(n);return n}
-function building(x,y,w,h,roof,wall,style=0){let g=el("g",{transform:"translate("+x+" "+y+")"} ,buildings);el("ellipse",{cx:w/2,cy:h+13,rx:w*.62,ry:12,fill:"#766b5b",opacity:".17",filter:"url(#shadow)"},g);el("path",{d:"M0 0 L"+w*.22+" -"+h*.22+" L"+w*.22+" "+(h*.78)+" L0 "+h+"Z",fill:wall,stroke:"#9b8069","stroke-width":2},g);el("path",{d:"M"+w*.22+" -"+h*.22+" L"+w+" 0 L"+w+" "+h+" L"+w*.22+" "+(h*.78)+"Z",fill:"#d4b89a",stroke:"#9b8069","stroke-width":2},g);el("path",{d:"M-5 0 L"+w*.22+" -"+h*.22+" L"+w+ " 0 L"+w*.78+" "+(h*.24)+"Z",fill:roof,stroke:"#79594d","stroke-width":2},g);el("path",{d:"M"+w*.22+" -"+h*.22+" L"+w*.43+" -"+h*.52+" L"+(w+8)+" -"+h*.3+" L"+w+" 0Z",fill:roof,stroke:"#79594d","stroke-width":2},g);for(let i=0;i<2;i++){let xx=w*.32+i*w*.3;el("rect",{x:xx,y:h*.23,width:9,height:17,rx:2,fill:"#526b70",stroke:"#f6e3c5","stroke-width":2},g);el("path",{d:"M"+(xx+4.5)+" "+(h*.23)+"v17",stroke:"#d9c4a8","stroke-width":1},g)}el("rect",{x:w*.08,y:h*.53,width:10,height:20,rx:2,fill:"#6d5145"},g);if(style%3===0)el("path",{d:"M"+(w*.1)+" -"+(h*.2)+"q-8 -20 5 -24q13 5 5 24",fill:"#a87556",stroke:"#79594d","stroke-width":2},g);if(style%4===1)el("path",{d:"M"+w*.2+" "+(h*.82)+"h"+(w*.85),stroke:"#f5e7d1","stroke-width":4},g)}
-function tree(x,y,color,size=1){let g=el("g",{transform:"translate("+x+" "+y+") scale("+size+")"},trees);el("ellipse",{cx:0,cy:9,rx:17,ry:6,fill:"#5b6c4d",opacity:".2"},g);el("path",{d:"M-3 7v-25h7V7",fill:"#8b654b"},g);el("circle",{cx:0,cy:-29,r:19,fill:color,stroke:"#71835f","stroke-width":2},g);el("circle",{cx:-9,cy:-34,r:8,fill:"#fff4dc",opacity:".28"},g);el("circle",{cx:10,cy:-23,r:6,fill:"#fff4dc",opacity:".2"},g)}
-const palettes=[["#6f8585","#e8e0d2"],["#b66e69","#f0ddc8"],["#c18b50","#f0d8aa"],["#8d5d50","#e2c3a7"],["#68898c","#f0e3d0"]];
-let seed=41;function rnd(){seed=(seed*9301+49297)%233280;return seed/233280}
-const blocks=[[30,270,0],[85,515,1],[170,390,2],[460,130,0],[520,300,1],[630,530,2],[740,180,3],[1060,120,4],[1170,300,3],[1020,590,4],[1250,760,2],[760,880,1],[250,920,0],[430,730,3],[930,990,4]];
-blocks.forEach((b,i)=>{let [x,y,z]=b;for(let j=0;j<5;j++){let xx=x+j*48+rnd()*15,yy=y+(j%2)*32+rnd()*15;let pal=palettes[(z+j)%5];building(xx,yy,34+rnd()*12,36+rnd()*12,pal[0],pal[1],i+j);}});
-for(let i=0;i<22;i++){let x=70+rnd()*1350,y=70+rnd()*1000;let col=["#587d61","#e3a7a7","#c97842","#72926a","#f0f0e4"][i%5];tree(x,y,col,.7+rnd()*.6)}
-for(let i=0;i<34;i++){let x=70+rnd()*1400,y=80+rnd()*980;let col=["#557b5b","#e5a5ad","#c77a40","#71966a"][i%4];tree(x,y,col,.48+rnd()*.3)}
-// Beach parasols, striped cabanas and little boats
-for(let i=0;i<7;i++){let x=1580+(i%2)*70,y=390+i*85;el("path",{d:"M"+x+" "+y+"q18 -34 36 0Z",fill:i%2?"#d98c7c":"#f1d39c",stroke:"#fff2d9","stroke-width":3},beach);el("path",{d:"M"+(x+18)+" "+y+"v20",stroke:"#8e755b","stroke-width":3},beach)}
-for(let i=0;i<3;i++){let x=1660+i*42,y=320+i*235;el("path",{d:"M"+x+" "+y+"q28 14 56 0l-9 13h-37Z",fill:"#f4e7ce",stroke:"#775f4b","stroke-width":3},beach);el("path",{d:"M"+(x+27)+" "+(y-27)+"v27",stroke:"#775f4b","stroke-width":3},beach);el("path",{d:"M"+(x+28)+" "+(y-26)+"l20 22h-20Z",fill:"#f0c58b"},beach)}
-// Clock tower: detailed civic landmark with clock faces and spire
-let cg=el("g",{transform:"translate(760 410)"},landmarks);el("ellipse",{cx:0,cy:18,rx:62,ry:20,fill:"#78664f",opacity:".2"},cg);el("rect",{x:-34,y:-120,width:68,height:138,fill:"#d5b994",stroke:"#80684f","stroke-width":4},cg);el("path",{d:"M-44 -120L0 -168L44 -120Z",fill:"#8b6654",stroke:"#705344","stroke-width":4},cg);el("path",{d:"M-25 -168L0 -202L25 -168Z",fill:"#6d8584",stroke:"#705344","stroke-width":3},cg);for(let side of [-1,1]){el("circle",{cx:side*0,cy:-88,r:19,fill:"#f7edcf",stroke:"#8b7156","stroke-width":4},cg);el("path",{d:"M0 -88v-12M0 -88l10 6",stroke:"#66584a","stroke-width":3},cg);el("rect",{x:side*17-4,y:-34,width:8,height:24,fill:"#71868a",stroke:"#f0ddbc","stroke-width":2},cg)}el("path",{d:"M-34 -120h68",stroke:"#f8e6c7","stroke-width":5},cg);
-let ag=el("g",{transform:"translate(1190 600)"},landmarks);el("ellipse",{cx:0,cy:20,rx:115,ry:49,fill:"#78664f",opacity:".2"},ag);el("path",{d:"M-112 0Q-105 -75 0 -83Q105 -75 112 0L78 25Q0 -25 -78 25Z",fill:"#b77c59",stroke:"#80543f","stroke-width":5},ag);el("path",{d:"M-82 -8Q-75 -53 0 -58Q75 -53 82 -8",fill:"none",stroke:"#e3b58c","stroke-width":14"},ag);el("path",{d:"M-50 -18v-24M-18 -29v-25M18 -29v-25M50 -18v-24",stroke:"#80543f","stroke-width":9"},ag);el("ellipse",{cx:0,cy:0,rx:58,ry:19,fill:"#80604b"},ag);el("ellipse",{cx:0,cy:-2,rx:38,ry:10,fill:"#b9a17f"},ag);
-// Tappable location markers
-const places=[{x:210,y:390,name:"Frostwood",desc:"A northern quarter of snow-dusted roofs, evergreen lanes, a frozen pond and cosy cafés."},{x:285,y:810,name:"Spring Gardens",desc:"Blossom trees, flower markets, glasshouses and winding paths through leafy gardens."},{x:760,y:720,name:"Sunmarket",desc:"The sunny heart of the city: lively terraces, market stalls, courtyards and warm stone streets."},{x:1370,y:300,name:"Old Autumn Quarter",desc:"Golden trees, old bookshops, intimate squares and beautiful old European façades."},{x:1650,y:930,name:"The Coast",desc:"A bright seaside district with a sandy beach, harbour, promenade and little boats."},{x:760,y:410,name:"The Clock Tower",desc:"The city's great civic clock tower rises over the central square, inspired by London's famous landmark."},{x:1190,y:600,name:"The Amphitheatre",desc:"An ancient Roman-style amphitheatre surrounded by gardens and a broad public plaza."},{x:1675,y:730,name:"Seaglass Beach",desc:"A long sandy beach with striped parasols, cabanas and a view across the water."}];
-places.forEach((p,i)=>{let g=el("g",{class:"map-marker",transform:"translate("+p.x+" "+p.y+")",tabindex:"0",role:"button","aria-label":p.name},svg);el("circle",{r:18,fill:"#fff8e8",stroke:"#8e7358","stroke-width":3},g);el("circle",{r:6,fill:i>4?"#bd8066":"#789477"},g);el("path",{d:"M-4 20l4 8 4-8",fill:"#fff8e8",stroke:"#8e7358","stroke-width":2},g);g.addEventListener("click",e=>{e.stopPropagation();selectPlace(p)});g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectPlace(p)}})});
-function selectPlace(p){activePlace=p;document.getElementById("place-card").innerHTML="<strong>"+p.name+"</strong><p>"+p.desc+"</p><button class='button secondary' id='visit-place'>Visit this place</button>";document.getElementById("visit-place").onclick=()=>{if(!state.visits.includes(p.name))state.visits.push(p.name);localStorage.setItem("lw-visits",JSON.stringify(state.visits));document.getElementById("journal-text").textContent="Places you've discovered: "+state.visits.join(", ")+". Your city is getting bigger.";document.querySelector("#place-card p").textContent="You discovered "+p.name+". "+p.desc}}
+const svg=document.getElementById("city-art"),arch=document.getElementById("architecture"),green=document.getElementById("greenery"),land=document.getElementById("landmarks"),people=document.getElementById("residents"),markers=document.getElementById("markers"),NS="http://www.w3.org/2000/svg";
+function el(tag,a,parent){let n=document.createElementNS(NS,tag);for(const k in a)n.setAttribute(k,a[k]);(parent||svg).appendChild(n);return n}
+let seed=7301;function rnd(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
+const roofColors=["#b96651","#c57c58","#9d6554","#d09a63","#6e8581","#a85f50"],wallColors=["#e9cda8","#f0dfc1","#d9b99a","#f2d9bb","#dfc6a5","#e6d0ad"];
+// Pixel-art apartment blocks with stepped roofs, shutters, balconies, tile strips and ground-floor awnings.
+function house(x,y,w,h,i){let g=el("g",{transform:"translate("+x+" "+y+")"},arch),roof=roofColors[i%roofColors.length],wall=wallColors[(i*3)%wallColors.length];el("rect",{x:7,y:12,width:w,height:h,fill:"#776653",opacity:".18"},g);el("rect",{x:0,y:0,width:w,height:h,fill:wall,stroke:"#9b765d","stroke-width":4},g);el("rect",{x:0,y:0,width:w,height:13,fill:roof},g);el("rect",{x:0,y:13,width:w,height:7,fill:"#f1dfc4"},g);el("rect",{x:5,y:24,width:w-10,height:5,fill:"#c19b78",opacity:".65"},g);
+let cols=Math.max(2,Math.floor(w/27)),rows=Math.max(2,Math.floor(h/35));for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){let xx=10+c*((w-24)/cols),yy=36+r*34;el("rect",{x:xx,y:yy,width:13,height:19,fill:i%3===0?"#66838a":"#607b80",stroke:"#f4e2c7","stroke-width":2},g);el("rect",{x:xx-3,y:yy+7,width:19,height:4,fill:"#9e6550"},g);el("rect",{x:xx+5,y:yy,width:2,height:19,fill:"#d6c5a8"},g);if((c+r+i)%3===0)el("rect",{x:xx-5,y:yy+19,width:23,height:4,fill:"#b98261"},g)}
+el("rect",{x:w*.43,y:h-29,width:17,height:29,fill:"#795844",stroke:"#e8d5b9","stroke-width":2},g);el("rect",{x:0,y:h-7,width:w,height:7,fill:"#a77d5d"},g);
+if(i%4===0){el("rect",{x:w*.12,y:-12,width:w*.76,height:12,fill:"url(#tiles)",stroke:"#89594b","stroke-width":2},g);el("rect",{x:w*.12,y:-20,width:w*.76,height:8,fill:roof},g)}
+if(i%4===1){el("rect",{x:0,y:29,width:w, height:10,fill:"#e0a27c"},g);for(let k=0;k<Math.floor(w/12);k++)el("rect",{x:k*12,y:29,width:6,height:10,fill:"#f4dfb9"},g)}
+if(i%4===2){el("rect",{x:w*.1,y:-16,width:w*.8,height:16,fill:"#6f8580",stroke:"#805d4b","stroke-width":2},g);el("rect",{x:w*.35,y:-29,width:w*.3,height:13,fill:"#b66c55"},g)}
+}
+const blocks=[[55,160],[410,150],[800,440],[1180,430],[80,590],[430,900],[830,930],[1180,130],[60,1320],[420,1300],[1200,1320],[1500,900],[1450,170],[850,1350],[1080,700]];
+blocks.forEach((b,idx)=>{let [bx,by]=b;for(let j=0;j<4;j++){let x=bx+(j%2)*82+(rnd()*10),y=by+Math.floor(j/2)*102+(rnd()*9);house(x,y,65+rnd()*9,75+rnd()*12,idx*5+j)}});
+// Tiny tile-roof shops and market stalls
+for(let i=0;i<13;i++){let x=80+i*112,y=i%2?380:790;let g=el("g",{transform:"translate("+x+" "+y+")"},arch);el("rect",{width:58,height:34,y:12,fill:"#e9cba6",stroke:"#8e6c50","stroke-width":3},g);el("path",{d:"M-5 13L29 -5 64 13Z",fill:roofColors[i%roofColors.length],stroke:"#875c4c","stroke-width":3},g);el("rect",{x:7,y:22,width:44,height:13,fill:i%2?"#76918a":"#b8795e"},g);el("path",{d:"M4 20h50v-8H4Z",fill:i%2?"#e5c58f":"#e6a28a"},g)}
+// Pixel trees: layered square foliage and seasonal accents
+function tree(x,y,color,scale=1){let g=el("g",{transform:"translate("+x+" "+y+") scale("+scale+")"},green);el("rect",{x:-5,y:0,width:10,height:20,fill:"#896449"} ,g);el("rect",{x:-17,y:-23,width:34,height:27,fill:color,stroke:"#71845f","stroke-width":2},g);el("rect",{x:-10,y:-34,width:21,height:15,fill:color},g);el("rect",{x:-23,y:-12,width:10,height:12,fill:color},g);el("rect",{x:13,y:-17,width:10,height:13,fill:color},g);el("rect",{x:-12,y:-25,width:6,height:6,fill:"#f7e6c7",opacity:".45"},g)}
+const treeSpots=[[140,220,"#dce9ed"],[220,250,"#e2edf0"],[500,1050,"#e8a6a6"],[600,1100,"#e8a6a6"],[700,1080,"#f0c4a5"],[850,230,"#c88a45"],[940,260,"#d49a53"],[1240,1150,"#c87d43"],[1350,1200,"#d58b48"],[880,610,"#86a97b"],[960,650,"#91b47e"],[220,950,"#9bbd8a"],[1320,930,"#8eb07d"]];
+treeSpots.forEach(t=>tree(t[0],t[1],t[2],.95));
+for(let i=0;i<52;i++){let x=35+rnd()*1580,y=30+rnd()*1450;if((x>300&&x<720&&y>400&&y<820)||(x>1130&&x<1480&&y>850&&y<1220))continue;tree(x,y,["#7eaa7a","#91b17d","#e2a4a4","#d28a4c","#b6c9a0"][i%5],.45+rnd()*.4)}
+// Distinctive city landmarks: modernist tiled market hall and an open Roman-inspired amphitheatre, no clock tower.
+let market=el("g",{transform:"translate(880 790)"},land);el("rect",{x:-95,y:-70,width:190,height:135,fill:"#d9b58f",stroke:"#8f6c52","stroke-width":5},market);el("path",{d:"M-110 -70L-70 -112H70L110 -70Z",fill:"url(#tiles)",stroke:"#875b4d","stroke-width":5},market);for(let i=0;i<5;i++){el("rect",{x:-78+i*32,y:-35,width:20,height:85,fill:"#77918b",stroke:"#f0ddc1","stroke-width":3},market)}el("rect",{x:-102,y:58,width:204,height:12,fill:"#a67d5d"},market);
+let amph=el("g",{transform:"translate(1390 560)"},land);el("ellipse",{cx:0,cy:0,rx:130,ry:76,fill:"#c78a62",stroke:"#875b48","stroke-width":8},amph);el("ellipse",{cx:0,cy:-4,rx:93,ry:48,fill:"#8e7059",stroke:"#e3b68e","stroke-width":8},amph);el("ellipse",{cx:0,cy:-9,rx:55,ry:25,fill:"#c8b08b"},amph);for(let i=0;i<11;i++){let x=-100+i*20;el("rect",{x:x,y:-35-Math.sin(i/10*Math.PI)*20,width:10,height:22,fill:"#e4bd95"},amph)}
+// Place markers and labels
+const places=[{x:520,y:610,name:"Plaça de les Flors",desc:"A tiled square with a little fountain, shaded benches and flower sellers."},{x:905,y:220,name:"Jardins del Nord",desc:"A cool pocket garden with frosted leaves in winter and quiet paths."},{x:1300,y:1020,name:"Plaça de la Tardor",desc:"An autumn courtyard with copper-coloured trees, bookshops and warm cafés."},{x:880,y:790,name:"Mercat de la Llum",desc:"A colourful market hall filled with produce stalls, flowers and tiny bakeries."},{x:1390,y:560,name:"The Old Amphitheatre",desc:"A Roman-inspired open-air arena tucked between the old streets and a leafy square."},{x:1910,y:1190,name:"Platja Blava",desc:"A sandy beach with striped umbrellas, a promenade and boats bobbing offshore."},{x:580,y:1080,name:"Blossom Park",desc:"A spring garden full of pink blossom, winding paths and little picnic spots."}];
+places.forEach((p,i)=>{let g=el("g",{transform:"translate("+p.x+" "+p.y+")",tabindex:"0",role:"button",style:"cursor:pointer"},markers);el("rect",{x:-13,y:-13,width:26,height:26,fill:"#fff4dc",stroke:"#8a624c","stroke-width":4},g);el("rect",{x:-5,y:-5,width:10,height:10,fill:i%2?"#c77c65":"#789b78"},g);el("path",{d:"M-5 15l5 8 5-8",fill:"#fff4dc",stroke:"#8a624c","stroke-width":2},g);g.addEventListener("click",e=>{e.stopPropagation();selectPlace(p)});g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectPlace(p)}})});
+function selectPlace(p){document.getElementById("place-card").innerHTML="<strong>"+p.name+"</strong><p>"+p.desc+"</p><button class='button secondary' id='visit-place'>Visit this place</button>";document.getElementById("visit-place").onclick=()=>{if(!state.visits.includes(p.name))state.visits.push(p.name);localStorage.setItem("lw-visits",JSON.stringify(state.visits));document.getElementById("journal-text").textContent="Places you've discovered: "+state.visits.join(", ")+". Your city is getting bigger.";document.querySelector("#place-card p").textContent="You discovered "+p.name+". "+p.desc}}
+// Tiny residents are crisp pixel sprites with simple walking animations along the pavements.
+const routes=[{x:80,y:410,dx:1,dy:0},{x:480,y:820,dx:0,dy:1},{x:760,y:410,dx:1,dy:0},{x:1110,y:820,dx:0,dy:-1},{x:330,y:1230,dx:1,dy:0},{x:1500,y:410,dx:0,dy:1},{x:720,y:1230,dx:1,dy:0},{x:1110,y:410,dx:0,dy:1},{x:1500,y:820,dx:-1,dy:0}];
+const clothes=["#b96d58","#577d83","#d3a34f","#7e8f68","#9a718b","#e1c8a4","#4e5d65","#c68d72"];
+const sprites=[];
+routes.forEach((r,i)=>{let g=el("g",{transform:"translate("+r.x+" "+r.y+")"},people);el("rect",{x:-5,y:7,width:12,height:4,fill:"#6b6256",opacity:".25"},g);el("rect",{x:-4,y:-12,width:9,height:12,fill:clothes[i%clothes.length]},g);el("rect",{x:-5,y:-18,width:11,height:7,fill:["#d9a77e","#8a5c49","#c9a17b"][i%3]},g);el("rect",{x:-4,y:-20,width:9,height:3,fill:"#4d4038"},g);el("rect",{x:-3,y:0,width:3,height:8,fill:"#4c4a4b"},g);el("rect",{x:2,y:0,width:3,height:8,fill:"#4c4a4b"},g);el("rect",{x:-8,y:-10,width:3,height:8,fill:clothes[i%clothes.length]},g);sprites.push({g,r,offset:i*91})});
+let tick=0;function animatePeople(){tick+=1;sprites.forEach((s,i)=>{let distance=(tick*.42+s.offset)%380;let x=s.r.x+(s.r.dx?distance*s.r.dx:Math.sin(distance/380*Math.PI)*8),y=s.r.y+(s.r.dy?distance*s.r.dy:Math.cos(distance/380*Math.PI)*5);s.g.setAttribute("transform","translate("+x+" "+y+")");let leg=(tick%20<10)?1:-1;s.g.children[6].setAttribute("x",-3+leg);s.g.children[7].setAttribute("x",2-leg)});requestAnimationFrame(animatePeople)}requestAnimationFrame(animatePeople);
+// Map camera: viewBox zoom/pan plus map rotation. Pinch zoom is supported on touch screens.
+let view={x:0,y:0,w:2200,h:1540},rotation=0,drag=null,pinch=null;
 function applyView(){svg.setAttribute("viewBox",view.x+" "+view.y+" "+view.w+" "+view.h)}
-function zoom(f){let nw=Math.max(650,Math.min(1800,view.w*f)),nh=nw*1160/1800;let cx=view.x+view.w/2,cy=view.y+view.h/2;view={x:cx-nw/2,y:cy-nh/2,w:nw,h:nh};applyView()}
-document.getElementById("zoom-in").onclick=()=>zoom(.82);document.getElementById("zoom-out").onclick=()=>zoom(1.22);document.getElementById("map-home").onclick=()=>{view={x:0,y:0,w:1800,h:1160};applyView()};
-svg.addEventListener("pointerdown",e=>{if(e.target.closest(".map-marker"))return;pointer={x:e.clientX,y:e.clientY,view:{...view}};svg.classList.add("dragging");svg.setPointerCapture(e.pointerId)});
-svg.addEventListener("pointermove",e=>{if(!pointer)return;let r=svg.getBoundingClientRect(),dx=(e.clientX-pointer.x)/r.width*pointer.view.w,dy=(e.clientY-pointer.y)/r.height*pointer.view.h;view.x=Math.max(0,Math.min(1800-view.w,pointer.view.x-dx));view.y=Math.max(0,Math.min(1160-view.h,pointer.view.y-dy));applyView()});
-svg.addEventListener("pointerup",()=>{pointer=null;svg.classList.remove("dragging")});svg.addEventListener("pointercancel",()=>{pointer=null;svg.classList.remove("dragging")});
-svg.addEventListener("wheel",e=>{e.preventDefault();zoom(e.deltaY<0?.9:1.1)},{passive:false});
+function zoom(f,cx=view.x+view.w/2,cy=view.y+view.h/2){let nw=Math.max(520,Math.min(2200,view.w*f)),nh=nw*1540/2200;view={x:Math.max(0,Math.min(2200-nw,cx-(cx-view.x)*nw/view.w)),y:Math.max(0,Math.min(1540-nh,cy-(cy-view.y)*nh/view.h)),w:nw,h:nh};applyView()}
+function rotate(deg){rotation=(rotation+deg+360)%360;svg.style.transform="rotate("+rotation+"deg)"}
+document.getElementById("zoom-in").onclick=()=>zoom(.8);document.getElementById("zoom-out").onclick=()=>zoom(1.25);document.getElementById("rotate-left").onclick=()=>rotate(-15);document.getElementById("rotate-right").onclick=()=>rotate(15);document.getElementById("map-home").onclick=()=>{view={x:0,y:0,w:2200,h:1540};rotation=0;svg.style.transform="rotate(0deg)";applyView()};
+svg.addEventListener("pointerdown",e=>{if(e.target.closest("[role=button]"))return;drag={x:e.clientX,y:e.clientY,v:{...view}};svg.classList.add("dragging");svg.setPointerCapture(e.pointerId)});
+svg.addEventListener("pointermove",e=>{if(!drag)return;let r=svg.getBoundingClientRect(),dx=(e.clientX-drag.x)/r.width*drag.v.w,dy=(e.clientY-drag.y)/r.height*drag.v.h;view.x=Math.max(0,Math.min(2200-view.w,drag.v.x-dx));view.y=Math.max(0,Math.min(1540-view.h,drag.v.y-dy));applyView()});
+function stopDrag(){drag=null;svg.classList.remove("dragging")}svg.addEventListener("pointerup",stopDrag);svg.addEventListener("pointercancel",stopDrag);
+svg.addEventListener("wheel",e=>{e.preventDefault();let rect=svg.getBoundingClientRect(),cx=view.x+(e.clientX-rect.left)/rect.width*view.w,cy=view.y+(e.clientY-rect.top)/rect.height*view.h;zoom(e.deltaY<0?.9:1.1,cx,cy)},{passive:false});
+svg.addEventListener("touchstart",e=>{if(e.touches.length===2){pinch=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);drag=null}},{passive:true});
+svg.addEventListener("touchmove",e=>{if(e.touches.length===2&&pinch){let d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);zoom(pinch/d);pinch=d;e.preventDefault()}},{passive:false});
+svg.addEventListener("touchend",()=>pinch=null);
 save();renderTasks();
 </script></body></html>
