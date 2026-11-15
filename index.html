@@ -238,7 +238,7 @@ const districtData=[
 const districtMarkers=[];
 districtData.forEach((d,di)=>{
  const root=el("g",{transform:"translate("+d.ox+" "+d.oy+")"},world);
- el("rect",{x:0,y:0,width:2200,height:1540,fill:d.ground,stroke:"none"},root);
+ el("path",{d:"M70 120Q350 -35 690 70T1330 55Q1760 -35 2130 110L2200 300Q2140 650 2200 980T2100 1440Q1720 1570 1360 1460T650 1490Q260 1560 35 1390L0 1040Q70 730 0 420Z",fill:d.ground,stroke:"none"},root);
  // Quiet, consistent street hierarchy; buildings occupy plots between roads.
  const roads=el("g",{fill:"none","stroke-linecap":"square"},root);
  const streetPath="M-40 360C350 330 620 425 980 390S1740 330 2240 390M-40 1040C360 980 620 1090 1020 1030S1780 960 2240 1050M280 -40C340 300 250 560 360 820S470 1280 410 1580M1050 -40C980 300 1110 570 1030 850S1000 1280 1080 1580M1760 -40C1690 320 1830 610 1740 900S1720 1290 1800 1580M-30 1450C460 1280 770 1320 1140 1400S1830 1330 2230 1450";
@@ -313,6 +313,31 @@ districtData.forEach((d,di)=>{
  const routes=[{x:18,y:410,dx:1,dy:0},{x:790,y:820,dx:1,dy:0},{x:25,y:1230,dx:1,dy:0},{x:330,y:24,dx:0,dy:1},{x:720,y:470,dx:0,dy:1},{x:1110,y:20,dx:0,dy:1},{x:1500,y:850,dx:0,dy:1},{x:365,y:410,dx:1,dy:0},{x:1120,y:820,dx:1,dy:0},{x:780,y:1230,dx:1,dy:0}];
  routes.forEach(route=>addResident({...route,length:300},residentIndex++,crowd));
 });
+// A winding river, stone bridges and an expanded eastern waterfront.
+const water=el("g",{},world);
+const riverPath="M2550 -80C2800 340 2450 760 2860 1110S3420 1580 3200 2020S2840 2700 3370 3090S4240 3400 4550 3780S5200 4300 5580 4680";
+el("path",{d:riverPath,fill:"none",stroke:"#e7d8bd","stroke-width":150,"stroke-linecap":"round"},water);
+el("path",{d:riverPath,fill:"none",stroke:"#83b9c0","stroke-width":126,"stroke-linecap":"round"},water);
+el("path",{d:riverPath,fill:"none",stroke:"#b9d9d5","stroke-width":5,"stroke-dasharray":"30 42"},water);
+[["M2750 780l170 -70 58 118 -170 70Z"],["M3140 1960l180 -48 35 125 -180 48Z"],["M4210 3420l180 -48 35 125 -180 48Z"]].forEach(([d])=>el("path",{d,fill:"#a77e5c",stroke:"#f3e5cf","stroke-width":14},water));
+const coast=el("g",{},world);
+el("path",{d:"M6100 -100Q5900 500 6150 1000T6080 2200Q5920 2900 6150 3500T6080 4700H6700V-100Z",fill:"url(#water)"},coast);
+el("path",{d:"M6100 -100Q5900 500 6150 1000T6080 2200Q5920 2900 6150 3500T6080 4700",fill:"none",stroke:"#f0dfb9","stroke-width":52},coast);
+el("path",{d:"M6100 2600Q5900 2750 5980 3000T6070 3500L6250 3550V2600Z",fill:"url(#sand)"},coast);
+for(let k=0;k<5;k++){const x=6030+(k%2)*75,y=2780+k*115;el("path",{d:"M"+x+" "+y+"q28-42 56 0Z",fill:k%2?"#f1d59b":"#d78370",stroke:"#fff0d9","stroke-width":5},coast)}
+// European landmarks: a recognisable clock tower and a deliberately leaning Roman bell tower.
+const clock=el("g",{transform:"translate(4300 520)"},world);
+el("rect",{x:-54,y:70,width:108,height:290,fill:"#d9c5a4",stroke:"#8d765d","stroke-width":8},clock);
+el("path",{d:"M-74 70L-54 22H54L74 70Z",fill:"#6f7772",stroke:"#8d765d","stroke-width":7},clock);
+el("rect",{x:-38,y:-40,width:76,height:65,fill:"#e6d4b7",stroke:"#8d765d","stroke-width":7},clock);
+el("path",{d:"M-50 -40L0 -105 50 -40Z",fill:"#9f6250",stroke:"#795846","stroke-width":7},clock);
+el("circle",{cx:0,cy:110,r:30,fill:"#f6e9cf",stroke:"#7b6856","stroke-width":6},clock);
+el("path",{d:"M0 110V88M0 110L18 122",stroke:"#4f5b5b","stroke-width":5},clock);
+for(let k=0;k<4;k++)el("rect",{x:-30+k*20,y:180,width:12,height:54,fill:"#6f8584",stroke:"#f1dfc3","stroke-width":3},clock);
+const leaning=el("g",{transform:"translate(3400 2350) rotate(-8)"},world);
+el("rect",{x:-70,y:-35,width:140,height:250,fill:"#d9c5a4",stroke:"#8d765d","stroke-width":8},leaning);
+for(let k=0;k<6;k++){el("path",{d:"M-70 "+(-20+k*39)+"H70",stroke:"#a78a69","stroke-width":7},leaning);el("path",{d:"M-48 "+(-12+k*39)+"h96",stroke:"#f0e1c8","stroke-width":4},leaning);el("rect",{x:-10,y:-25+k*39,width:20,height:23,fill:"#6f8584"},leaning)}
+el("path",{d:"M-88 -35L0 -105 88 -35Z",fill:"#a75f4d",stroke:"#8d765d","stroke-width":7},leaning);
 // Broad avenue links join the district grids into one continuous city network.
 const links=el("g",{fill:"none","stroke-linecap":"square"},world);
 for(let row=0;row<3;row++){const yy=row*1540;for(const y of [410,820,1230]){el("path",{d:"M1680 "+(yy+y)+"H2220",stroke:"#b7a58c","stroke-width":94},links);el("path",{d:"M1680 "+(yy+y)+"H2220",stroke:"#f3e8d5","stroke-width":82},links)}}
