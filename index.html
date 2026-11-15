@@ -11,7 +11,7 @@ header{padding:16px clamp(16px,4vw,48px);display:flex;justify-content:space-betw
 h1{font-size:clamp(23px,4vw,33px);font-weight:normal;margin:0;letter-spacing:-1px}header small{color:var(--muted);font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase}.wallet{font:13px Arial,sans-serif;background:#f1e5d4;border:1px solid #e1d0bb;border-radius:30px;padding:9px 14px}
 .layout{max-width:1450px;margin:18px auto;padding:0 16px;display:grid;grid-template-columns:165px minmax(0,1fr);gap:18px}.nav{display:flex;flex-direction:column;gap:7px}.nav button{border:0;text-align:left;background:transparent;padding:11px 13px;border-radius:12px;color:var(--muted)}.nav button.active,.nav button:hover{background:#e9ddca;color:var(--ink)}main{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px;margin-bottom:16px}
 .eyebrow{font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}h2{font-size:26px;font-weight:normal;margin:5px 0 10px}p{margin:7px 0;color:#655d53}.hero{min-height:250px;background:linear-gradient(120deg,#e8c9ad,#d8e3d3 55%,#b9d4d3);display:flex;align-items:flex-end;position:relative;overflow:hidden}.hero h2{font-size:36px}.button{border:0;border-radius:24px;background:#51483e;color:#fff8ed;padding:10px 16px;margin-top:10px}.button.secondary{background:#eee2d0;color:var(--ink)}
-.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.note,.map-help{font:11px Arial,sans-serif;color:#746b60}.map-shell{position:relative;border:2px solid #cbb99f;border-radius:16px;overflow:hidden;background:#b6d5d1;touch-action:none;overscroll-behavior:contain;-webkit-user-select:none;user-select:none;box-shadow:0 12px 34px rgba(78,65,49,.13)}#city-art{display:block;width:100%;height:min(76vh,820px);min-height:500px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;background:#d9d7bd;shape-rendering:crispEdges}#city-art.dragging{cursor:grabbing;transition:none}.map-tools{display:none}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#eee6d9;padding:6px 10px;border-radius:20px}.place-card{background:#f7efe2;border:1px solid #e6d8c5;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}
+.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.note,.map-help{font:11px Arial,sans-serif;color:#746b60}.map-shell{position:relative;border:2px solid #cbb99f;border-radius:16px;overflow:hidden;background:#b6d5d1;touch-action:none;overscroll-behavior:contain;-webkit-user-select:none;user-select:none;box-shadow:0 12px 34px rgba(78,65,49,.13)}#city-art{display:block;width:100%;height:min(76vh,820px);min-height:500px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;background:#d9d7bd;shape-rendering:geometricPrecision}#city-art.dragging{cursor:grabbing;transition:none}.map-tools{display:none}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#eee6d9;padding:6px 10px;border-radius:20px}.place-card{background:#f7efe2;border:1px solid #e6d8c5;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}
 @media(max-width:700px){.layout{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.panel{padding:15px}#city-art{height:68vh;min-height:440px}}
 
 /* Editorial character interface */
@@ -72,7 +72,7 @@ p{color:#64717a;line-height:1.7}
 <div class="layout"><nav class="nav" aria-label="Game sections"><button class="active" data-page="home">Home</button><button data-page="city">Explore the city</button><button data-page="people">People</button><button data-page="life">Daily life</button><button data-page="journal">Journal</button></nav><main>
 <section id="home"><div class="panel hero"><div><div class="eyebrow">Your story starts here</div><h2>A city with a life of its own.</h2><p>Wander sunlit streets, find hidden courtyards and meet the people who call it home.</p><button class="button" data-go="city">Enter the city</button></div></div><div class="panel"><div class="eyebrow">A note for today</div><h2>There is no rush.</h2><p>Wander, meet people and make a life that feels like yours. Exploring is always free.</p></div></section>
 <section id="city" class="hidden">
-<div class="city-heading"><div><div class="eyebrow">A Mediterranean city, made for wandering</div><h2>Wish & Wander</h2></div><div class="note">Six connected neighbourhoods · Drag, pinch and twist to explore</div></div>
+<div class="city-heading"><div><div class="eyebrow">A Mediterranean city, made for wandering</div><h2>Wish & Wander</h2></div><div class="note">One continuous coastal city · Drag, pinch and twist to explore</div></div>
 <div class="map-shell" id="map-shell"><svg id="city-art" viewBox="0 0 19800 13860" role="img" aria-label="Pixel-art Mediterranean city with Barcelona-inspired architecture, scattered seasonal gardens, beach, plazas and walking residents">
 <defs>
 <pattern id="sand" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#e6d0a8"/><path d="M3 5h3M15 17h4M8 21h2" stroke="#c9b184" stroke-width="2"/></pattern>
@@ -133,8 +133,8 @@ p{color:#64717a;line-height:1.7}
 </g>
 </svg></div>
 <div class="map-legend"><span class="legend-chip">❄ Snowy gardens</span><span class="legend-chip">✿ Spring blossom</span><span class="legend-chip">☀ Sunlit plazas</span><span class="legend-chip">🍂 Autumn courtyards</span><span class="legend-chip">♧ Mediterranean coast</span></div>
-<div class="place-card" id="place-card"><strong>Welcome to Wish & Wander</strong><p>A sunlit city of tiled façades, little plazas, leafy courtyards and seaside streets. Tap a place marker to explore.</p></div>
-<p class="map-help">Move around with one finger. Use two fingers together to zoom and rotate. Tap marked places to discover them.</p>
+<div class="place-card" id="place-card"><strong>Welcome to Wish & Wander</strong><p>One connected city of winding streets, old squares, seasonal gardens, a river, a harbour and a long sandy beach. Tap a place marker to explore.</p></div>
+<p class="map-help">One finger moves the map. Two fingers zoom and rotate. Tap a marker to discover a place. The whole city is visible when you first arrive.</p>
 </section>
 <section id="people" class="hidden">
 <div class="city-heading"><div><div class="eyebrow">The residents of Wish & Wander</div><h2>People & stories</h2><p>Get to know the people who make the city feel alive.</p></div><div class="note">CHARACTER COLLECTION · 01 RESIDENT</div></div>
@@ -342,9 +342,180 @@ el("path",{d:"M-88 -35L0 -105 88 -35Z",fill:"#a75f4d",stroke:"#8d765d","stroke-w
 const links=el("g",{fill:"none","stroke-linecap":"square"},world);
 for(let row=0;row<3;row++){const yy=row*1540;for(const y of [410,820,1230]){el("path",{d:"M1680 "+(yy+y)+"H2220",stroke:"#b7a58c","stroke-width":94},links);el("path",{d:"M1680 "+(yy+y)+"H2220",stroke:"#f3e8d5","stroke-width":82},links)}}
 for(let row=0;row<2;row++){const y1=row*1540+1230,y2=(row+1)*1540+410;for(const x of [330,720,1110,1500,1900]){el("path",{d:"M"+x+" "+y1+"V"+y2,stroke:"#b7a58c","stroke-width":94},links);el("path",{d:"M"+x+" "+y1+"V"+y2,stroke:"#f3e8d5","stroke-width":82},links)}}
+
+// COMPLETE MAP REDESIGN: one continuous coastal city, not a tiled district grid.
+// The older prototype is covered by this new illustrated map layer.
+const fresh=el("g",{},world);
+el("rect",{x:0,y:0,width:6600,height:4620,fill:"#9bc8c9"},fresh);
+// Open water, irregular coastline and a single connected peninsula.
+el("path",{d:"M0 0H6600V4620H0Z",fill:"#91c2c5"},fresh);
+el("path",{d:"M0 0H5750C5680 250 5900 430 5740 690S5910 1040 5700 1280S5860 1580 5640 1830S5810 2140 5590 2410S5780 2760 5520 3020S5700 3390 5430 3650S5600 4070 5350 4620H0Z",fill:"#e7d9bf"},fresh);
+el("path",{d:"M0 0H5750C5680 250 5900 430 5740 690S5910 1040 5700 1280S5860 1580 5640 1830S5810 2140 5590 2410S5780 2760 5520 3020S5700 3390 5430 3650S5600 4070 5350 4620",fill:"none",stroke:"#f5e8c9","stroke-width":70},fresh);
+el("path",{d:"M0 0H5750C5680 250 5900 430 5740 690S5910 1040 5700 1280S5860 1580 5640 1830S5810 2140 5590 2410S5780 2760 5520 3020S5700 3390 5430 3650S5600 4070 5350 4620",fill:"none",stroke:"#c5a984","stroke-width":5,"stroke-dasharray":"16 20"},fresh);
+// Sand coves, beach, marina and a long curving waterfront promenade.
+el("path",{d:"M5640 1670Q5920 1570 6600 1690V2300Q6130 2200 5600 2370Z",fill:"#e8cfa5"},fresh);
+el("path",{d:"M5500 3160Q5920 3030 6600 3180V3810Q6030 3700 5450 3900Z",fill:"#e8cfa5"},fresh);
+el("path",{d:"M5510 1670Q5930 1530 6600 1640M5450 3160Q6000 2990 6600 3140",fill:"none",stroke:"#fff0d5","stroke-width":18},fresh);
+el("path",{d:"M5640 1720Q6000 1610 6600 1730M5510 3210Q6030 3060 6600 3210",fill:"none",stroke:"#b69b76","stroke-width":4,"stroke-dasharray":"8 15"},fresh);
+for(let i=0;i<7;i++){const x=5840+(i%3)*205,y=1840+Math.floor(i/3)*120;el("path",{d:"M"+x+" "+y+"q34-53 68 0Z",fill:i%2?"#d47c69":"#e9c77f",stroke:"#fff1d7","stroke-width":5},fresh);el("path",{d:"M"+(x+34)+" "+y+"v34",stroke:"#876d55","stroke-width":4},fresh)}
+// A river meanders through the old town and opens into the harbour.
+const river="M720 -80C930 300 620 570 980 850S1510 1130 1390 1510S1050 1940 1500 2250S2210 2450 2380 2800S2810 3170 3210 3330S3920 3450 4270 3740";
+el("path",{d:river,fill:"none",stroke:"#d9d1b8","stroke-width":170,"stroke-linecap":"round"},fresh);
+el("path",{d:river,fill:"none",stroke:"#83b9c0","stroke-width":142,"stroke-linecap":"round"},fresh);
+el("path",{d:river,fill:"none",stroke:"#c6e1dc","stroke-width":6,"stroke-dasharray":"35 42"},fresh);
+// A network of winding avenues, branching lanes and little pedestrian streets.
+const roads=el("g",{fill:"none","stroke-linecap":"round","stroke-linejoin":"round"},fresh);
+const avenues=[
+"M-80 760C550 610 820 890 1320 760S2110 570 2670 770S3650 1050 4250 790S5140 620 5800 820",
+"M-100 2020C500 1810 900 2040 1390 1880S2320 1680 2860 1900S3750 2220 4300 1970S5100 1770 5740 1980",
+"M-100 3350C500 3120 950 3440 1470 3210S2380 2970 2890 3210S3820 3550 4410 3290S5100 3110 5570 3330",
+"M480 -100C680 420 410 850 690 1280S1040 2070 760 2530S540 3350 890 4700",
+"M2180 -100C1930 480 2290 900 2040 1430S1810 2340 2180 2800S2490 3760 2250 4700",
+"M3900 -100C3590 420 4020 850 3730 1320S3480 2160 3860 2650S4200 3590 3950 4700",
+"M-100 1220C540 1070 890 1330 1440 1160S2380 970 2910 1190S3860 1450 4450 1200S5240 1030 5830 1260",
+"M-100 2670C500 2470 930 2730 1470 2530S2380 2350 2920 2570S3870 2860 4440 2600S5190 2420 5660 2670"
+];
+avenues.forEach(d=>{el("path",{d,stroke:"#b49f83","stroke-width":82},roads);el("path",{d,stroke:"#f5ead6","stroke-width":68},roads);el("path",{d,stroke:"#d2c1a8","stroke-width":3,"stroke-dasharray":"8 22"},roads)});
+const lanes=[
+"M160 420C500 520 650 390 920 470S1310 600 1540 470",
+"M900 1000C1170 900 1290 1050 1540 970S1860 800 2080 900",
+"M2450 430C2720 560 2910 380 3140 470S3520 680 3750 540",
+"M3150 1320C3420 1190 3630 1380 3880 1280S4200 1080 4470 1190",
+"M180 1570C470 1430 680 1600 930 1500S1230 1340 1450 1430",
+"M1700 2180C1980 2030 2160 2230 2400 2130S2720 1940 2940 2050",
+"M3000 2360C3260 2200 3450 2420 3710 2310S4080 2130 4290 2240",
+"M800 2920C1080 2770 1280 2960 1520 2850S1830 2680 2040 2790",
+"M2390 3650C2650 3490 2850 3680 3100 3570S3430 3400 3650 3510",
+"M4050 2900C4300 2750 4510 2950 4760 2840S5110 2650 5320 2780"
+];
+lanes.forEach(d=>{el("path",{d,stroke:"#c4b397","stroke-width":43},roads);el("path",{d,stroke:"#f6eddf","stroke-width":34},roads)});
+// Irregular public gardens: snowy northern grove, blossom garden, autumn park and sunny botanical terrace.
+function park(x,y,w,h,kind){
+ const g=el("g",{transform:"translate("+x+" "+y+")"},fresh);
+ el("path",{d:"M18 30Q"+(w*.28)+" -8 "+(w*.55)+" 18T"+(w-12)+" 38Q"+(w+12)+" "+(h*.55)+" "+(w-28)+" "+(h-22)+"Q"+(w*.55)+" "+(h+18)+" 24 "+(h-8) +"Q-20 "+(h*.5)+" 18 30Z",fill:kind==="snow"?"#dce8e6":kind==="spring"?"#d5e4c9":kind==="autumn"?"#e4c99f":"#c7d8ad",stroke:"#9caf8e","stroke-width":8},g);
+ el("path",{d:"M30 "+(h*.58)+"Q"+(w*.35)+" "+(h*.2)+" "+(w*.53)+" "+(h*.56)+"T"+(w-30)+" "+(h*.35),fill:"none",stroke:"#f3e9d8","stroke-width":13,"stroke-linecap":"round"},g);
+ for(let i=0;i<12;i++){const tx=35+(i*71%(w-60)),ty=35+(i*47%(h-65)),c=kind==="snow"?"#e9f0ed":kind==="spring"?"#e7aab5":kind==="autumn"?"#c77d43":i%3?"#8ca978":"#a4b987";tree(tx,ty,c,.75+(i%3)*.12)}
+ el("circle",{cx:w*.52,cy:h*.55,r:kind==="snow"?28:22,fill:"#80b8bc",stroke:"#f7ead5","stroke-width":7},g);
+}
+park(110,90,650,470,"snow");
+park(290,2180,700,510,"spring");
+park(3630,300,680,500,"summer");
+park(3980,3440,620,460,"autumn");
+park(2630,1450,520,370,"summer");
+park(850,3450,520,380,"autumn");
+// Detailed individual buildings in loose neighbourhood clusters; no repeating tile blocks.
+const housePal=[
+["#e9c6a4","#b96550"],["#f0d9bb","#c27b58"],["#d8c9b5","#788c88"],["#efcbbd","#a96d66"],
+["#e6d0ad","#c18a5e"],["#d9e0d9","#70868b"],["#f0dfc6","#a75f4f"],["#e5c2a5","#9a7560"]
+];
+function cityHouse(x,y,w,h,n,angle=0){
+ const [wall,roof]=housePal[n%housePal.length],g=el("g",{transform:"translate("+x+" "+y+") rotate("+angle+")"},fresh);
+ el("path",{d:"M-7 "+(h+13)+"l"+(w+18)+" 0 -9 14 -"+(w+2)+" 0Z",fill:"#756955",opacity:".18"},g);
+ el("path",{d:"M0 0L"+(w*.18)+" -18H"+(w*.84)+"L"+w+" 0V"+h+"H0Z",fill:wall,stroke:"#94765b","stroke-width":5},g);
+ el("path",{d:"M-10 0L"+(w*.18)+" -28H"+(w*.84)+"L"+(w+10)+" 0L"+(w*.5)+" 20Z",fill:roof,stroke:"#875b4b","stroke-width":5},g);
+ el("path",{d:"M"+(w*.5)+" 20V"+h,stroke:"#c49a77","stroke-width":4},g);
+ for(let row=0;row<2;row++)for(let col=0;col<Math.max(2,Math.floor(w/34));col++){
+  const wx=12+col*31,wy=23+row*35;
+  el("rect",{x:wx,y:wy,width:17,height:22,fill:"#66848a",stroke:"#f4e4cd","stroke-width":3},g);
+  el("path",{d:"M"+(wx-4)+" "+(wy+22)+"h25",stroke:"#a96e55","stroke-width":4},g);
+ }
+ el("rect",{x:w*.42,y:h-32,width:22,height:32,fill:"#795844",stroke:"#f1ddc0","stroke-width":3},g);
+ if(n%3===0){el("path",{d:"M"+(w*.15)+" 8h"+(w*.7),stroke:"#f4d5b3","stroke-width":7},g);el("path",{d:"M"+(w*.12)+" 4h"+(w*.76),stroke:"#8b5849","stroke-width":3},g)}
+ if(n%3===1){el("path",{d:"M"+(w*.1)+" "+(h*.58)+"h"+(w*.8),stroke:"#b77b60","stroke-width":7},g);el("path",{d:"M"+(w*.18)+" "+(h*.58)+"v18m"+(w*.64)+" -18v18",stroke:"#785c4c","stroke-width":3},g)}
+ if(n%3===2){el("rect",{x:w*.1,y:-12,width:w*.8,height:9,fill:"#d9a16f"},g)}
+}
+const clusters=[
+ {x:850,y:250,pts:[[0,0],[130,30],[270,-10],[390,75],[65,145],[210,180],[355,210],[500,135],[525,260],[365,330],[175,320]]},
+ {x:1550,y:700,pts:[[0,0],[130,-55],[280,15],[420,65],[45,150],[200,180],[360,205],[520,150],[580,300],[390,340],[190,315]]},
+ {x:2820,y:180,pts:[[0,0],[140,30],[290,-25],[430,55],[45,155],[210,175],[370,200],[520,140],[555,290],[350,330],[160,310]]},
+ {x:4200,y:720,pts:[[0,0],[140,-45],[280,15],[420,70],[40,150],[205,180],[365,200],[510,140],[545,290],[360,330],[160,315]]},
+ {x:850,y:2750,pts:[[0,0],[135,-40],[275,10],[415,65],[40,155],[205,180],[360,210],[510,145],[545,290],[370,330],[165,310]]},
+ {x:2280,y:2850,pts:[[0,0],[140,30],[280,-35],[425,55],[45,150],[210,175],[370,205],[520,145],[550,290],[365,335],[165,315]]},
+ {x:3970,y:2550,pts:[[0,0],[140,-45],[280,20],[425,70],[40,155],[205,180],[365,205],[515,145],[555,295],[370,335],[165,315]]}
+];
+let houseN=0;
+clusters.forEach((c,ci)=>c.pts.forEach((p,j)=>cityHouse(c.x+p[0],c.y+p[1],76+(j%3)*9,76+(j%2)*14,houseN++,(j%4-1.5)*2.2)));
+// A few larger public buildings and arcaded market streets.
+function civicBuilding(x,y,w,h,roof,label){
+ const g=el("g",{transform:"translate("+x+" "+y+")"},fresh);
+ el("path",{d:"M-18 "+h+"H"+(w+22)+"l-12 22H-8Z",fill:"#756955",opacity:".2"},g);
+ el("rect",{x:0,y:0,width:w,height:h,fill:"#e7d3b8",stroke:"#92775e","stroke-width":7},g);
+ el("path",{d:"M-14 0L"+(w*.2)+" -38H"+(w*.8)+"L"+(w+14)+" 0Z",fill:roof,stroke:"#865a4a","stroke-width":7},g);
+ for(let i=0;i<Math.floor(w/42);i++){const xx=15+i*42;el("path",{d:"M"+xx+" "+(h-4)+"v-55q13-27 26 0v55Z",fill:"#789397",stroke:"#f3e1c6","stroke-width":4},g)}
+ el("rect",{x:w*.42,y:h-58,width:w*.16,height:58,fill:"#795c48"},g);
+ el("text",{x:w/2,y:h+42,"text-anchor":"middle","font-family":"Georgia,serif","font-size":26,fill:"#665747","letter-spacing":2},g).textContent=label.toUpperCase();
+}
+civicBuilding(1120,1030,260,170,"#a95f50","Old Town Hall");
+civicBuilding(3210,850,310,180,"#718985","Winter Conservatory");
+civicBuilding(4380,2100,300,190,"#c17a59","Grand Theatre");
+civicBuilding(1780,3500,280,175,"#b66c55","The Flower Market");
+// Clock tower inspired by Big Ben, placed at a prominent central square.
+const clock=el("g",{transform:"translate(2490 1650)"},fresh);
+el("path",{d:"M-76 330L-60 80H60L76 330Z",fill:"#d9c5a4",stroke:"#8c735b","stroke-width":9},clock);
+el("rect",{x:-68,y:55,width:136,height:30,fill:"#c5a982",stroke:"#8c735b","stroke-width":7},clock);
+el("path",{d:"M-55 55V-70H55V55Z",fill:"#e6d4b7",stroke:"#8c735b","stroke-width":8},clock);
+el("path",{d:"M-68 -70L0 -165 68 -70Z",fill:"#a45f4d",stroke:"#805946","stroke-width":8},clock);
+el("rect",{x:-42,y:-58,width:84,height:70,fill:"#e7d8bb",stroke:"#8c735b","stroke-width":6},clock);
+el("circle",{cx:0,cy:120,r:43,fill:"#f6e9cf",stroke:"#7b6856","stroke-width":8},clock);
+el("path",{d:"M0 120V88M0 120L25 137",stroke:"#4f5b5b","stroke-width":7},clock);
+for(let i=0;i<4;i++)el("rect",{x:-43+i*29,y:205,width:18,height:82,fill:"#718b89",stroke:"#f0dfc3","stroke-width":4},clock);
+// Leaning Roman bell tower inspired by Pisa, with visible stacked arcades.
+const pisa=el("g",{transform:"translate(4660 1320) rotate(-8)"},fresh);
+el("path",{d:"M-85 310L-75 -35H75L85 310Z",fill:"#dfc9a7",stroke:"#8b7459","stroke-width":9},pisa);
+for(let level=0;level<6;level++){
+ const yy=-15+level*52;
+ el("path",{d:"M-74 "+yy+"H74",stroke:"#aa8b68","stroke-width":8},pisa);
+ for(let col=0;col<4;col++){const xx=-56+col*37;el("path",{d:"M"+xx+" "+(yy+37)+"v-24q12-22 24 0v24",fill:"#f2e3c9",stroke:"#9d7c5c","stroke-width":4},pisa)}
+}
+el("path",{d:"M-91 -35L0 -100 91 -35Z",fill:"#a65f4c",stroke:"#8b7459","stroke-width":8},pisa);
+// Roman amphitheatre, gardenside steps and a small performance arena.
+const amph=el("g",{transform:"translate(3530 2700)"},fresh);
+el("ellipse",{cx:0,cy:0,rx:220,ry:132,fill:"#b67b58",stroke:"#805d48","stroke-width":12},amph);
+el("ellipse",{cx:0,cy:-8,rx:172,ry:96,fill:"#e4c39d",stroke:"#f0dfc4","stroke-width":9},amph);
+el("ellipse",{cx:0,cy:-17,rx:116,ry:60,fill:"#92765e",stroke:"#c99a70","stroke-width":8},amph);
+el("ellipse",{cx:0,cy:-20,rx:62,ry:30,fill:"#c8b08b"},amph);
+for(let i=0;i<11;i++){const xx=-165+i*33;el("path",{d:"M"+xx+" -20v-40q16-26 32 0v40",fill:"#f1dfc2",stroke:"#a47755","stroke-width":4},amph)}
+// Bridges crossing the river; each has stone parapets and an arched deck.
+[[930,760,0],[1390,1580,-12],[2280,2660,10],[3280,3270,-8]].forEach(([x,y,a])=>{
+ const b=el("g",{transform:"translate("+x+" "+y+") rotate("+a+")"},fresh);
+ el("path",{d:"M-115 -28Q0 -78 115 -28L115 25Q0 -18 -115 25Z",fill:"#b28c69",stroke:"#f2e2c7","stroke-width":9},b);
+ el("path",{d:"M-90 -13H90",stroke:"#f4e5cf","stroke-width":8},b);
+ for(let k=-2;k<=2;k++)el("rect",{x:k*35-6,y:-33,width:12,height:19,fill:"#e4d0b1",stroke:"#9b7b5b","stroke-width":3},b);
+});
+// Beachfront cafés, piers and little moored boats.
+for(let i=0;i<4;i++){const x=5780+(i%2)*180,y=2450+Math.floor(i/2)*210;const g=el("g",{transform:"translate("+x+" "+y+")"},fresh);el("path",{d:"M0 0h112v70H0Z",fill:"#f0d9bb",stroke:"#94775b","stroke-width":5},g);el("path",{d:"M-8 0L56 -35 120 0Z",fill:i%2?"#a95f50":"#718d89",stroke:"#865b4b","stroke-width":5},g);el("rect",{x:22,y:27,width:68,height:20,fill:"#718f91"},g)}
+for(let i=0;i<3;i++){const x=6150+(i%2)*180,y=2780+i*95;el("path",{d:"M"+x+" "+y+"q55 25 110 0l-18 30h-74Z",fill:"#f5ead8",stroke:"#8a6f56","stroke-width":5},fresh);el("path",{d:"M"+(x+55)+" "+(y-55)+"v55l42 -8Z",fill:"#f0dfc5",stroke:"#8a6f56","stroke-width":3},fresh)}
+// Street trees, flower beds, lamp posts and small urban details soften the blocks.
+for(let i=0;i<85;i++){const x=170+(i*173)%5200,y=160+(i*257)%4200;if((x>5550&&y>1600&&y<3900)||(x>5300&&y<100))continue;tree(x,y,["#86a477","#9eb887","#d8a2a3","#d29a57","#8da984"][i%5],.48+(i%4)*.08)}
+for(let i=0;i<36;i++){const x=300+(i*293)%5000,y=220+(i*181)%4100;el("circle",{cx:x,cy:y,r:7,fill:i%2?"#e8aeb3":"#f0d39a"},fresh)}
+// Neighbourhood names sit on the landscape rather than inside square district panels.
+function mapLabel(x,y,title,sub){const g=el("g",{transform:"translate("+x+" "+y+")"},fresh);el("text",{x:0,y:0,"font-family":"Georgia,serif","font-size":38,"letter-spacing":3,fill:"#655747","text-anchor":"middle"},g).textContent=title.toUpperCase();el("text",{x:0,y:35,"font-family":"Arial,sans-serif","font-size":16,"letter-spacing":2,fill:"#897b69","text-anchor":"middle"},g).textContent=sub.toUpperCase()}
+mapLabel(360,650,"North Gardens","Snow · pines · quiet lanes");
+mapLabel(620,2480,"Blossom Park","Spring gardens · flower walks");
+mapLabel(1840,520,"The Old Quarter","Bookshops · old stone streets");
+mapLabel(2870,1160,"Market Quarter","Bakeries · little courtyards");
+mapLabel(3890,390,"The Conservatory","Glasshouse · summer gardens");
+mapLabel(4580,3020,"The Cultural Quarter","Theatre · galleries · cafés");
+mapLabel(1130,3850,"Autumn Gardens","Copper leaves · warm courtyards");
+mapLabel(6100,3520,"The Beach","Promenade · marina · sea");
+mapLabel(2520,2040,"Clocktower Square","Civic heart of Wish & Wander");
+// Add fresh tap targets over the redesigned city.
+const newPlaces=[
+ {x:2490,y:1770,name:"Clocktower Square",desc:"The city's central square, beneath the great clock tower. Street musicians and flower sellers gather here."},
+ {x:4660,y:1510,name:"The Leaning Tower",desc:"A pale Roman-style bell tower, leaning over a small piazza lined with cafés."},
+ {x:3530,y:2700,name:"The Amphitheatre",desc:"An old open-air arena tucked between gardens and the cultural quarter."},
+ {x:6120,y:3520,name:"The Beach",desc:"A broad sandy cove with a promenade, cafés, boats and umbrellas."},
+ {x:1120,y:1030,name:"Old Town Hall",desc:"A civic building surrounded by narrow streets, independent shops and old town cafés."},
+ {x:3210,y:850,name:"Winter Conservatory",desc:"A glasshouse beside a snowy garden, full of winter plants and warm light."},
+ {x:290, y:270,name:"North Gardens",desc:"A quiet northern park with frosted paths, evergreen trees and snow-covered lawns."},
+ {x:640,y:2370,name:"Blossom Park",desc:"A spring garden with pink blossom, winding paths and places to sit."},
+ {x:4280,y:3660,name:"Autumn Gardens",desc:"A leafy park filled with copper and gold trees."}
+];
+newPlaces.forEach((p,i)=>{const g=el("g",{transform:"translate("+p.x+" "+p.y+")",tabindex:"0",role:"button",style:"cursor:pointer"},fresh);el("circle",{r:24,fill:"#fff7e8",stroke:"#85684f","stroke-width":5},g);el("circle",{r:9,fill:i%2?"#bd765d":"#789778"},g);el("path",{d:"M-7 23L0 35 7 23",fill:"#fff7e8",stroke:"#85684f","stroke-width":3},g);g.addEventListener("click",e=>{e.stopPropagation();selectPlace(p)});g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectPlace(p)}})});
+
 let tick=0;function animatePeople(){tick+=1;sprites.forEach((s,i)=>{const r=s.route,phase=(tick*s.speed+s.offset)%(r.length*2),back=phase>r.length,dist=back?r.length*2-phase:phase,x=r.x+(r.dx?dist*r.dx:0),y=r.y+(r.dy?dist*r.dy:0);s.g.setAttribute("transform","translate("+x+" "+y+")"+(back?" scale(-1 1)":""));const leg=(Math.floor(tick/5+i)%2)?1:-1;s.g.children[5].setAttribute("x",-3+leg);s.g.children[6].setAttribute("x",2-leg)});requestAnimationFrame(animatePeople)}requestAnimationFrame(animatePeople);
 // Gesture camera: one-finger pan; two-finger pinch zoom and twist rotation.
-let view={x:2200,y:1540,w:2200,h:1540},rotation=0,mouseDrag=null,touchGesture=null;
+let view={x:0,y:0,w:19800,h:13860},rotation=0,mouseDrag=null,touchGesture=null;
 const WORLD_W=19800,WORLD_H=13860;
 function applyView(){svg.setAttribute("viewBox",view.x+" "+view.y+" "+view.w+" "+view.h)}
 function clampView(){view.x=Math.max(0,Math.min(WORLD_W-view.w,view.x));view.y=Math.max(0,Math.min(WORLD_H-view.h,view.y))}
