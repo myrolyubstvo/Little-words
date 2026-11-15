@@ -11,7 +11,7 @@ header{padding:16px clamp(16px,4vw,48px);display:flex;justify-content:space-betw
 h1{font-size:clamp(23px,4vw,33px);font-weight:normal;margin:0;letter-spacing:-1px}header small{color:var(--muted);font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase}.wallet{font:13px Arial,sans-serif;background:#f1e5d4;border:1px solid #e1d0bb;border-radius:30px;padding:9px 14px}
 .layout{max-width:1450px;margin:18px auto;padding:0 16px;display:grid;grid-template-columns:165px minmax(0,1fr);gap:18px}.nav{display:flex;flex-direction:column;gap:7px}.nav button{border:0;text-align:left;background:transparent;padding:11px 13px;border-radius:12px;color:var(--muted)}.nav button.active,.nav button:hover{background:#e9ddca;color:var(--ink)}main{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px;margin-bottom:16px}
 .eyebrow{font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}h2{font-size:26px;font-weight:normal;margin:5px 0 10px}p{margin:7px 0;color:#655d53}.hero{min-height:250px;background:linear-gradient(120deg,#e8c9ad,#d8e3d3 55%,#b9d4d3);display:flex;align-items:flex-end;position:relative;overflow:hidden}.hero h2{font-size:36px}.button{border:0;border-radius:24px;background:#51483e;color:#fff8ed;padding:10px 16px;margin-top:10px}.button.secondary{background:#eee2d0;color:var(--ink)}
-.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.note,.map-help{font:11px Arial,sans-serif;color:#746b60}.map-shell{position:relative;border:2px solid #cbb99f;border-radius:16px;overflow:hidden;background:#b6d5d1;touch-action:none;overscroll-behavior:contain;box-shadow:0 12px 34px rgba(78,65,49,.13)}#city-art{display:block;width:100%;height:min(76vh,820px);min-height:500px;cursor:grab;touch-action:none;user-select:none;shape-rendering:crispEdges}#city-art.dragging{cursor:grabbing;transition:none}.map-tools{display:none}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#eee6d9;padding:6px 10px;border-radius:20px}.place-card{background:#f7efe2;border:1px solid #e6d8c5;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}
+.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.note,.map-help{font:11px Arial,sans-serif;color:#746b60}.map-shell{position:relative;border:2px solid #cbb99f;border-radius:16px;overflow:hidden;background:#b6d5d1;touch-action:none;overscroll-behavior:contain;-webkit-user-select:none;user-select:none;box-shadow:0 12px 34px rgba(78,65,49,.13)}#city-art{display:block;width:100%;height:min(76vh,820px);min-height:500px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;shape-rendering:crispEdges}#city-art.dragging{cursor:grabbing;transition:none}.map-tools{display:none}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#eee6d9;padding:6px 10px;border-radius:20px}.place-card{background:#f7efe2;border:1px solid #e6d8c5;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}
 @media(max-width:700px){.layout{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.panel{padding:15px}#city-art{height:68vh;min-height:440px}}
 
 /* Editorial character interface */
@@ -187,13 +187,14 @@ const world=document.createElementNS(NS,"g");
 const defs=svg.querySelector("defs");
 [...svg.children].forEach(node=>{if(node!==defs)world.appendChild(node)});
 svg.appendChild(world);
+const worldGround=document.createElementNS(NS,"rect");worldGround.setAttribute("x","0");worldGround.setAttribute("y","0");worldGround.setAttribute("width","6600");worldGround.setAttribute("height","4620");worldGround.setAttribute("fill","#e5d8c2");world.insertBefore(worldGround,world.firstChild);
 world.setAttribute("transform","scale(3)");
 const arch=document.getElementById("architecture"),green=document.getElementById("greenery"),land=document.getElementById("landmarks"),people=document.getElementById("residents"),markers=document.getElementById("markers");
 function el(tag,a,parent){let n=document.createElementNS(NS,tag);for(const k in a)n.setAttribute(k,a[k]);(parent||world).appendChild(n);return n}
 let seed=7301;function rnd(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
 const roofColors=["#b96651","#c57c58","#9d6554","#d09a63","#6e8581","#a85f50"],wallColors=["#e9cda8","#f0dfc1","#d9b99a","#f2d9bb","#dfc6a5","#e6d0ad"];
 // Pixel-art apartment blocks with stepped roofs, shutters, balconies, tile strips and ground-floor awnings.
-function house(x,y,w,h,i,parent=arch){let g=el("g",{transform:"translate("+x+" "+y+")"},parent),roof=roofColors[i%roofColors.length],wall=wallColors[(i*3)%wallColors.length];el("rect",{x:7,y:12,width:w,height:h,fill:"#776653",opacity:".18"},g);el("rect",{x:0,y:0,width:w,height:h,fill:wall,stroke:"#9b765d","stroke-width":4},g);el("rect",{x:0,y:0,width:w,height:13,fill:roof},g);el("rect",{x:0,y:13,width:w,height:7,fill:"#f1dfc4"},g);el("rect",{x:5,y:24,width:w-10,height:5,fill:"#c19b78",opacity:".65"},g);
+function house(x,y,w,h,i,parent=arch){let g=el("g",{transform:"translate("+x+" "+y+")"},parent),style=parent&&parent.getAttribute("data-style")!==null?Number(parent.getAttribute("data-style")):-1,palettes=[["#657f86","#788b91","#9aa9a8"],["#a95f4d","#bd7654","#d09663"],["#657e83","#8a9690","#b17a62"],["#a96d66","#c58a75","#879c83"],["#bf7653","#d29b62","#a95f50"],["#6f8d8b","#a76f5c","#c18b64"],["#9e5f48","#b8794e","#a46f50"],["#7c8985","#a96f5c","#6e7d83"],["#c77b54","#d19b5d","#a65e4b"]],walls=[["#d8e2df","#e8e6dc","#c9d9d8"],["#e7c6a4","#d9b28e","#f0d8b6"],["#d8d8d0","#e8dfd0","#bfcac5"],["#edcbbd","#e8d7c4","#c8d8c0"],["#e9d0a6","#f0dfc1","#d8b78e"],["#e8d6bd","#d5c8b1","#f0e4cf"],["#dfb98e","#e9d1ac","#c9a17f"],["#e6d7bd","#d5c7b4","#e8dfd0"],["#e9c49d","#f1d9b4","#d8ad87"]],roof=(style>=0?palettes[style%9][i%3]:roofColors[i%roofColors.length]),wall=(style>=0?walls[style%9][(i*3)%3]:wallColors[(i*3)%wallColors.length]);el("rect",{x:7,y:12,width:w,height:h,fill:"#776653",opacity:".18"},g);el("rect",{x:0,y:0,width:w,height:h,fill:wall,stroke:"#9b765d","stroke-width":4},g);el("rect",{x:0,y:0,width:w,height:13,fill:roof},g);el("rect",{x:0,y:13,width:w,height:7,fill:"#f1dfc4"},g);el("rect",{x:5,y:24,width:w-10,height:5,fill:"#c19b78",opacity:".65"},g);
 let cols=Math.max(2,Math.floor(w/27)),rows=Math.max(2,Math.floor(h/35));for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){let xx=10+c*((w-24)/cols),yy=36+r*34;el("rect",{x:xx,y:yy,width:13,height:19,fill:i%3===0?"#66838a":"#607b80",stroke:"#f4e2c7","stroke-width":2},g);el("rect",{x:xx-3,y:yy+7,width:19,height:4,fill:"#9e6550"},g);el("rect",{x:xx+5,y:yy,width:2,height:19,fill:"#d6c5a8"},g);if((c+r+i)%3===0)el("rect",{x:xx-5,y:yy+19,width:23,height:4,fill:"#b98261"},g)}
 el("rect",{x:w*.43,y:h-29,width:17,height:29,fill:"#795844",stroke:"#e8d5b9","stroke-width":2},g);el("rect",{x:0,y:h-7,width:w,height:7,fill:"#a77d5d"},g);
 if(i%4===0){el("rect",{x:w*.12,y:-12,width:w*.76,height:12,fill:"url(#tiles)",stroke:"#89594b","stroke-width":2},g);el("rect",{x:w*.12,y:-20,width:w*.76,height:8,fill:roof},g)}
@@ -215,7 +216,7 @@ let market=el("g",{transform:"translate(880 790)"},land);el("rect",{x:-95,y:-70,
 let amph=el("g",{transform:"translate(1390 560)"},land);el("ellipse",{cx:0,cy:0,rx:130,ry:76,fill:"#c78a62",stroke:"#875b48","stroke-width":8},amph);el("ellipse",{cx:0,cy:-4,rx:93,ry:48,fill:"#8e7059",stroke:"#e3b68e","stroke-width":8},amph);el("ellipse",{cx:0,cy:-9,rx:55,ry:25,fill:"#c8b08b"},amph);for(let i=0;i<11;i++){let x=-100+i*20;el("rect",{x:x,y:-35-Math.sin(i/10*Math.PI)*20,width:10,height:22,fill:"#e4bd95"},amph)}
 // Place markers and labels
 const places=[{x:520,y:610,name:"Plaça de les Flors",desc:"A tiled square with a little fountain, shaded benches and flower sellers."},{x:905,y:220,name:"Jardins del Nord",desc:"A cool pocket garden with frosted leaves in winter and quiet paths."},{x:1300,y:1020,name:"Plaça de la Tardor",desc:"An autumn courtyard with copper-coloured trees, bookshops and warm cafés."},{x:880,y:790,name:"Mercat de la Llum",desc:"A colourful market hall filled with produce stalls, flowers and tiny bakeries."},{x:1390,y:560,name:"The Old Amphitheatre",desc:"A Roman-inspired open-air arena tucked between the old streets and a leafy square."},{x:1910,y:1190,name:"Platja Blava",desc:"A sandy beach with striped umbrellas, a promenade and boats bobbing offshore."},{x:580,y:1080,name:"Blossom Park",desc:"A spring garden full of pink blossom, winding paths and little picnic spots."}];
-places.push({x:3100,y:615,name:"The Old Quarter",desc:"A neighbourhood of independent shops, old façades and narrow streets."},{x:5300,y:615,name:"Arts & University",desc:"Studios, bookshops, campus courtyards and lively cafés."},{x:900,y:2155,name:"The Garden District",desc:"Residential streets and quiet planted squares."},{x:3100,y:2155,name:"The Market Quarter",desc:"Food stalls, bakeries and neighbourhood markets."},{x:5300,y:2155,name:"Harbour Heights",desc:"Terraces and promenades overlooking the water."},{x:900,y:3695,name:"Lakeside Gardens",desc:"A calm green neighbourhood with walking paths and gardens."},{x:3100,y:3695,name:"The Cultural Quarter",desc:"Theatres, galleries and small performance spaces."},{x:5300,y:3695,name:"South Market",desc:"A lively southern district with local shops and cafés."});
+places.push({x:5300,y:3695,name:"South Market",desc:"A sun-warmed southern neighbourhood of colourful façades, local shops and cafés."},{x:3100,y:615,name:"The Old Quarter",desc:"A neighbourhood of independent shops, old façades and narrow streets."},{x:5300,y:615,name:"Arts & University",desc:"Studios, bookshops, campus courtyards and lively cafés."},{x:900,y:2155,name:"The Garden District",desc:"Residential streets and quiet planted squares."},{x:3100,y:2155,name:"The Market Quarter",desc:"Food stalls, bakeries and neighbourhood markets."},{x:5300,y:2155,name:"Harbour Heights",desc:"Terraces and promenades overlooking the water."},{x:900,y:3695,name:"Lakeside Gardens",desc:"A calm green neighbourhood with walking paths and gardens."},{x:3100,y:3695,name:"The Cultural Quarter",desc:"Theatres, galleries and small performance spaces."},{x:5300,y:3695,name:"South Market",desc:"A lively southern district with local shops and cafés."});
 places.forEach((p,i)=>{let g=el("g",{transform:"translate("+p.x+" "+p.y+")",tabindex:"0",role:"button",style:"cursor:pointer"},markers);el("rect",{x:-13,y:-13,width:26,height:26,fill:"#fff4dc",stroke:"#8a624c","stroke-width":4},g);el("rect",{x:-5,y:-5,width:10,height:10,fill:i%2?"#c77c65":"#789b78"},g);el("path",{d:"M-5 15l5 8 5-8",fill:"#fff4dc",stroke:"#8a624c","stroke-width":2},g);g.addEventListener("click",e=>{e.stopPropagation();selectPlace(p)});g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectPlace(p)}})});
 function selectPlace(p){document.getElementById("place-card").innerHTML="<strong>"+p.name+"</strong><p>"+p.desc+"</p><button class='button secondary' id='visit-place'>Visit this place</button>";document.getElementById("visit-place").onclick=()=>{if(!state.visits.includes(p.name))state.visits.push(p.name);localStorage.setItem("lw-visits",JSON.stringify(state.visits));document.getElementById("journal-text").textContent="Places you've discovered: "+state.visits.join(", ")+". Your city is getting bigger.";document.querySelector("#place-card p").textContent="You discovered "+p.name+". "+p.desc}}
 // Residents follow the street grid and walk continuously around their neighbourhoods.
@@ -223,8 +224,96 @@ const clothes=["#b96d58","#577d83","#d3a34f","#7e8f68","#9a718b","#e1c8a4","#4e5
 const hair=["#4d4038","#342d2b","#a47750","#6e5141","#b58a62","#292d33"],sprites=[];
 function addResident(route,index,parent=people){const g=el("g",{transform:"translate("+route.x+" "+route.y+")"},parent),shirt=clothes[index%clothes.length],skin=["#d9a77e","#8a5c49","#c9a17b","#e0b994"][index%4],hc=hair[index%hair.length];el("rect",{x:-5,y:7,width:12,height:4,fill:"#6b6256",opacity:".22"},g);el("rect",{x:-4,y:-12,width:9,height:12,fill:shirt},g);el("rect",{x:-5,y:-18,width:11,height:7,fill:skin},g);el("rect",{x:-5,y:-21,width:11,height:4,fill:hc},g);el("rect",{x:-4,y:-18,width:3,height:3,fill:hc},g);el("rect",{x:-3,y:0,width:3,height:8,fill:"#4c4a4b"},g);el("rect",{x:2,y:0,width:3,height:8,fill:"#4c4a4b"},g);el("rect",{x:-8,y:-10,width:3,height:8,fill:shirt},g);sprites.push({g,route,offset:index*37,speed:.22+(index%4)*.025})}
 const baseRoutes=[{x:18,y:410,dx:1,dy:0},{x:790,y:820,dx:1,dy:0},{x:25,y:1230,dx:1,dy:0},{x:330,y:24,dx:0,dy:1},{x:720,y:470,dx:0,dy:1},{x:1110,y:20,dx:0,dy:1},{x:1500,y:850,dx:0,dy:1},{x:365,y:410,dx:1,dy:0},{x:1120,y:820,dx:1,dy:0}];let residentIndex=0;baseRoutes.forEach(r=>addResident({...r,length:300},residentIndex++));
-const districtData=[{"ox":2200,"oy":0,"name":"The Old Quarter"},{"ox":4400,"oy":0,"name":"Arts & University"},{"ox":0,"oy":1540,"name":"The Garden District"},{"ox":2200,"oy":1540,"name":"The Market Quarter"},{"ox":4400,"oy":1540,"name":"Harbour Heights"},{"ox":0,"oy":3080,"name":"Lakeside Gardens"},{"ox":2200,"oy":3080,"name":"The Cultural Quarter"},{"ox":4400,"oy":3080,"name":"South Market"}];
-districtData.forEach((d,di)=>{const root=el("g",{transform:"translate("+d.ox+" "+d.oy+")"},world);el("rect",{x:0,y:0,width:2200,height:1540,fill:["#d9d8bd","#d8d6b9","#d6d8bd","#dbd5b9","#d4d9bd"][di],stroke:"#c2b69e","stroke-width":8},root);const road=el("g",{fill:"none","stroke-linecap":"square"},root),path="M-20 410H1680M-20 820H1680M-20 1230H1680M330 -30V1570M720 -30V1570M1110 -30V1570M1500 -30V1570";el("path",{d:path,stroke:"#b7a58c","stroke-width":94},road);el("path",{d:path,stroke:"#f3e8d5","stroke-width":82},road);el("path",{d:path,stroke:"#d2c1a8","stroke-width":2,"stroke-dasharray":"6 18"},road);const green=el("g",{},root),buildings=el("g",{},root),details=el("g",{},root),crowd=el("g",{},root);el("rect",{x:380,y:470,width:270,height:290,rx:12,fill:di%2?"#b7c99e":"#c9d6b4",stroke:"#8fa67e","stroke-width":8},green);el("path",{d:"M405 615H625M515 490V740",stroke:"#e9e1ca","stroke-width":13},green);el("circle",{cx:515,cy:615,r:27,fill:"#83b8bd",stroke:"#f2e6cf","stroke-width":6},green);el("rect",{x:1170,y:890,width:245,height:270,rx:12,fill:"#b5c99c",stroke:"#8fa67e","stroke-width":8},green);for(let k=0;k<5;k++){for(const [tx,ty] of [[400+k*52,495+(k%2)*205],[1190+k*43,920+(k%2)*170]]){el("rect",{x:tx,y:ty,width:8,height:18,fill:"#896449"},green);el("rect",{x:tx-13,y:ty-28,width:34,height:28,fill:["#8eaf7b","#a7bd8e","#d8a2a0"][(k+di)%3],stroke:"#71845f","stroke-width":2},green)}}const plots=[[55,155],[410,155],[800,155],[1180,155],[55,565],[410,900],[800,900],[1180,125],[55,1320],[410,1320],[1180,1320],[1510,900],[1510,155],[800,1320],[800,565]];plots.forEach((p,idx)=>{for(let j=0;j<4;j++)house(p[0]+(j%2)*82+4,p[1]+Math.floor(j/2)*102+4,66+(idx+j+di)%5,78+(idx*2+j+di)%7,di*19+idx*5+j,buildings)});const civic=el("g",{transform:"translate(900 260)"},details);el("rect",{x:-86,y:-58,width:172,height:112,fill:"#e6c9a5",stroke:"#8f6c52","stroke-width":5},civic);el("path",{d:"M-98 -58L0 -105 98 -58Z",fill:di%2?"#78918a":"#c77d62",stroke:"#875b4d","stroke-width":5},civic);for(let k=0;k<4;k++)el("rect",{x:-62+k*42,y:-25,width:22,height:68,fill:"#718b8a",stroke:"#f0ddc1","stroke-width":3},civic);const caption=el("g",{transform:"translate(900 80)","font-family":"Georgia,serif","text-anchor":"middle"},details);el("rect",{x:-145,y:-25,width:290,height:48,rx:20,fill:"#fff5e5",stroke:"#d9c8ad","stroke-width":2},caption);const label=el("text",{y:7,fill:"#655344","font-size":23,"letter-spacing":1.5},caption);label.textContent=d.name.toUpperCase();const routes=[{x:18,y:410,dx:1,dy:0},{x:790,y:820,dx:1,dy:0},{x:25,y:1230,dx:1,dy:0},{x:330,y:24,dx:0,dy:1},{x:720,y:470,dx:0,dy:1},{x:1110,y:20,dx:0,dy:1},{x:1500,y:850,dx:0,dy:1},{x:365,y:410,dx:1,dy:0},{x:1120,y:820,dx:1,dy:0},{x:780,y:1230,dx:1,dy:0}];routes.forEach(route=>addResident({...route,length:300},residentIndex++,crowd))});
+// Nine deliberately planned districts. Every tile has its own climate, planting and architecture.
+const districtData=[
+ {ox:0,oy:0,name:"North Gardens",climate:"snow",ground:"#dce5e1",walls:["#d8e2df","#e8e6dc","#c9d9d8"],roofs:["#657f86","#788b91","#9aa9a8"]},
+ {ox:2200,oy:0,name:"The Old Quarter",climate:"historic",ground:"#e6d4bb",walls:["#e7c6a4","#d9b28e","#f0d8b6"],roofs:["#a95f4d","#bd7654","#d09663"]},
+ {ox:4400,oy:0,name:"Arts & University",climate:"modern",ground:"#d8d9d0",walls:["#d8d8d0","#e8dfd0","#bfcac5"],roofs:["#657e83","#8a9690","#b17a62"]},
+ {ox:0,oy:1540,name:"Blossom District",climate:"spring",ground:"#dce4cd",walls:["#edcbbd","#e8d7c4","#c8d8c0"],roofs:["#a96d66","#c58a75","#879c83"]},
+ {ox:2200,oy:1540,name:"The Market Quarter",climate:"summer",ground:"#e5d9bd",walls:["#e9d0a6","#f0dfc1","#d8b78e"],roofs:["#bf7653","#d29b62","#a95f50"]},
+ {ox:4400,oy:1540,name:"Harbour Heights",climate:"coast",ground:"#d8e0d7",walls:["#e8d6bd","#d5c8b1","#f0e4cf"],roofs:["#6f8d8b","#a76f5c","#c18b64"]},
+ {ox:0,oy:3080,name:"Autumn Gardens",climate:"autumn",ground:"#e2cdb3",walls:["#dfb98e","#e9d1ac","#c9a17f"],roofs:["#9e5f48","#b8794e","#a46f50"]},
+ {ox:2200,oy:3080,name:"The Cultural Quarter",climate:"civic",ground:"#ddd9ca",walls:["#e6d7bd","#d5c7b4","#e8dfd0"],roofs:["#7c8985","#a96f5c","#6e7d83"]},
+ {ox:4400,oy:3080,name:"South Market",climate:"warm",ground:"#e8d6b8",walls:["#e9c49d","#f1d9b4","#d8ad87"],roofs:["#c77b54","#d19b5d","#a65e4b"]}
+];
+const districtMarkers=[];
+districtData.forEach((d,di)=>{
+ const root=el("g",{transform:"translate("+d.ox+" "+d.oy+")"},world);
+ el("rect",{x:0,y:0,width:2200,height:1540,fill:d.ground,stroke:"#b8a58e","stroke-width":8},root);
+ // Quiet, consistent street hierarchy; buildings occupy plots between roads.
+ const roads=el("g",{fill:"none","stroke-linecap":"square"},root);
+ const streetPath="M-20 410H2220M-20 820H2220M-20 1230H2220M330 -30V1570M720 -30V1570M1110 -30V1570M1500 -30V1570M1890 -30V1570";
+ el("path",{d:streetPath,stroke:"#b7a58c","stroke-width":96},roads);
+ el("path",{d:streetPath,stroke:"#f5ead8","stroke-width":82},roads);
+ el("path",{d:streetPath,stroke:"#d7c7af","stroke-width":2,"stroke-dasharray":"5 20"},roads);
+ const green=el("g",{},root),buildings=el("g",{"data-style":di},root),details=el("g",{},root),crowd=el("g",{},root);
+ // Two clearly bounded public gardens in every district.
+ el("rect",{x:380,y:470,width:270,height:290,rx:8,fill:di===0?"#cbdad9":di===3?"#c5d8ad":di===6?"#d7bd91":"#b9c99f",stroke:"#91a181","stroke-width":7},green);
+ el("path",{d:"M405 615H625M515 490V740",stroke:"#eee5d2","stroke-width":12},green);
+ el("circle",{cx:515,cy:615,r:26,fill:"#83b8bd",stroke:"#f4e8d2","stroke-width":6},green);
+ el("rect",{x:1170,y:890,width:245,height:270,rx:8,fill:di===0?"#d4e0df":di===3?"#c4d7ad":di===6?"#d5b68a":"#b8c89b",stroke:"#91a181","stroke-width":7},green);
+ for(let k=0;k<5;k++){
+   const trees=[[405+k*48,505+(k%2)*205],[1190+k*43,920+(k%2)*170]];
+   trees.forEach(([tx,ty])=>{
+     el("rect",{x:tx,y:ty,width:8,height:19,fill:"#896449"},green);
+     const foliage=d.climate==="snow"?"#e5ece9":d.climate==="spring"?"#e4a9b1":d.climate==="autumn"?"#c67c42":d.climate==="summer"||d.climate==="warm"?"#88a66f":"#91ae80";
+     el("rect",{x:tx-13,y:ty-29,width:34,height:29,fill:foliage,stroke:"#71845f","stroke-width":2},green);
+     if(d.climate==="snow")el("rect",{x:tx-10,y:ty-30,width:28,height:7,fill:"#f5f7f3"},green);
+   });
+ }
+ // Regular building plots. Repeated alignment gives the map a legible rhythm.
+ const plots=[[45,45],[405,45],[790,45],[1175,45],[45,465],[790,465],[1175,465],[1550,465],[45,875],[405,875],[790,875],[1550,875],[405,1280],[790,1280],[1175,1280]];
+ plots.forEach((p,idx)=>{
+   for(let j=0;j<4;j++){
+     const x=p[0]+(j%2)*88+5,y=p[1]+Math.floor(j/2)*100+5;
+     house(x,y,66,78,di*31+idx*4+j,buildings);
+   }
+ });
+ // Architecture differs by district: timber lodge, historic tiled roofs, modern glass,
+ // pastel spring terraces, Mediterranean arcades, coastal balconies and civic stonework.
+ const civic=el("g",{transform:"translate(900 260)"},details);
+ if(d.climate==="snow"){
+   el("path",{d:"M-112 -48L-75 -94 0 -112 75 -94 112 -48Z",fill:"#657f86",stroke:"#f0f4ef","stroke-width":7},civic);
+   el("rect",{x:-95,y:-48,width:190,height:112,fill:"#d5dfda",stroke:"#748a8d","stroke-width":6},civic);
+   el("path",{d:"M-95 -48L-112 -65M95 -48L112 -65",stroke:"#f7f8f3","stroke-width":12},civic);
+ }else if(d.climate==="historic"){
+   el("path",{d:"M-112 -50L-85 -98H85L112 -50Z",fill:"#b96651",stroke:"#865b4a","stroke-width":6},civic);
+   el("rect",{x:-98,y:-50,width:196,height:116,fill:"#e8c8a3",stroke:"#956f55","stroke-width":6},civic);
+   for(let k=0;k<5;k++)el("rect",{x:-77+k*39,y:-28,width:20,height:40,fill:"#718a89",stroke:"#f4dfc0","stroke-width":3},civic);
+ }else if(d.climate==="modern"){
+   el("rect",{x:-105,y:-85,width:210,height:150,fill:"#b9c9c5",stroke:"#697f82","stroke-width":7},civic);
+   for(let k=0;k<5;k++)el("rect",{x:-85+k*39,y:-62,width:25,height:112,fill:"#6f9296",stroke:"#e8e4d8","stroke-width":3},civic);
+ }else if(d.climate==="spring"){
+   el("path",{d:"M-112 -40Q0 -130 112 -40Z",fill:"#c58b78",stroke:"#946b5b","stroke-width":6},civic);
+   el("rect",{x:-96,y:-40,width:192,height:105,fill:"#efd3c3",stroke:"#a77e6e","stroke-width":6},civic);
+   for(let k=0;k<4;k++)el("path",{d:"M"+(-65+k*43)+" 60v-75",stroke:"#8e9e7b","stroke-width":5},civic);
+ }else if(d.climate==="coast"){
+   el("path",{d:"M-112 -45L-85 -86H85L112 -45Z",fill:"#718d8b",stroke:"#7b5e4c","stroke-width":6},civic);
+   el("rect",{x:-98,y:-45,width:196,height:110,fill:"#eee0c8",stroke:"#9c7c5e","stroke-width":6},civic);
+   for(let k=0;k<4;k++){el("rect",{x:-78+k*44,y:-17,width:28,height:36,fill:"#7da2a4"},civic);el("path",{d:"M"+(-84+k*44)+" 28h40v10h-40Z",fill:"#a76f5c"},civic)}
+ }else{
+   el("path",{d:"M-112 -50L0 -102 112 -50Z",fill:d.roofs[0],stroke:"#855e4b","stroke-width":6},civic);
+   el("rect",{x:-98,y:-50,width:196,height:116,fill:d.walls[0],stroke:"#98765d","stroke-width":6},civic);
+   for(let k=0;k<4;k++)el("rect",{x:-70+k*45,y:-22,width:25,height:38,fill:"#718b8a",stroke:"#f2e2c9","stroke-width":3},civic);
+ }
+ // Climate cues: snow drifts, spring blossom, autumn foliage, and warm coastal planting.
+ if(d.climate==="snow"){
+   el("path",{d:"M40 1320q100-48 205 0t205 0",fill:"none",stroke:"#f4f7f2","stroke-width":26},details);
+   for(let k=0;k<22;k++)el("rect",{x:80+k*82,y:80+(k%4)*23,width:5,height:5,fill:"#f6f8f4"},details);
+ }else if(d.climate==="spring"){
+   for(let k=0;k<18;k++)el("circle",{cx:90+k*105,cy:1350-(k%3)*35,r:7,fill:"#e5aab5"},details);
+ }else if(d.climate==="autumn"){
+   for(let k=0;k<18;k++)el("rect",{x:80+k*105,y:1370-(k%3)*34,width:10,height:8,fill:k%2?"#c47b3d":"#d89a4c"},details);
+ }else if(d.climate==="summer"||d.climate==="warm"||d.climate==="coast"){
+   for(let k=0;k<7;k++){const px=95+k*290;el("rect",{x:px,y:1330,width:8,height:42,fill:"#896449"},details);el("path",{d:"M"+(px+4)+" 1330q-45-38-65-5q38-5 65 5q25-40 62-20q-28 5-62 20",fill:"#7f9d68"},details)}
+ }
+ const title=el("g",{transform:"translate(900 80)","font-family":"Georgia,serif","text-anchor":"middle"},details);
+ el("rect",{x:-150,y:-26,width:300,height:50,rx:18,fill:"#fff8eb",stroke:"#cbb99f","stroke-width":2},title);
+ const t=el("text",{y:7,fill:"#655344","font-size":23,"letter-spacing":1.4},title);t.textContent=d.name.toUpperCase();
+ districtMarkers.push({x:d.ox+900,y:d.oy+80,name:d.name,desc:"Explore "+d.name+", a district shaped by its own climate, public spaces and local architecture."});
+ const routes=[{x:18,y:410,dx:1,dy:0},{x:790,y:820,dx:1,dy:0},{x:25,y:1230,dx:1,dy:0},{x:330,y:24,dx:0,dy:1},{x:720,y:470,dx:0,dy:1},{x:1110,y:20,dx:0,dy:1},{x:1500,y:850,dx:0,dy:1},{x:365,y:410,dx:1,dy:0},{x:1120,y:820,dx:1,dy:0},{x:780,y:1230,dx:1,dy:0}];
+ routes.forEach(route=>addResident({...route,length:300},residentIndex++,crowd));
+});
 // Broad avenue links join the district grids into one continuous city network.
 const links=el("g",{fill:"none","stroke-linecap":"square"},world);
 for(let row=0;row<3;row++){const yy=row*1540;for(const y of [410,820,1230]){el("path",{d:"M1680 "+(yy+y)+"H2220",stroke:"#b7a58c","stroke-width":94},links);el("path",{d:"M1680 "+(yy+y)+"H2220",stroke:"#f3e8d5","stroke-width":82},links)}}
@@ -236,18 +325,57 @@ const WORLD_W=19800,WORLD_H=13860;
 function applyView(){svg.setAttribute("viewBox",view.x+" "+view.y+" "+view.w+" "+view.h)}
 function clampView(){view.x=Math.max(0,Math.min(WORLD_W-view.w,view.x));view.y=Math.max(0,Math.min(WORLD_H-view.h,view.y))}
 function zoomAt(f,cx,cy){const nw=Math.max(520,Math.min(WORLD_W,view.w*f)),nh=nw*WORLD_H/WORLD_W;view.x=cx-(cx-view.x)*nw/view.w;view.y=cy-(cy-view.y)*nh/view.h;view.w=nw;view.h=nh;clampView();applyView()}
-function setRotation(deg){rotation=deg;world.setAttribute("transform","rotate("+rotation+" 3300 2310) scale(3)")}
+function setRotation(deg){rotation=deg;world.setAttribute("transform","rotate("+rotation+" 9900 6930) scale(3)")}
 function pointInWorld(clientX,clientY){const r=svg.getBoundingClientRect();return{x:view.x+(clientX-r.left)/r.width*view.w,y:view.y+(clientY-r.top)/r.height*view.h}}
 function touchMetrics(touches){const a=touches[0],b=touches[1],cx=(a.clientX+b.clientX)/2,cy=(a.clientY+b.clientY)/2;return{cx,cy,d:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),angle:Math.atan2(b.clientY-a.clientY,b.clientX-a.clientX)}}
-svg.addEventListener("pointerdown",e=>{if(e.pointerType==="touch"||e.target.closest("[role=button]"))return;mouseDrag={x:e.clientX,y:e.clientY,v:{...view}};svg.classList.add("dragging");svg.setPointerCapture(e.pointerId)});
-svg.addEventListener("pointermove",e=>{if(!mouseDrag)return;const r=svg.getBoundingClientRect();view.x=Math.max(0,Math.min(WORLD_W-view.w,mouseDrag.v.x-(e.clientX-mouseDrag.x)/r.width*mouseDrag.v.w));view.y=Math.max(0,Math.min(WORLD_H-view.h,mouseDrag.v.y-(e.clientY-mouseDrag.y)/r.height*mouseDrag.v.h));applyView()});
-function stopMouseDrag(){mouseDrag=null;svg.classList.remove("dragging")}svg.addEventListener("pointerup",stopMouseDrag);svg.addEventListener("pointercancel",stopMouseDrag);
+// Direct map manipulation: one pointer pans; two pointers pinch and twist.
+// A tap never changes zoom. Movement starts only after the pointer actually moves.
+const activePointers=new Map();let gestureBase=null,dragged=false,suppressClickUntil=0;
+function pointerSnapshot(){return [...activePointers.values()]}
+function beginGesture(){
+ const pts=pointerSnapshot();
+ if(pts.length===1){const p=pts[0];gestureBase={mode:"pan",x:p.x,y:p.y,view:{...view}}}
+ else if(pts.length>=2){const a=pts[0],b=pts[1];gestureBase={mode:"transform",view:{...view},rotation,midX:(a.x+b.x)/2,midY:(a.y+b.y)/2,d:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle:Math.atan2(b.y-a.y,b.x-a.x)}}
+}
+svg.addEventListener("pointerdown",e=>{
+ if(e.target.closest("[role=button]"))return;
+ if(e.pointerType==="mouse"&&e.button!==0)return;
+ activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ try{svg.setPointerCapture(e.pointerId)}catch(_){}
+ dragged=false;beginGesture();svg.classList.add("dragging");
+});
+svg.addEventListener("pointermove",e=>{
+ if(!activePointers.has(e.pointerId))return;
+ activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ const pts=pointerSnapshot(),rect=svg.getBoundingClientRect();
+ if(!gestureBase||!rect.width||!rect.height)return;
+ if(gestureBase.mode==="pan"&&pts.length===1){
+   const p=pts[0],dx=p.x-gestureBase.x,dy=p.y-gestureBase.y;
+   if(Math.hypot(dx,dy)>5)dragged=true;
+   if(dragged){view={...gestureBase.view,x:gestureBase.view.x-dx/rect.width*gestureBase.view.w,y:gestureBase.view.y-dy/rect.height*gestureBase.view.h};clampView();applyView()}
+ }else if(pts.length>=2){
+   const a=pts[0],b=pts[1],midX=(a.x+b.x)/2,midY=(a.y+b.y)/2,d=Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),angle=Math.atan2(b.y-a.y,b.x-a.x);
+   const deltaDistance=Math.abs(d-gestureBase.d),deltaAngle=Math.abs(angle-gestureBase.angle);
+   if(deltaDistance>2||deltaAngle>.015||Math.hypot(midX-gestureBase.midX,midY-gestureBase.midY)>3)dragged=true;
+   const ratio=d/gestureBase.d,nw=Math.max(520,Math.min(WORLD_W,gestureBase.view.w/ratio)),nh=nw*WORLD_H/WORLD_W;
+   const dx=(midX-gestureBase.midX)/rect.width*gestureBase.view.w,dy=(midY-gestureBase.midY)/rect.height*gestureBase.view.h;
+   view={x:gestureBase.view.x-dx,y:gestureBase.view.y-dy,w:nw,h:nh};clampView();applyView();
+   let da=angle-gestureBase.angle;while(da>Math.PI)da-=Math.PI*2;while(da< -Math.PI)da+=Math.PI*2;
+   setRotation(gestureBase.rotation+da*180/Math.PI);
+ }
+ if(dragged)e.preventDefault();
+});
+function endPointer(e){
+ if(!activePointers.has(e.pointerId))return;
+ activePointers.delete(e.pointerId);
+ if(dragged)suppressClickUntil=Date.now()+350;
+ if(activePointers.size===0){gestureBase=null;svg.classList.remove("dragging")}
+ else beginGesture();
+}
+svg.addEventListener("pointerup",endPointer);svg.addEventListener("pointercancel",endPointer);
+svg.addEventListener("click",e=>{if(Date.now()<suppressClickUntil){e.preventDefault();e.stopPropagation()}},true);
 svg.addEventListener("wheel",e=>{e.preventDefault();const p=pointInWorld(e.clientX,e.clientY);zoomAt(e.deltaY<0?.9:1.1,p.x,p.y)},{passive:false});
-svg.addEventListener("touchstart",e=>{if(e.touches.length>=2){e.preventDefault();const m=touchMetrics(e.touches);touchGesture={mode:"transform",metrics:m,view:{...view},rotation};}else if(e.touches.length===1){touchGesture={mode:"pan",x:e.touches[0].clientX,y:e.touches[0].clientY,view:{...view}};}},{passive:false});
-svg.addEventListener("touchmove",e=>{if(!touchGesture)return;if(e.cancelable)e.preventDefault();const rect=svg.getBoundingClientRect();if(e.touches.length===1&&touchGesture.mode==="pan"){const g=touchGesture;view.x=g.view.x-(e.touches[0].clientX-g.x)/rect.width*g.view.w;view.y=g.view.y-(e.touches[0].clientY-g.y)/rect.height*g.view.h;clampView();applyView()}else if(e.touches.length>=2){const g=touchGesture,m=touchMetrics(e.touches);if(g.mode!=="transform"){touchGesture={mode:"transform",metrics:m,view:{...view},rotation};return}const base=g.metrics,ratio=m.d/Math.max(1,base.d),nw=Math.max(520,Math.min(WORLD_W,g.view.w*ratio)),nh=nw*WORLD_H/WORLD_W;const dx=(m.cx-base.cx)/rect.width*g.view.w,dy=(m.cy-base.cy)/rect.height*g.view.h;view={x:g.view.x-dx,y:g.view.y-dy,w:nw,h:nh};clampView();applyView();let delta=m.angle-base.angle;while(delta>Math.PI)delta-=Math.PI*2;while(delta< -Math.PI)delta+=Math.PI*2;setRotation(g.rotation+delta*180/Math.PI)}},{passive:false});
-svg.addEventListener("touchend",e=>{if(e.touches.length===0)touchGesture=null;else if(e.touches.length===1){touchGesture={mode:"pan",x:e.touches[0].clientX,y:e.touches[0].clientY,view:{...view}}}else{const m=touchMetrics(e.touches);touchGesture={mode:"transform",metrics:m,view:{...view},rotation}}},{passive:false});
-svg.addEventListener("touchcancel",()=>{touchGesture=null},{passive:true});
-// Stop iOS Safari from interpreting a two-finger map gesture as page zoom/rotation.
-for(const name of ["gesturestart","gesturechange","gestureend"]){svg.addEventListener(name,e=>{e.preventDefault()},{passive:false})}
+// Prevent Safari's native page-level pinch and double-tap zoom while interacting with the map.
+for(const name of ["gesturestart","gesturechange","gestureend"]){svg.addEventListener(name,e=>e.preventDefault(),{passive:false})}
 save();renderTasks();
 </script></body></html>
