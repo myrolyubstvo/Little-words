@@ -1,10 +1,10 @@
 /* Little Worlds: Wish & Wander — real, editable top-down game-world data.
-   Compact 226x226 walkable tile grid, 48px tiles: half the original area.
+   Compact 160x160 walkable tile grid, 48px tiles: half the previous map area.
    Terrain, streets, buildings, landmarks, collision and paths are independent
    of any concept illustration. Deterministically generated for reproducibility. */
 (() => {
 "use strict";
-const N=226, T=48, LENGTH=N*N, designScale=N/320;
+const N=160, T=48, LENGTH=N*N, designScale=N/320;
 const TERRAIN={GRASS:0,ROAD:1,SAND:2,WATER:3,PARK:4,RIVER:5,BRIDGE:6,PLAZA:7,PATH:8};
 const B={SUMMER:0,SPRING:1,AUTUMN:2,WINTER:3,COAST:4};
 const terrain=new Uint8Array(LENGTH), biomes=new Uint8Array(LENGTH);
@@ -138,7 +138,9 @@ function findBuildingPlot(x,y,w,h,allowPlaza=false){
  }
  return null;
 }
-for(const [name,kind,seedX,seedY,w,h,description] of landmarkSeeds){
+for(const [name,kind,seedX,seedY,seedW,seedH,description] of landmarkSeeds){
+ // Compact landmark courtyards along with the map so they still fit between streets.
+ const landmarkScale=Math.min(1,N/226),w=Math.max(4,Math.round(seedW*landmarkScale)),h=Math.max(4,Math.round(seedH*landmarkScale));
  const x=Math.round(seedX*designScale),y=Math.round(seedY*designScale);
  const scenic=["beach","lighthouse","harbour"].includes(kind);
  const plot=scenic?(closestWalkable(x,y)||{x,y}):findBuildingPlot(x,y,w,h,true);

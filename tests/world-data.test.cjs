@@ -7,11 +7,14 @@ const context=vm.createContext({window:{}});
 vm.runInContext(fs.readFileSync(path.join(__dirname,'../world-data.js'),'utf8'),context);
 const w=context.window.LWWorldData;
 
-test('compact map retains all five climates and all twelve landmarks',()=>{
- assert(Math.abs(w.N*w.N/(320*320)-.5)<.002);
+test('half-size map retains all five climates and all twelve landmarks',()=>{
+ assert(Math.abs(w.N*w.N/(226*226)-.5)<.002);
  assert.equal(w.landmarks.length,12);
  assert(w.seasonCounts.every(n=>n>0));
- assert(w.buildings.length>400);
+ assert(w.buildings.length>150);
+ for(const l of w.landmarks)assert(w.inBounds(l.x+l.w-1,l.y+l.h-1),l.name+' must fit within the smaller world');
+ for(const name of ['Frostglass Lodge','Snowbell Square'])assert.equal(w.landmarks.find(l=>l.name===name).biome,w.B.WINTER,name+' must stay in snow country');
+ for(const name of ['Blossom Conservatory','Petal Gardens'])assert.equal(w.landmarks.find(l=>l.name===name).biome,w.B.SPRING,name+' must stay in the spring region');
 });
 
 test('every landmark remains reachable from the arrival street',()=>{

@@ -72,7 +72,7 @@ p{color:#64717a;line-height:1.7}
 <div class="layout"><nav class="nav" aria-label="Game sections"><button class="active" data-page="home">Home</button><button data-page="city">Explore the city</button><button data-page="people">People</button><button data-page="life">Daily life</button><button data-page="journal">Journal</button></nav><main>
 <section id="home"><div class="panel hero"><div><div class="eyebrow">Your story starts here</div><h2>A city with a life of its own.</h2><p>Wander sunlit streets, find hidden courtyards and meet the people who call it home.</p><button class="button" data-go="city">Enter the city</button></div></div><div class="panel"><div class="eyebrow">A note for today</div><h2>There is no rush.</h2><p>Wander, meet people and make a life that feels like yours. Exploring is always free.</p></div></section>
 <section id="city" class="hidden">
-<div class="city-heading"><div><div class="eyebrow">Sun-warmed rooftops. Snow-dusted villages.</div><h2>Wish & Wander <span style="font:600 12px Arial,sans-serif;color:#517465">ILLUSTRATED EDITION</span></h2></div><div class="note">An illustrated world · Sunlit streets & snowy villages</div></div>
+<div class="city-heading"><div><div class="eyebrow">Sun-warmed rooftops. Snow-dusted villages.</div><h2>Wish & Wander <span style="font:600 12px Arial,sans-serif;color:#517465">ILLUSTRATED EDITION</span></h2></div><div class="note">Half-size world · Sunlit streets & snowy villages</div></div>
 <div class="map-shell" id="map-shell"><svg id="city-art" viewBox="0 0 1000 700" role="img" aria-label="Loading the illustrated city"><rect width="1000" height="700" fill="#dfd4b3"/><text x="500" y="350" text-anchor="middle" fill="#536e5c" font-size="24">Your little world is loading…</text></svg></div>
 <div class="map-legend"><span class="legend-chip">❄ Snowy gardens</span><span class="legend-chip">✿ Spring blossom</span><span class="legend-chip">☀ Sunlit plazas</span><span class="legend-chip">🍂 Autumn courtyards</span><span class="legend-chip">♧ Mediterranean coast</span></div>
 <div class="place-card" id="place-card"><strong>Welcome to Wish & Wander</strong><p>A hand-illustrated city of rooftop gardens, little shops and snowy mountain villages. Tap a street to walk, a resident to chat, or a building to step inside.</p></div>
@@ -126,10 +126,10 @@ function show(page){document.querySelectorAll("main section").forEach(s=>s.class
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.page)));document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.go)));
  save();renderTasks();
 </script>
-<script src="./world-data.js?v=illustrated-7"></script>
-<script src="./world-art.js?v=illustrated-7"></script>
-<script src="./world-render.js?v=illustrated-7"></script>
-<script src="./world-play.js?v=illustrated-7"></script>
+<script src="./world-data.js?v=illustrated-8"></script>
+<script src="./world-art.js?v=illustrated-8"></script>
+<script src="./world-render.js?v=illustrated-8"></script>
+<script src="./world-play.js?v=illustrated-8"></script>
 <script>
 if(location.hash==="#city"||new URLSearchParams(location.search).has("map")){
  document.querySelector('[data-page="city"]').click();
