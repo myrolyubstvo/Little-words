@@ -1,22 +1,41 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f5eee6">
 <title>Little Worlds: Wish & Wander</title>
 <style>
-:root{--ink:#292b35;--muted:#777783;--paper:#fbf8f3;--panel:#fffdf9;--line:#e9e1d8;--rose:#d98e91;--blue:#8da9bf;--green:#9eaf9a;--gold:#d9b878}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Georgia,serif}button{font:inherit;cursor:pointer}header{padding:22px clamp(18px,5vw,64px);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);background:#fffdf9}h1{font-size:clamp(22px,4vw,34px);font-weight:normal;margin:0;letter-spacing:-1px}header small{color:var(--muted);font:11px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase}.wallet{font:13px Arial,sans-serif;background:#f4eee6;border-radius:30px;padding:10px 15px}.layout{max-width:1120px;margin:28px auto;padding:0 18px;display:grid;grid-template-columns:190px 1fr;gap:22px}.nav{display:flex;flex-direction:column;gap:8px}.nav button{border:0;text-align:left;background:transparent;padding:12px 14px;border-radius:12px;color:var(--muted)}.nav button.active,.nav button:hover{background:#eee8e0;color:var(--ink)}main{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:18px}.eyebrow{font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}h2{font-size:27px;font-weight:normal;margin:6px 0 12px}p{margin:8px 0;color:#5f606a}.hero{min-height:230px;background:linear-gradient(120deg,#e9e1d9,#dce5e4 55%,#e9d9d3);display:flex;align-items:flex-end;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:8%;bottom:-35px;width:210px;height:170px;background:#a7b5a2;border-radius:48% 48% 0 0;box-shadow:-85px 24px 0 -22px #c5a99a,75px 18px 0 -20px #d5c1a5}.hero div{position:relative;z-index:1;max-width:65%}.hero h2{font-size:34px}.button{border:0;border-radius:24px;background:var(--ink);color:white;padding:10px 17px;margin-top:12px}.button.secondary{background:#eee8e0;color:var(--ink)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:17px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}.note{font:12px Arial,sans-serif;color:var(--muted)}@media(max-width:650px){.layout{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.hero div{max-width:85%}.hero:after{opacity:.5;right:-35px}}
-</style>
-</head>
+:root{--ink:#292b35;--muted:#777783;--paper:#fbf8f3;--panel:#fffdf9;--line:#e9e1d8;--rose:#d98e91}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Georgia,serif}button{font:inherit;cursor:pointer}
+header{padding:18px clamp(16px,4vw,48px);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);background:#fffdf9}
+h1{font-size:clamp(22px,4vw,32px);font-weight:normal;margin:0;letter-spacing:-1px}header small{color:var(--muted);font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase}
+.wallet{font:13px Arial,sans-serif;background:#f4eee6;border-radius:30px;padding:9px 14px}
+.layout{max-width:1300px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:165px minmax(0,1fr);gap:18px}
+.nav{display:flex;flex-direction:column;gap:7px}.nav button{border:0;text-align:left;background:transparent;padding:11px 13px;border-radius:12px;color:var(--muted)}.nav button.active,.nav button:hover{background:#eee8e0;color:var(--ink)}
+main{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px;margin-bottom:16px}
+.eyebrow{font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}h2{font-size:26px;font-weight:normal;margin:5px 0 10px}p{margin:7px 0;color:#5f606a}
+.hero{min-height:220px;background:linear-gradient(120deg,#e9e1d9,#dce5e4 55%,#e9d9d3);display:flex;align-items:flex-end;position:relative;overflow:hidden}.hero h2{font-size:34px}.button{border:0;border-radius:24px;background:var(--ink);color:white;padding:10px 16px;margin-top:10px}.button.secondary{background:#eee8e0;color:var(--ink)}
+.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.map-shell{position:relative;border:1px solid #d9d4cb;border-radius:16px;overflow:hidden;background:#d7e5e8;touch-action:none}
+#city-map{display:block;width:100%;height:min(70vh,690px);min-height:430px;cursor:grab}#city-map.dragging{cursor:grabbing}
+.map-help{font:11px Arial,sans-serif;color:#6d7075;margin:8px 2px}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#f0ece5;padding:6px 10px;border-radius:20px}
+.place-card{background:#f8f4ee;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}.note{font:12px Arial,sans-serif;color:var(--muted)}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.panel{padding:16px}#city-map{height:64vh;min-height:390px}}
+</style></head>
 <body>
 <header><div><small>A little life, at your own pace</small><h1>Little Worlds <span style="color:#bd898a">✳</span></h1></div><div class="wallet">✦ <b id="points">0</b> wishes</div></header>
-<div class="layout"><nav class="nav" aria-label="Game sections"><button class="active" data-page="home">Home</button><button data-page="city">Explore the city</button><button data-page="people">People</button><button data-page="life">Daily life</button><button data-page="journal">Journal</button></nav>
+<div class="layout">
+<nav class="nav" aria-label="Game sections"><button class="active" data-page="home">Home</button><button data-page="city">Explore the city</button><button data-page="people">People</button><button data-page="life">Daily life</button><button data-page="journal">Journal</button></nav>
 <main>
-<section id="home"><div class="panel hero"><div><div class="eyebrow">Your story starts here</div><h2>A city full of little possibilities.</h2><p>Meet people, find favourite places and make a life that feels like yours.</p><button class="button" data-go="city">Explore the city</button></div></div><div class="panel"><div class="eyebrow">A note for today</div><h2>There is no rush.</h2><p>Your world keeps its doors open. Spend your wishes when you want, and let the day unfold at your own pace.</p></div></section>
-<section id="city" class="hidden"><div class="panel"><div class="eyebrow">Neighbourhood map</div><h2>Where will you wander?</h2><div class="grid"><div class="task"><strong>Old Town</strong><p>Bookshops, little cafés and quiet streets.</p><button class="button secondary" onclick="visit('Old Town')">Visit</button></div><div class="task"><strong>Riverside</strong><p>A long path, a flower market and the water.</p><button class="button secondary" onclick="visit('Riverside')">Visit</button></div><div class="task"><strong>Arts Quarter</strong><p>Studios, galleries and a small theatre.</p><button class="button secondary" onclick="visit('Arts Quarter')">Visit</button></div></div><p id="visit-note" class="note">Choose a place to explore.</p></div></section>
-<section id="people" class="hidden"><div class="panel"><div class="eyebrow">People in your world</div><h2>Someone you might meet</h2><div class="person"><strong>Astrid Yun</strong><small>Violinist · Norway</small><p>Quiet and thoughtful, with a love for classical music, theatre, ballet and classic literature. She has a home full of animals and a life shaped by music and family.</p><span class="tag">CHARACTER PROFILE · STORY IN PROGRESS</span></div><p class="note">More characters and full illustrated designs will be added as the world is built.</p></div></section>
+<section id="home"><div class="panel hero"><div><div class="eyebrow">Your story starts here</div><h2>A whole city to discover.</h2><p>Five different districts, familiar landmarks and little places waiting to be found.</p><button class="button" data-go="city">Enter the city</button></div></div><div class="panel"><div class="eyebrow">A note for today</div><h2>There is no rush.</h2><p>Wander, meet people and make a life that feels like yours. Exploring is always free.</p></div></section>
+<section id="city" class="hidden">
+<div class="city-heading"><div><div class="eyebrow">Your connected city</div><h2>Wish & Wander</h2></div><div class="note">Drag the map to explore · Tap a place to visit</div></div>
+<div class="map-shell"><canvas id="city-map" aria-label="Interactive isometric city map"></canvas></div>
+<div class="map-legend"><span class="legend-chip">❄ Winter district</span><span class="legend-chip">🌸 Spring quarter</span><span class="legend-chip">☀ Summer district</span><span class="legend-chip">🍂 Autumn quarter</span><span class="legend-chip">🌊 Coast & beach</span></div>
+<div class="place-card" id="place-card"><strong>Welcome to the city</strong><p>Explore the map and tap a landmark or neighbourhood to learn about it.</p></div>
+<p class="map-help">The map is a first playable city layout. More streets, buildings, interiors and moving characters will be added as the game grows.</p>
+</section>
+<section id="people" class="hidden"><div class="panel"><div class="eyebrow">People in your world</div><h2>Someone you might meet</h2><div class="person"><strong>Astrid Yun</strong><small>Violinist · Norway</small><p>Quiet and thoughtful, with a love for classical music, theatre, ballet and classic literature. She has a home full of animals and a life shaped by music and family.</p><span class="tag">CHARACTER PROFILE · STORY IN PROGRESS</span></div><p class="note">Full illustrated character designs and storylines are still to come.</p></div></section>
 <section id="life" class="hidden"><div class="panel"><div class="eyebrow">Small things count</div><h2>Daily life</h2><p>Complete a task to earn wishes. These are optional and never required to explore the city.</p><div class="grid" id="tasks"></div></div></section>
 <section id="journal" class="hidden"><div class="panel"><div class="eyebrow">Your journal</div><h2>Little moments</h2><p id="journal-text">Your story is waiting to be written.</p><p class="note">Your progress is saved in this browser on this device.</p></div></section>
 </main></div>
@@ -26,8 +45,54 @@ let state={points:Number(localStorage.getItem("lw-points")||0),done:JSON.parse(l
 function save(){localStorage.setItem("lw-points",state.points);localStorage.setItem("lw-done",JSON.stringify(state.done));localStorage.setItem("lw-visits",JSON.stringify(state.visits));document.getElementById("points").textContent=state.points}
 function renderTasks(){document.getElementById("tasks").innerHTML=taskList.map(([name,value],i)=>'<div class="task '+(state.done.includes(i)?"done":"")+'"><button '+(state.done.includes(i)?"disabled":"")+' onclick="complete('+i+')">'+(state.done.includes(i)?"Done":"+"+value)+'</button><strong>'+name+'</strong><small>'+value+' wishes</small></div>').join("")}
 function complete(i){if(state.done.includes(i))return;state.done.push(i);state.points+=taskList[i][1];save();renderTasks()}
-function visit(place){if(!state.visits.includes(place))state.visits.push(place);document.getElementById("visit-note").textContent="You spent a little time in "+place+". Places visited: "+state.visits.length+".";document.getElementById("journal-text").textContent="You've wandered through "+state.visits.join(", ")+". Keep exploring." ;save()}
-function show(page){document.querySelectorAll("main section").forEach(s=>s.classList.toggle("hidden",s.id!==page));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page))}
-document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.page)));document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.go)));save();renderTasks();
-</script>
-</body></html>
+function show(page){document.querySelectorAll("main section").forEach(s=>s.classList.toggle("hidden",s.id!==page));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));if(page==="city")setTimeout(resizeMap,30)}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.page)));document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.go)));
+const canvas=document.getElementById("city-map"),ctx=canvas.getContext("2d");
+const W=36,H=25,TW=48,TH=25;let scale=1,ox=0,oy=0,drag=null,spots=[];
+const places=[
+{x:5,y:8,name:"Frostwood",desc:"A quiet winter neighbourhood with snowy roofs, pine trees, a frozen pond and warm little cafés.",kind:"district"},
+{x:12,y:7,name:"Spring Gardens",desc:"Blossom-lined streets, flower stalls, greenhouses and a beautiful public garden.",kind:"district"},
+{x:19,y:16,name:"Sunmarket",desc:"A bright summer quarter with outdoor restaurants, colourful awnings and lively squares.",kind:"district"},
+{x:25,y:8,name:"Old Autumn Quarter",desc:"Golden trees, old bookshops, museums and winding streets paved with warm stone.",kind:"district"},
+{x:32,y:13,name:"The Coast",desc:"A seaside neighbourhood with a sandy beach, harbour, boardwalk and little seafood cafés.",kind:"district"},
+{x:12,y:13,name:"The Clock Tower",desc:"A grand clock tower inspired by London's Big Ben, standing above the central square.",kind:"landmark"},
+{x:24,y:13,name:"The Colosseum",desc:"A huge ancient amphitheatre inspired by Rome's Colosseum, now surrounded by a public plaza.",kind:"landmark"},
+{x:32,y:18,name:"Seaglass Beach",desc:"A wide sandy beach with a promenade, beach huts and a view across the sea.",kind:"landmark"}
+];
+function zone(x){return x<7?"winter":x<14?"spring":x<21?"summer":x<28?"autumn":"coast"}
+function iso(x,y){return{x:(x-y)*TW/2,y:(x+y)*TH/2}}
+function poly(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=.7;ctx.stroke()}}
+function tile(x,y,z){let p=iso(x,y),c={winter:"#e6edf0",spring:"#b8d4ad",summer:"#d7c58e",autumn:"#c99b70",coast:"#e8d5a0"}[z];if(z==="coast"&&x>=31)c="#8ebdca";poly([{x:p.x,y:p.y},{x:p.x+TW/2,y:p.y+TH/2},{x:p.x,y:p.y+TH},{x:p.x-TW/2,y:p.y+TH/2}],c,"rgba(70,75,70,.10)");}
+function tree(x,y,z,i){let p=iso(x,y),h=z==="winter"?25:22;ctx.fillStyle="#76604d";ctx.fillRect(p.x-2,p.y-13,4,14);let col=z==="winter"?"#54766b":z==="spring"?"#efb5bd":z==="summer"?"#648e58":"#c47742";ctx.fillStyle=col;ctx.beginPath();ctx.arc(p.x,p.y-18,8+(i%3),0,Math.PI*2);ctx.fill();if(z==="winter"){ctx.fillStyle="#f8fbfc";ctx.beginPath();ctx.arc(p.x-3,p.y-22,4,0,Math.PI*2);ctx.fill()}}
+function building(x,y,z,w=1,h=1,kind="house"){let p=iso(x,y),bw=TW*.72*w,bh=TH*.65*w,wall={winter:"#d7dce0",spring:"#e8d9ca",summer:"#e5c99f",autumn:"#c99f7f",coast:"#f0e6d5"}[z],roof={winter:"#60747d",spring:"#b66e70",summer:"#c16f50",autumn:"#795d50",coast:"#5d8790"}[z];let left={x:p.x-bw/2,y:p.y-bh/2},right={x:p.x+bw/2,y:p.y-bh/2},back={x:p.x,y:p.y-bh};
+poly([{x:left.x,y:left.y},{x:p.x,y:p.y+bh*.35},{x:p.x,y:p.y+bh*.35-TH*h},{x:left.x,y:left.y-TH*h}],wall);
+poly([{x:p.x,y:p.y+bh*.35},{x:right.x,y:right.y},{x:right.x,y:right.y-TH*h},{x:p.x,y:p.y+bh*.35-TH*h}],wall);
+poly([{x:left.x,y:left.y-TH*h},{x:p.x,y:p.y-bh/2-TH*h},{x:p.x+bw/2,y:p.y-bh/2-TH*h},{x:right.x,y:right.y-TH*h}],roof);
+poly([{x:left.x,y:left.y-TH*h},{x:p.x,y:p.y-bh/2-TH*h-12*w},{x:p.x+bw/2,y:p.y-bh/2-TH*h}],roof);
+ctx.fillStyle="#665b54";ctx.fillRect(p.x-4,p.y-13,7,13);ctx.fillStyle="#f3d9a2";ctx.fillRect(p.x-15,p.y-TH*h+8,6,8);ctx.fillRect(p.x+7,p.y-TH*h+8,6,8);
+if(kind==="tower"){ctx.fillStyle="#d6c6a4";ctx.fillRect(p.x-10,p.y-TH*3,20,TH*3);ctx.fillStyle="#6f5c4e";ctx.fillRect(p.x-8,p.y-TH*3-12,16,12);ctx.fillStyle="#f7edcf";ctx.beginPath();ctx.arc(p.x,p.y-TH*2.1,5,0,Math.PI*2);ctx.fill();ctx.fillStyle="#4e514e";ctx.fillRect(p.x-1,p.y-TH*2.1-4,2,5)}
+if(kind==="arena"){ctx.fillStyle="#b98155";ctx.beginPath();ctx.ellipse(p.x,p.y-9,26,13,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#e0b88e";ctx.beginPath();ctx.ellipse(p.x,p.y-12,19,8,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#8b6049";ctx.beginPath();ctx.ellipse(p.x,p.y-13,10,4,0,0,Math.PI*2);ctx.fill()}
+}
+function drawMap(){if(!canvas.width)return;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle="#b8d5dc";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.setTransform(scale,0,0,scale,ox,oy);
+for(let y=0;y<H;y++)for(let x=0;x<W;x++){let z=zone(x);tile(x,y,z)}
+// beach edge and sea foam
+for(let y=0;y<H;y++){let p=iso(29,y);ctx.strokeStyle="#f4ead0";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(p.x+TW/2,p.y+TH/2);ctx.lineTo(p.x+TW/2+8,p.y+TH/2+TH);ctx.stroke()}
+spots=[];
+for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){let z=zone(x);let seed=(x*17+y*31)%23;if(seed===2||seed===8)tree(x,y,z,seed);if(seed===5||seed===15)building(x,y,z,1,1)}
+// named landmark buildings
+building(12,13,"spring",1.7,3,"tower");building(24,13,"autumn",2.1,1.1,"arena");
+// piers and beach huts
+for(let i=0;i<4;i++){let p=iso(31+i%2,16+i*2);ctx.fillStyle="#9b785f";ctx.fillRect(p.x-12,p.y-3,24,5);building(32,5+i*4,"coast",.7,.7)}
+// region labels
+const labels=[["FROSTWOOD",4,3],["SPRING GARDENS",12,3],["SUNMARKET",19,21],["OLD AUTUMN QUARTER",24,3],["THE COAST",32,3]];
+ctx.textAlign="center";ctx.font="bold 12px Arial";for(let [t,x,y] of labels){let p=iso(x,y);ctx.fillStyle="rgba(255,255,255,.78)";ctx.fillText(t,p.x,p.y-20)}
+for(let a of places){let p=iso(a.x,a.y);spots.push({x:p.x,y:p.y,place:a});ctx.fillStyle=a.kind==="landmark"?"#fff8e7":"#fffdf6";ctx.strokeStyle="#786b5d";ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(p.x,p.y-25,7,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle="#51463f";ctx.font="11px Arial";ctx.textAlign="center";ctx.fillText(a.name,p.x,p.y-38)}
+}
+function resizeMap(){let r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);canvas.width=r.width*dpr;canvas.height=r.height*dpr;const worldW=(W+H)*TW/2,worldH=(W+H)*TH/2;scale=Math.min(canvas.width/(worldW+180),canvas.height/(worldH+120))*1.65;scale=Math.max(.48,Math.min(scale,1.05));ox=(canvas.width-worldW*scale)/2+20;oy=(canvas.height-worldH*scale)/2+15;drawMap()}
+function canvasPoint(e){let r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}}
+canvas.addEventListener("pointerdown",e=>{drag={...canvasPoint(e),ox,oy,moved:false};canvas.setPointerCapture(e.pointerId)});
+canvas.addEventListener("pointermove",e=>{if(!drag)return;let p=canvasPoint(e),dx=p.x-drag.x,dy=p.y-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;ox=drag.ox+dx;oy=drag.oy+dy;drawMap()});
+canvas.addEventListener("pointerup",e=>{if(!drag)return;let p=canvasPoint(e);if(!drag.moved){let hit=spots.find(s=>Math.hypot((s.x*scale+ox-p.x),(s.y*scale+oy-25*scale-p.y))<25*scale);if(hit)selectPlace(hit.place)}drag=null});
+function selectPlace(a){document.getElementById("place-card").innerHTML="<strong>"+a.name+"</strong><p>"+a.desc+"</p><button class='button secondary' id='visit-place'>Visit this place</button>";document.getElementById("visit-place").onclick=()=>{if(!state.visits.includes(a.name))state.visits.push(a.name);localStorage.setItem("lw-visits",JSON.stringify(state.visits));document.getElementById("journal-text").textContent="Places you've discovered: "+state.visits.join(", ")+". Your city is getting bigger.";document.getElementById("place-card").querySelector("p").textContent="You visited "+a.name+". "+a.desc}}
+window.addEventListener("resize",resizeMap);save();renderTasks();resizeMap();
+</script></body></html>
