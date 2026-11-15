@@ -15,12 +15,13 @@ h1{font-size:clamp(22px,4vw,32px);font-weight:normal;margin:0;letter-spacing:-1p
 main{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px;margin-bottom:16px}
 .eyebrow{font:10px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}h2{font-size:26px;font-weight:normal;margin:5px 0 10px}p{margin:7px 0;color:#5f606a}
 .hero{min-height:220px;background:linear-gradient(120deg,#e9e1d9,#dce5e4 55%,#e9d9d3);display:flex;align-items:flex-end;position:relative;overflow:hidden}.hero h2{font-size:34px}.button{border:0;border-radius:24px;background:var(--ink);color:white;padding:10px 16px;margin-top:10px}.button.secondary{background:#eee8e0;color:var(--ink)}
-.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.map-shell{position:relative;border:1px solid #d9d4cb;border-radius:16px;overflow:hidden;background:#d7e5e8;touch-action:none}
+.city-heading{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.city-heading h2{margin-bottom:0}.map-shell{position:relative;border:1px solid #d5cbbb;border-radius:18px;overflow:hidden;background:#d8d9bb;touch-action:none;box-shadow:0 12px 34px rgba(78,65,49,.12)}
+#city-art{display:block;width:100%;height:min(74vh,760px);min-height:480px;cursor:grab;touch-action:none;user-select:none}#city-art.dragging{cursor:grabbing}.map-tools{display:flex;justify-content:flex-end;gap:7px;margin:0 0 8px}.map-tools button{border:1px solid #ded4c7;background:#fffaf1;border-radius:20px;padding:6px 13px;color:#65584c}.map-tools button:hover{background:#eee3d3}
 #city-map{display:block;width:100%;height:min(70vh,690px);min-height:430px;cursor:grab}#city-map.dragging{cursor:grabbing}
 .map-help{font:11px Arial,sans-serif;color:#6d7075;margin:8px 2px}.map-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.legend-chip{font:11px Arial,sans-serif;background:#f0ece5;padding:6px 10px;border-radius:20px}
 .place-card{background:#f8f4ee;border-radius:13px;padding:13px;margin-top:12px}.place-card strong{font-weight:normal;font-size:18px}.place-card p{font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.task,.person{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff}.task strong,.person strong{display:block;font-weight:normal;font-size:16px}.task small,.person small{color:var(--muted);font:12px Arial,sans-serif}.task button{float:right;border:1px solid var(--line);background:#f5eee6;border-radius:20px;padding:6px 10px}.task.done{opacity:.55}.person .tag{display:inline-block;margin-top:8px;font:10px Arial,sans-serif;letter-spacing:1px;color:#806c52}.hidden{display:none}.note{font:12px Arial,sans-serif;color:var(--muted)}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.panel{padding:16px}#city-map{height:64vh;min-height:390px}}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.panel{padding:16px}#city-art{height:66vh;min-height:430px}}
 </style></head>
 <body>
 <header><div><small>A little life, at your own pace</small><h1>Little Worlds <span style="color:#bd898a">✳</span></h1></div><div class="wallet">✦ <b id="points">0</b> wishes</div></header>
@@ -29,11 +30,70 @@ main{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);bor
 <main>
 <section id="home"><div class="panel hero"><div><div class="eyebrow">Your story starts here</div><h2>A whole city to discover.</h2><p>Five different districts, familiar landmarks and little places waiting to be found.</p><button class="button" data-go="city">Enter the city</button></div></div><div class="panel"><div class="eyebrow">A note for today</div><h2>There is no rush.</h2><p>Wander, meet people and make a life that feels like yours. Exploring is always free.</p></div></section>
 <section id="city" class="hidden">
-<div class="city-heading"><div><div class="eyebrow">Your connected city</div><h2>Wish & Wander</h2></div><div class="note">Drag the map to explore · Tap a place to visit</div></div>
-<div class="map-shell"><canvas id="city-map" aria-label="Interactive isometric city map"></canvas></div>
-<div class="map-legend"><span class="legend-chip">❄ Winter district</span><span class="legend-chip">🌸 Spring quarter</span><span class="legend-chip">☀ Summer district</span><span class="legend-chip">🍂 Autumn quarter</span><span class="legend-chip">🌊 Coast & beach</span></div>
-<div class="place-card" id="place-card"><strong>Welcome to the city</strong><p>Explore the map and tap a landmark or neighbourhood to learn about it.</p></div>
-<p class="map-help">The map is a first playable city layout. More streets, buildings, interiors and moving characters will be added as the game grows.</p>
+<div class="city-heading"><div><div class="eyebrow">A city made for wandering</div><h2>Wish & Wander</h2></div><div class="note">Drag to wander · Pinch or use + / − to zoom · Tap a place</div></div>
+<div class="map-tools"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-in" aria-label="Zoom in">+</button><button id="map-home">Reset view</button></div>
+<div class="map-shell" id="map-shell"><svg id="city-art" viewBox="0 0 1800 1160" role="img" aria-label="A large illustrated European city with five seasonal districts, connected streets, gardens, landmarks and a coast"><defs>
+<linearGradient id="land" x2="0" y2="1"><stop stop-color="#e9e1c9"/><stop offset="1" stop-color="#d9d6b8"/></linearGradient>
+<linearGradient id="sea" x2="0" y2="1"><stop stop-color="#8dbbc4"/><stop offset="1" stop-color="#5f9eae"/></linearGradient>
+<linearGradient id="roofRed" x2="0" y2="1"><stop stop-color="#bd7666"/><stop offset="1" stop-color="#89544d"/></linearGradient>
+<linearGradient id="roofBlue" x2="0" y2="1"><stop stop-color="#718b91"/><stop offset="1" stop-color="#4d6970"/></linearGradient>
+<linearGradient id="wall" x2="0" y2="1"><stop stop-color="#f4e8d5"/><stop offset="1" stop-color="#d6bda0"/></linearGradient>
+<pattern id="waterlines" width="100" height="44" patternUnits="userSpaceOnUse"><path d="M5 15q18-8 38 0t42 0M-20 34q18-8 38 0t42 0" fill="none" stroke="#d5ece9" stroke-width="3" opacity=".38"/></pattern>
+<pattern id="cobble" width="28" height="18" patternUnits="userSpaceOnUse"><path d="M2 5h10m4 8h10" stroke="#8d8172" stroke-width="1.5" opacity=".18"/></pattern>
+<filter id="shadow" x="-30%" y="-30%" width="170%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+</defs>
+<rect width="1800" height="1160" fill="url(#land)"/>
+<path d="M0 0H1800V270Q1690 310 1650 420T1690 660Q1740 820 1600 1160H0Z" fill="#d8d9bb"/>
+<!-- districts as soft, irregular landscape regions -->
+<path d="M0 0H660Q620 160 700 300T610 590L0 650Z" fill="#dce4df"/>
+<path d="M0 580Q240 480 500 570T890 630L820 1160H0Z" fill="#d9e2c9"/>
+<path d="M550 0H1170Q1100 220 1210 420T1120 770L740 720Q650 490 590 350Z" fill="#e7d6ae"/>
+<path d="M960 0H1800V520Q1570 490 1470 650T1240 760L1100 510Z" fill="#e6c9a9"/>
+<path d="M1040 600Q1320 490 1600 620T1800 900V1160H920Z" fill="#e3d0a7"/>
+<!-- sea and natural coastline -->
+<path d="M1800 230V1160H1510Q1570 1060 1510 970T1530 790Q1580 680 1510 580T1530 400Q1580 300 1800 230Z" fill="url(#sea)"/>
+<path d="M1800 230V1160H1510Q1570 1060 1510 970T1530 790Q1580 680 1510 580T1530 400Q1580 300 1800 230Z" fill="url(#waterlines)"/>
+<path d="M1510 1160Q1570 1060 1510 970T1530 790Q1580 680 1510 580T1530 400Q1580 300 1800 230" fill="none" stroke="#f7e5bd" stroke-width="28"/>
+<path d="M1510 1160Q1570 1060 1510 970T1530 790Q1580 680 1510 580T1530 400Q1580 300 1800 230" fill="none" stroke="#c4a783" stroke-width="4" stroke-dasharray="5 12"/>
+<!-- parks and planted squares -->
+<g id="parks">
+<path d="M95 105Q220 60 345 130L370 310Q260 370 110 300Z" fill="#a9c59b" stroke="#839e7b" stroke-width="5"/>
+<path d="M110 700Q280 620 430 700L455 930Q270 1010 100 900Z" fill="#9dbd8c" stroke="#809e73" stroke-width="5"/>
+<path d="M790 130Q920 75 1050 145L1070 330Q920 390 790 315Z" fill="#9ebd8e" stroke="#819e76" stroke-width="5"/>
+<path d="M1070 760Q1210 690 1360 770L1375 980Q1200 1040 1060 950Z" fill="#a3bd8d" stroke="#819b72" stroke-width="5"/>
+<path d="M160 205Q230 175 300 205M160 245Q230 215 300 245M175 285Q235 260 305 285" stroke="#e8dfc8" stroke-width="13" fill="none" stroke-linecap="round"/>
+<path d="M170 780Q270 740 380 800M165 855Q275 820 390 875" stroke="#e8dfc8" stroke-width="13" fill="none" stroke-linecap="round"/>
+</g>
+<!-- connected, gently curving street network -->
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<g stroke="#b6a38b" stroke-width="92"><path d="M-30 455C250 380 410 500 640 440S1030 350 1260 420 1510 510 1630 470"/><path d="M350 -30C400 180 330 340 430 520S550 850 500 1190"/><path d="M930 -20C850 190 980 330 900 510S850 850 940 1190"/><path d="M-20 880C250 820 450 920 690 850S1080 770 1260 850 1470 920 1600 870"/><path d="M1280 -20C1210 190 1320 350 1260 540S1300 780 1350 940"/></g>
+<g stroke="#f2e6d3" stroke-width="78"><path d="M-30 455C250 380 410 500 640 440S1030 350 1260 420 1510 510 1630 470"/><path d="M350 -30C400 180 330 340 430 520S550 850 500 1190"/><path d="M930 -20C850 190 980 330 900 510S850 850 940 1190"/><path d="M-20 880C250 820 450 920 690 850S1080 770 1260 850 1470 920 1600 870"/><path d="M1280 -20C1210 190 1320 350 1260 540S1300 780 1350 940"/></g>
+<g stroke="#d4c4ac" stroke-width="2" stroke-dasharray="4 16"><path d="M-30 455C250 380 410 500 640 440S1030 350 1260 420 1510 510 1630 470"/><path d="M350 -30C400 180 330 340 430 520S550 850 500 1190"/><path d="M930 -20C850 190 980 330 900 510S850 850 940 1190"/><path d="M-20 880C250 820 450 920 690 850S1080 770 1260 850 1470 920 1600 870"/><path d="M1280 -20C1210 190 1320 350 1260 540S1300 780 1350 940"/></g>
+</g>
+<!-- small lanes linking blocks -->
+<g stroke="#f3e7d6" stroke-width="26" fill="none" stroke-linecap="round"><path d="M80 175Q250 230 350 180T610 210"/><path d="M570 80Q690 160 760 300T900 370"/><path d="M1040 120Q1130 210 1130 320T1250 420"/><path d="M650 600Q760 650 840 600T1030 650"/><path d="M1020 1000Q1120 920 1190 960T1400 1030"/><path d="M70 1020Q210 970 340 1020T520 1060"/></g>
+<g id="buildings"></g>
+<g id="trees"></g>
+<!-- promenade, piers, marina -->
+<path d="M1530 355Q1580 390 1550 450T1540 585Q1580 640 1550 720T1550 860Q1590 920 1540 1020" fill="none" stroke="#f9edcf" stroke-width="18"/>
+<g fill="#9b785b" stroke="#f4e3c4" stroke-width="5"><path d="M1540 495l180-28 8 22-180 30z"/><path d="M1540 690l170-18 8 22-170 20z"/><path d="M1540 895l190-25 8 22-190 28z"/></g>
+<g fill="#f2e5cf" stroke="#b08e6c" stroke-width="3"><path d="M1610 470l22-10 18 12-22 11z"/><path d="M1670 460l22-10 18 12-22 11z"/><path d="M1610 670l22-10 18 12-22 11z"/><path d="M1680 660l22-10 18 12-22 11z"/></g>
+<!-- beach umbrellas -->
+<g id="beach"></g>
+<!-- clock tower and amphitheatre landmarks -->
+<g id="landmarks"></g>
+<!-- labels -->
+<g font-family="Georgia,serif" fill="#62564a" text-anchor="middle">
+<g transform="translate(245 75)"><rect x="-112" y="-23" width="224" height="42" rx="20" fill="#fff9ed" opacity=".92"/><text y="5" font-size="22" letter-spacing="3">FROSTWOOD</text></g>
+<g transform="translate(300 650)"><rect x="-128" y="-23" width="256" height="42" rx="20" fill="#fff9ed" opacity=".92"/><text y="5" font-size="22" letter-spacing="3">SPRING GARDENS</text></g>
+<g transform="translate(730 720)"><rect x="-108" y="-23" width="216" height="42" rx="20" fill="#fff9ed" opacity=".92"/><text y="5" font-size="22" letter-spacing="3">SUNMARKET</text></g>
+<g transform="translate(1390 180)"><rect x="-150" y="-23" width="300" height="42" rx="20" fill="#fff9ed" opacity=".92"/><text y="5" font-size="21" letter-spacing="2">OLD AUTUMN QUARTER</text></g>
+<g transform="translate(1650 1090)"><rect x="-95" y="-23" width="190" height="42" rx="20" fill="#fff9ed" opacity=".92"/><text y="5" font-size="22" letter-spacing="3">THE COAST</text></g>
+</g>
+</svg></div>
+<div class="map-legend"><span class="legend-chip">❄ Frostwood</span><span class="legend-chip">✿ Spring Gardens</span><span class="legend-chip">☀ Sunmarket</span><span class="legend-chip">🍂 Old Autumn Quarter</span><span class="legend-chip">♧ The Coast</span></div>
+<div class="place-card" id="place-card"><strong>Welcome to Wish & Wander</strong><p>Follow the streets, discover little squares and visit the landmarks. Tap a marker to learn more.</p></div>
+<p class="map-help">This is the illustrated city map. More playable interiors, residents and activities can be added as the world expands.</p>
 </section>
 <section id="people" class="hidden"><div class="panel"><div class="eyebrow">People in your world</div><h2>Someone you might meet</h2><div class="person"><strong>Astrid Yun</strong><small>Violinist · Norway</small><p>Quiet and thoughtful, with a love for classical music, theatre, ballet and classic literature. She has a home full of animals and a life shaped by music and family.</p><span class="tag">CHARACTER PROFILE · STORY IN PROGRESS</span></div><p class="note">Full illustrated character designs and storylines are still to come.</p></div></section>
 <section id="life" class="hidden"><div class="panel"><div class="eyebrow">Small things count</div><h2>Daily life</h2><p>Complete a task to earn wishes. These are optional and never required to explore the city.</p><div class="grid" id="tasks"></div></div></section>
@@ -47,55 +107,34 @@ function renderTasks(){document.getElementById("tasks").innerHTML=taskList.map((
 function complete(i){if(state.done.includes(i))return;state.done.push(i);state.points+=taskList[i][1];save();renderTasks()}
 function show(page){document.querySelectorAll("main section").forEach(s=>s.classList.toggle("hidden",s.id!==page));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));if(page==="city")setTimeout(resizeMap,30)}
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.page)));document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.go)));
-const canvas=document.getElementById("city-map"),ctx=canvas.getContext("2d");
-const W=44,H=32,TW=48,TH=25;let scale=1,ox=0,oy=0,drag=null,spots=[];
-const places=[
-{x:5,y:8,name:"Frostwood",desc:"A quiet winter neighbourhood with snowy roofs, pine trees, a frozen pond and warm little cafés.",kind:"district"},
-{x:12,y:7,name:"Spring Gardens",desc:"Blossom-lined streets, flower stalls, greenhouses and a beautiful public garden.",kind:"district"},
-{x:19,y:16,name:"Sunmarket",desc:"A bright summer quarter with outdoor restaurants, colourful awnings and lively squares.",kind:"district"},
-{x:25,y:8,name:"Old Autumn Quarter",desc:"Golden trees, old bookshops, museums and winding streets paved with warm stone.",kind:"district"},
-{x:40,y:13,name:"The Coast",desc:"A seaside neighbourhood with a sandy beach, harbour, boardwalk and little seafood cafés.",kind:"district"},
-{x:15,y:13,name:"The Clock Tower",desc:"A grand clock tower inspired by London's Big Ben, standing above the central square.",kind:"landmark"},
-{x:29,y:15,name:"The Colosseum",desc:"A huge ancient amphitheatre inspired by Rome's Colosseum, now surrounded by a public plaza.",kind:"landmark"},
-{x:40,y:18,name:"Seaglass Beach",desc:"A wide sandy beach with a promenade, beach huts and a view across the sea.",kind:"landmark"}
-];
-function zone(x){return x<8?"winter":x<17?"spring":x<26?"summer":x<35?"autumn":"coast"}
-function iso(x,y){return{x:(x-y)*TW/2,y:(x+y)*TH/2}}
-function poly(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=.8;ctx.stroke()}}
-function groundTile(x,y,z){let p=iso(x,y),c={winter:"#dce7e8",spring:"#b9d3ad",summer:"#d9c58f",autumn:"#c99c75",coast:"#e8d3a1"}[z];if(z==="coast"&&x>=37)c="#8dbbc6";poly([{x:p.x,y:p.y},{x:p.x+TW/2,y:p.y+TH/2},{x:p.x,y:p.y+TH},{x:p.x-TW/2,y:p.y+TH/2}],c,"rgba(85,75,65,.10)")}
-function roadTile(x,y){let p=iso(x,y);poly([{x:p.x,y:p.y},{x:p.x+TW/2,y:p.y+TH/2},{x:p.x,y:p.y+TH},{x:p.x-TW/2,y:p.y+TH/2}],"#b7aaa0","rgba(255,255,255,.18)");ctx.strokeStyle="#e7d9c8";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x-9,p.y+TH/2);ctx.lineTo(p.x+9,p.y+TH/2);ctx.stroke()}
-function parkTile(x,y,z){let p=iso(x,y);poly([{x:p.x,y:p.y},{x:p.x+TW/2,y:p.y+TH/2},{x:p.x,y:p.y+TH},{x:p.x-TW/2,y:p.y+TH/2}],z==="spring"?"#9fca9c":z==="autumn"?"#c7a477":"#91b58b","rgba(255,255,255,.2)")}
-function tree(x,y,z,i){let p=iso(x,y),col=z==="winter"?"#54776c":z==="spring"?"#e7aab6":z==="summer"?"#5c8959":"#c47742";ctx.fillStyle="#78604c";ctx.fillRect(p.x-2,p.y-12,4,14);ctx.fillStyle=col;ctx.beginPath();ctx.arc(p.x,p.y-18,8+(i%3),0,Math.PI*2);ctx.fill();ctx.fillStyle="rgba(255,255,255,.22)";ctx.beginPath();ctx.arc(p.x-3,p.y-21,3,0,Math.PI*2);ctx.fill();if(z==="winter"){ctx.fillStyle="#f8fbfc";ctx.beginPath();ctx.arc(p.x+3,p.y-23,4,0,Math.PI*2);ctx.fill()}}
-function house(x,y,z,variant=0){let p=iso(x,y),w=variant%3===0?27:23,h=variant%3===1?35:28;let walls=[["#d4dce0","#e7ecec"],["#e8d7c7","#f4e6d8"],["#e5c99c","#f2dfba"],["#bd9276","#d6ae8e"],["#eee2ce","#f8efdf"]],roofs=["#60717a","#a95f61","#b66b4e","#76584d","#63858a"];let c=walls[z==="winter"?0:z==="spring"?1:z==="summer"?2:z==="autumn"?3:4],r=roofs[z==="winter"?0:z==="spring"?1:z==="summer"?2:z==="autumn"?3:4];let a={x:p.x-w/2,y:p.y-6},b={x:p.x+w/2,y:p.y-6};poly([{x:a.x,y:a.y},{x:p.x,y:p.y+8},{x:p.x,y:p.y-h+8},{x:a.x,y:a.y-h}],c[0]);poly([{x:p.x,y:p.y+8},{x:b.x,y:b.y},{x:b.x,y:b.y-h},{x:p.x,y:p.y-h+8}],c[1]);poly([{x:a.x,y:a.y-h},{x:p.x,y:p.y-h-13},{x:b.x,y:b.y-h},{x:p.x,y:p.y-h+8}],r);ctx.fillStyle="#594b43";ctx.fillRect(p.x-4,p.y-17,7,17);ctx.fillStyle="#f6d99f";ctx.fillRect(p.x-14,p.y-h+5,6,8);ctx.fillRect(p.x+7,p.y-h+5,6,8);ctx.strokeStyle="rgba(80,60,50,.35)";ctx.strokeRect(p.x-14,p.y-h+5,6,8);ctx.strokeRect(p.x+7,p.y-h+5,6,8);if(variant%4===0){ctx.fillStyle=r;ctx.fillRect(p.x+10,p.y-h-7,5,12)}}
-function landmark(x,y,kind){let p=iso(x,y);if(kind==="clock"){house(x,y,"spring",2);ctx.fillStyle="#d5c19c";ctx.fillRect(p.x-9,p.y-105,18,79);ctx.fillStyle="#9d7d60";ctx.beginPath();ctx.moveTo(p.x-12,p.y-105);ctx.lineTo(p.x,p.y-123);ctx.lineTo(p.x+12,p.y-105);ctx.fill();ctx.fillStyle="#fff0c9";ctx.beginPath();ctx.arc(p.x,p.y-83,6,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#66554a";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(p.x,p.y-83);ctx.lineTo(p.x+3,p.y-87);ctx.stroke()}else{ctx.fillStyle="#b97e54";ctx.beginPath();ctx.ellipse(p.x,p.y-14,38,20,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#e0b38b";ctx.beginPath();ctx.ellipse(p.x,p.y-18,29,14,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#80604d";ctx.beginPath();ctx.ellipse(p.x,p.y-20,17,8,0,0,Math.PI*2);ctx.fill();for(let i=-2;i<=2;i++){ctx.fillStyle="#6e5141";ctx.fillRect(p.x+i*11-3,p.y-28,6,13)}}}
-function drawMap(){if(!canvas.width)return;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle="#a9cbd2";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.setTransform(scale,0,0,scale,ox,oy);
-for(let y=0;y<H;y++)for(let x=0;x<W;x++)groundTile(x,y,zone(x));
-// A connected street grid with small irregular side lanes.
-for(let y=0;y<H;y++)for(let x=0;x<W;x++){if([4,10,16,22,28].includes(y)||[3,9,15,21,27,33,39].includes(x))roadTile(x,y)}
-// public gardens and squares
-for(let y=5;y<9;y++)for(let x=11;x<14;x++)parkTile(x,y,"spring");
-for(let y=18;y<22;y++)for(let x=18;x<22;x++)parkTile(x,y,"summer");
-for(let y=5;y<9;y++)for(let x=29;x<32;x++)parkTile(x,y,"autumn");
-// buildings placed deliberately inside city blocks
-for(let y=1;y<H-2;y++)for(let x=1;x<W-2;x++){let road=[4,10,16,22,28].includes(y)||[3,9,15,21,27,33,39].includes(x);let park=(x>=11&&x<=14&&y>=5&&y<=9)||(x>=18&&x<=22&&y>=18&&y<=22)||(x>=29&&x<=32&&y>=5&&y<=9);let coast=x>=37;if(!road&&!park&&((x+y*3)%4!==0)){if(coast&&x>39)continue;house(x,y,zone(x),(x*7+y*11)%7)}}
-// trees in parks, boulevards and seasonal streets
-for(let i=0;i<13;i++){tree(11+i%3,5+Math.floor(i/3),"spring",i);tree(18+i%4,18+Math.floor(i/4),"summer",i);tree(29+i%3,5+Math.floor(i/3),"autumn",i)}
-for(let y=1;y<H-1;y+=3){tree(1,y,"winter",y);tree(7,y,"winter",y+1);tree(35,y,"autumn",y)}
-// Central civic square and two major landmarks
-landmark(15,13,"clock");landmark(29,15,"arena");
-// Waterfront: promenade, piers, beach and harbour buildings
-for(let y=0;y<H;y++){let p=iso(37,y);ctx.strokeStyle="#f8edcf";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(p.x+TW/2,p.y+TH/2);ctx.lineTo(p.x+TW/2+4,p.y+TH/2+TH);ctx.stroke()}
-for(let i=0;i<4;i++){let p=iso(39,5+i*5);ctx.fillStyle="#98785d";ctx.fillRect(p.x-3,p.y-2,47,5);house(40,4+i*5,"coast",i)}
-// district signboards
-const labels=[["FROSTWOOD",4,2],["SPRING GARDENS",13,2],["SUNMARKET",22,25],["OLD AUTUMN QUARTER",30,2],["THE COAST",40,2]];
-ctx.textAlign="center";ctx.font="bold 13px Georgia";for(let [t,x,y] of labels){let p=iso(x,y);ctx.fillStyle="rgba(255,250,238,.9)";ctx.fillRect(p.x-65,p.y-30,130,22);ctx.fillStyle="#594e47";ctx.fillText(t,p.x,p.y-14)}
-spots=[];for(let a of places){let p=iso(a.x,a.y);spots.push({x:p.x,y:p.y,place:a});ctx.fillStyle="#fff6df";ctx.strokeStyle="#806b58";ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y-26,7,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle="#4d453e";ctx.font="12px Georgia";ctx.textAlign="center";ctx.fillText(a.name,p.x,p.y-41)}
-}
-function resizeMap(){let r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);canvas.width=r.width*dpr;canvas.height=r.height*dpr;const worldW=(W+H)*TW/2,worldH=(W+H)*TH/2;scale=Math.min(canvas.width/(worldW+180),canvas.height/(worldH+120))*1.65;scale=Math.max(.48,Math.min(scale,1.05));ox=(canvas.width-worldW*scale)/2+20;oy=(canvas.height-worldH*scale)/2+15;drawMap()}
-function canvasPoint(e){let r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}}
-canvas.addEventListener("pointerdown",e=>{drag={...canvasPoint(e),ox,oy,moved:false};canvas.setPointerCapture(e.pointerId)});
-canvas.addEventListener("pointermove",e=>{if(!drag)return;let p=canvasPoint(e),dx=p.x-drag.x,dy=p.y-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;ox=drag.ox+dx;oy=drag.oy+dy;drawMap()});
-canvas.addEventListener("pointerup",e=>{if(!drag)return;let p=canvasPoint(e);if(!drag.moved){let hit=spots.find(s=>Math.hypot((s.x*scale+ox-p.x),(s.y*scale+oy-25*scale-p.y))<25*scale);if(hit)selectPlace(hit.place)}drag=null});
-function selectPlace(a){document.getElementById("place-card").innerHTML="<strong>"+a.name+"</strong><p>"+a.desc+"</p><button class='button secondary' id='visit-place'>Visit this place</button>";document.getElementById("visit-place").onclick=()=>{if(!state.visits.includes(a.name))state.visits.push(a.name);localStorage.setItem("lw-visits",JSON.stringify(state.visits));document.getElementById("journal-text").textContent="Places you've discovered: "+state.visits.join(", ")+". Your city is getting bigger.";document.getElementById("place-card").querySelector("p").textContent="You visited "+a.name+". "+a.desc}}
-window.addEventListener("resize",resizeMap);save();renderTasks();resizeMap();
+
+const svg=document.getElementById("city-art"),buildings=document.getElementById("buildings"),trees=document.getElementById("trees"),landmarks=document.getElementById("landmarks"),beach=document.getElementById("beach");
+const NS="http://www.w3.org/2000/svg";let view={x:0,y:0,w:1800,h:1160},pointer=null,activePlace=null;
+function el(tag,attrs,parent){let n=document.createElementNS(NS,tag);for(let k in attrs)n.setAttribute(k,attrs[k]);(parent||svg).appendChild(n);return n}
+function building(x,y,w,h,roof,wall,style=0){let g=el("g",{transform:"translate("+x+" "+y+")"} ,buildings);el("ellipse",{cx:w/2,cy:h+13,rx:w*.62,ry:12,fill:"#766b5b",opacity:".17",filter:"url(#shadow)"},g);el("path",{d:"M0 0 L"+w*.22+" -"+h*.22+" L"+w*.22+" "+(h*.78)+" L0 "+h+"Z",fill:wall,stroke:"#9b8069","stroke-width":2},g);el("path",{d:"M"+w*.22+" -"+h*.22+" L"+w+" 0 L"+w+" "+h+" L"+w*.22+" "+(h*.78)+"Z",fill:"#d4b89a",stroke:"#9b8069","stroke-width":2},g);el("path",{d:"M-5 0 L"+w*.22+" -"+h*.22+" L"+w+ " 0 L"+w*.78+" "+(h*.24)+"Z",fill:roof,stroke:"#79594d","stroke-width":2},g);el("path",{d:"M"+w*.22+" -"+h*.22+" L"+w*.43+" -"+h*.52+" L"+(w+8)+" -"+h*.3+" L"+w+" 0Z",fill:roof,stroke:"#79594d","stroke-width":2},g);for(let i=0;i<2;i++){let xx=w*.32+i*w*.3;el("rect",{x:xx,y:h*.23,width:9,height:17,rx:2,fill:"#526b70",stroke:"#f6e3c5","stroke-width":2},g);el("path",{d:"M"+(xx+4.5)+" "+(h*.23)+"v17",stroke:"#d9c4a8","stroke-width":1},g)}el("rect",{x:w*.08,y:h*.53,width:10,height:20,rx:2,fill:"#6d5145"},g);if(style%3===0)el("path",{d:"M"+(w*.1)+" -"+(h*.2)+"q-8 -20 5 -24q13 5 5 24",fill:"#a87556",stroke:"#79594d","stroke-width":2},g);if(style%4===1)el("path",{d:"M"+w*.2+" "+(h*.82)+"h"+(w*.85),stroke:"#f5e7d1","stroke-width":4},g)}
+function tree(x,y,color,size=1){let g=el("g",{transform:"translate("+x+" "+y+") scale("+size+")"},trees);el("ellipse",{cx:0,cy:9,rx:17,ry:6,fill:"#5b6c4d",opacity:".2"},g);el("path",{d:"M-3 7v-25h7V7",fill:"#8b654b"},g);el("circle",{cx:0,cy:-29,r:19,fill:color,stroke:"#71835f","stroke-width":2},g);el("circle",{cx:-9,cy:-34,r:8,fill:"#fff4dc",opacity:".28"},g);el("circle",{cx:10,cy:-23,r:6,fill:"#fff4dc",opacity:".2"},g)}
+const palettes=[["#6f8585","#e8e0d2"],["#b66e69","#f0ddc8"],["#c18b50","#f0d8aa"],["#8d5d50","#e2c3a7"],["#68898c","#f0e3d0"]];
+let seed=41;function rnd(){seed=(seed*9301+49297)%233280;return seed/233280}
+const blocks=[[30,270,0],[85,515,1],[170,390,2],[460,130,0],[520,300,1],[630,530,2],[740,180,3],[1060,120,4],[1170,300,3],[1020,590,4],[1250,760,2],[760,880,1],[250,920,0],[430,730,3],[930,990,4]];
+blocks.forEach((b,i)=>{let [x,y,z]=b;for(let j=0;j<5;j++){let xx=x+j*48+rnd()*15,yy=y+(j%2)*32+rnd()*15;let pal=palettes[(z+j)%5];building(xx,yy,34+rnd()*12,36+rnd()*12,pal[0],pal[1],i+j);}});
+for(let i=0;i<22;i++){let x=70+rnd()*1350,y=70+rnd()*1000;let col=["#587d61","#e3a7a7","#c97842","#72926a","#f0f0e4"][i%5];tree(x,y,col,.7+rnd()*.6)}
+for(let i=0;i<34;i++){let x=70+rnd()*1400,y=80+rnd()*980;let col=["#557b5b","#e5a5ad","#c77a40","#71966a"][i%4];tree(x,y,col,.48+rnd()*.3)}
+// Beach parasols, striped cabanas and little boats
+for(let i=0;i<7;i++){let x=1580+(i%2)*70,y=390+i*85;el("path",{d:"M"+x+" "+y+"q18 -34 36 0Z",fill:i%2?"#d98c7c":"#f1d39c",stroke:"#fff2d9","stroke-width":3},beach);el("path",{d:"M"+(x+18)+" "+y+"v20",stroke:"#8e755b","stroke-width":3},beach)}
+for(let i=0;i<3;i++){let x=1660+i*42,y=320+i*235;el("path",{d:"M"+x+" "+y+"q28 14 56 0l-9 13h-37Z",fill:"#f4e7ce",stroke:"#775f4b","stroke-width":3},beach);el("path",{d:"M"+(x+27)+" "+(y-27)+"v27",stroke:"#775f4b","stroke-width":3},beach);el("path",{d:"M"+(x+28)+" "+(y-26)+"l20 22h-20Z",fill:"#f0c58b"},beach)}
+// Clock tower: detailed civic landmark with clock faces and spire
+let cg=el("g",{transform:"translate(760 410)"},landmarks);el("ellipse",{cx:0,cy:18,rx:62,ry:20,fill:"#78664f",opacity:".2"},cg);el("rect",{x:-34,y:-120,width:68,height:138,fill:"#d5b994",stroke:"#80684f","stroke-width":4},cg);el("path",{d:"M-44 -120L0 -168L44 -120Z",fill:"#8b6654",stroke:"#705344","stroke-width":4},cg);el("path",{d:"M-25 -168L0 -202L25 -168Z",fill:"#6d8584",stroke:"#705344","stroke-width":3},cg);for(let side of [-1,1]){el("circle",{cx:side*0,cy:-88,r:19,fill:"#f7edcf",stroke:"#8b7156","stroke-width":4},cg);el("path",{d:"M0 -88v-12M0 -88l10 6",stroke:"#66584a","stroke-width":3},cg);el("rect",{x:side*17-4,y:-34,width:8,height:24,fill:"#71868a",stroke:"#f0ddbc","stroke-width":2},cg)}el("path",{d:"M-34 -120h68",stroke:"#f8e6c7","stroke-width":5},cg);
+let ag=el("g",{transform:"translate(1190 600)"},landmarks);el("ellipse",{cx:0,cy:20,rx:115,ry:49,fill:"#78664f",opacity:".2"},ag);el("path",{d:"M-112 0Q-105 -75 0 -83Q105 -75 112 0L78 25Q0 -25 -78 25Z",fill:"#b77c59",stroke:"#80543f","stroke-width":5},ag);el("path",{d:"M-82 -8Q-75 -53 0 -58Q75 -53 82 -8",fill:"none",stroke:"#e3b58c","stroke-width":14"},ag);el("path",{d:"M-50 -18v-24M-18 -29v-25M18 -29v-25M50 -18v-24",stroke:"#80543f","stroke-width":9"},ag);el("ellipse",{cx:0,cy:0,rx:58,ry:19,fill:"#80604b"},ag);el("ellipse",{cx:0,cy:-2,rx:38,ry:10,fill:"#b9a17f"},ag);
+// Tappable location markers
+const places=[{x:210,y:390,name:"Frostwood",desc:"A northern quarter of snow-dusted roofs, evergreen lanes, a frozen pond and cosy cafés."},{x:285,y:810,name:"Spring Gardens",desc:"Blossom trees, flower markets, glasshouses and winding paths through leafy gardens."},{x:760,y:720,name:"Sunmarket",desc:"The sunny heart of the city: lively terraces, market stalls, courtyards and warm stone streets."},{x:1370,y:300,name:"Old Autumn Quarter",desc:"Golden trees, old bookshops, intimate squares and beautiful old European façades."},{x:1650,y:930,name:"The Coast",desc:"A bright seaside district with a sandy beach, harbour, promenade and little boats."},{x:760,y:410,name:"The Clock Tower",desc:"The city's great civic clock tower rises over the central square, inspired by London's famous landmark."},{x:1190,y:600,name:"The Amphitheatre",desc:"An ancient Roman-style amphitheatre surrounded by gardens and a broad public plaza."},{x:1675,y:730,name:"Seaglass Beach",desc:"A long sandy beach with striped parasols, cabanas and a view across the water."}];
+places.forEach((p,i)=>{let g=el("g",{class:"map-marker",transform:"translate("+p.x+" "+p.y+")",tabindex:"0",role:"button","aria-label":p.name},svg);el("circle",{r:18,fill:"#fff8e8",stroke:"#8e7358","stroke-width":3},g);el("circle",{r:6,fill:i>4?"#bd8066":"#789477"},g);el("path",{d:"M-4 20l4 8 4-8",fill:"#fff8e8",stroke:"#8e7358","stroke-width":2},g);g.addEventListener("click",e=>{e.stopPropagation();selectPlace(p)});g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectPlace(p)}})});
+function selectPlace(p){activePlace=p;document.getElementById("place-card").innerHTML="<strong>"+p.name+"</strong><p>"+p.desc+"</p><button class='button secondary' id='visit-place'>Visit this place</button>";document.getElementById("visit-place").onclick=()=>{if(!state.visits.includes(p.name))state.visits.push(p.name);localStorage.setItem("lw-visits",JSON.stringify(state.visits));document.getElementById("journal-text").textContent="Places you've discovered: "+state.visits.join(", ")+". Your city is getting bigger.";document.querySelector("#place-card p").textContent="You discovered "+p.name+". "+p.desc}}
+function applyView(){svg.setAttribute("viewBox",view.x+" "+view.y+" "+view.w+" "+view.h)}
+function zoom(f){let nw=Math.max(650,Math.min(1800,view.w*f)),nh=nw*1160/1800;let cx=view.x+view.w/2,cy=view.y+view.h/2;view={x:cx-nw/2,y:cy-nh/2,w:nw,h:nh};applyView()}
+document.getElementById("zoom-in").onclick=()=>zoom(.82);document.getElementById("zoom-out").onclick=()=>zoom(1.22);document.getElementById("map-home").onclick=()=>{view={x:0,y:0,w:1800,h:1160};applyView()};
+svg.addEventListener("pointerdown",e=>{if(e.target.closest(".map-marker"))return;pointer={x:e.clientX,y:e.clientY,view:{...view}};svg.classList.add("dragging");svg.setPointerCapture(e.pointerId)});
+svg.addEventListener("pointermove",e=>{if(!pointer)return;let r=svg.getBoundingClientRect(),dx=(e.clientX-pointer.x)/r.width*pointer.view.w,dy=(e.clientY-pointer.y)/r.height*pointer.view.h;view.x=Math.max(0,Math.min(1800-view.w,pointer.view.x-dx));view.y=Math.max(0,Math.min(1160-view.h,pointer.view.y-dy));applyView()});
+svg.addEventListener("pointerup",()=>{pointer=null;svg.classList.remove("dragging")});svg.addEventListener("pointercancel",()=>{pointer=null;svg.classList.remove("dragging")});
+svg.addEventListener("wheel",e=>{e.preventDefault();zoom(e.deltaY<0?.9:1.1)},{passive:false});
+save();renderTasks();
 </script></body></html>
