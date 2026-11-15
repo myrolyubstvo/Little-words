@@ -1,0 +1,40 @@
+name: Import generated world artwork (one-time)
+on:
+  push:
+    paths:
+      - ".github/workflows/import-world-art.yml"
+permissions:
+  contents: write
+jobs:
+  bring-map-into-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Fetch approved generated map into game assets
+        env:
+          MAP_IMAGE_URL: "https://pikaso.cdnpk.net/private/production/6045938481/3872858304.png?token=exp=1794960000~hmac=000618c2c6ac3d568f3189e215352f3e7b994d980926f14d358d777308a1aaf5"
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          curl --fail --location --retry 3 --max-time 120 "$MAP_IMAGE_URL" --output assets/wish-wander-map.png
+          python3 - <<'PY'
+          import os,struct
+          p="assets/wish-wander-map.png"
+          with open(p,"rb") as f:
+              header=f.read(24)
+          assert header[:8]==b"\x89PNG\r\n\x1a\n", "Image is not a PNG"
+          w,h=struct.unpack(">II",header[16:24])
+          assert w==1448 and h==1086,(w,h)
+          assert 300000 < os.path.getsize(p) < 20000000, "Image size unexpectedly changed"
+          print(f"Artwork verified: {w}x{h}, {os.path.getsize(p)} bytes")
+          PY
+      - name: Commit illustration into repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/wish-wander-map.png
+          if git diff --cached --quiet; then echo "Asset already present"; exit 0; fi
+          git commit -m "Add original illustrated Little Worlds city map"
+          git push
