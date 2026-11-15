@@ -40,7 +40,9 @@ function buildTree(id,cols,kind){
  if(kind==="pine"){
   for(let i=0;i<4;i++){
    const y=-82+i*20, half=14+i*12;
-   path(g,"M"+(-half)+" "+(y+29)+"v-10h10v-12h11v-12h"+(half*2-42)+"v12h11v12h10v10Z",cols[i%4]);
+   rect(g,-half+12,y-7,2*(half-12),12,cols[3]);
+   rect(g,-half+6,y+5,2*(half-6),12,cols[i%3]);
+   rect(g,-half,y+17,2*half,10,cols[(i+1)%4]);
    rect(g,-half+12,y+12,7,5,cols[3],{opacity:".65"});
   }
  } else if(kind==="palm"){
@@ -68,7 +70,7 @@ function buildTree(id,cols,kind){
   if(kind==="blossom"){for(let i=0;i<11;i++)rect(g,-31+(i*13)%60,-61+(i*17)%37,6,5,"#f7d8d2");}
  }
 }
-treeKinds.forEach(t=>buildTree(...t));
+treeKinds.forEach(t=>buildTree(t[0],t[1],t[0]));
 function buildBush(id,cols){
  const g=pixel("lw-bush-"+id);
  rect(g,-25,-5,54,13,"#5b6b46",{opacity:".16"});
