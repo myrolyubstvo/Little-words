@@ -48,45 +48,48 @@ function complete(i){if(state.done.includes(i))return;state.done.push(i);state.p
 function show(page){document.querySelectorAll("main section").forEach(s=>s.classList.toggle("hidden",s.id!==page));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));if(page==="city")setTimeout(resizeMap,30)}
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.page)));document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.go)));
 const canvas=document.getElementById("city-map"),ctx=canvas.getContext("2d");
-const W=36,H=25,TW=48,TH=25;let scale=1,ox=0,oy=0,drag=null,spots=[];
+const W=44,H=32,TW=48,TH=25;let scale=1,ox=0,oy=0,drag=null,spots=[];
 const places=[
 {x:5,y:8,name:"Frostwood",desc:"A quiet winter neighbourhood with snowy roofs, pine trees, a frozen pond and warm little cafés.",kind:"district"},
 {x:12,y:7,name:"Spring Gardens",desc:"Blossom-lined streets, flower stalls, greenhouses and a beautiful public garden.",kind:"district"},
 {x:19,y:16,name:"Sunmarket",desc:"A bright summer quarter with outdoor restaurants, colourful awnings and lively squares.",kind:"district"},
 {x:25,y:8,name:"Old Autumn Quarter",desc:"Golden trees, old bookshops, museums and winding streets paved with warm stone.",kind:"district"},
-{x:32,y:13,name:"The Coast",desc:"A seaside neighbourhood with a sandy beach, harbour, boardwalk and little seafood cafés.",kind:"district"},
-{x:12,y:13,name:"The Clock Tower",desc:"A grand clock tower inspired by London's Big Ben, standing above the central square.",kind:"landmark"},
-{x:24,y:13,name:"The Colosseum",desc:"A huge ancient amphitheatre inspired by Rome's Colosseum, now surrounded by a public plaza.",kind:"landmark"},
-{x:32,y:18,name:"Seaglass Beach",desc:"A wide sandy beach with a promenade, beach huts and a view across the sea.",kind:"landmark"}
+{x:40,y:13,name:"The Coast",desc:"A seaside neighbourhood with a sandy beach, harbour, boardwalk and little seafood cafés.",kind:"district"},
+{x:15,y:13,name:"The Clock Tower",desc:"A grand clock tower inspired by London's Big Ben, standing above the central square.",kind:"landmark"},
+{x:29,y:15,name:"The Colosseum",desc:"A huge ancient amphitheatre inspired by Rome's Colosseum, now surrounded by a public plaza.",kind:"landmark"},
+{x:40,y:18,name:"Seaglass Beach",desc:"A wide sandy beach with a promenade, beach huts and a view across the sea.",kind:"landmark"}
 ];
-function zone(x){return x<7?"winter":x<14?"spring":x<21?"summer":x<28?"autumn":"coast"}
+function zone(x){return x<8?"winter":x<17?"spring":x<26?"summer":x<35?"autumn":"coast"}
 function iso(x,y){return{x:(x-y)*TW/2,y:(x+y)*TH/2}}
-function poly(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=.7;ctx.stroke()}}
-function tile(x,y,z){let p=iso(x,y),c={winter:"#e6edf0",spring:"#b8d4ad",summer:"#d7c58e",autumn:"#c99b70",coast:"#e8d5a0"}[z];if(z==="coast"&&x>=31)c="#8ebdca";poly([{x:p.x,y:p.y},{x:p.x+TW/2,y:p.y+TH/2},{x:p.x,y:p.y+TH},{x:p.x-TW/2,y:p.y+TH/2}],c,"rgba(70,75,70,.10)");}
-function tree(x,y,z,i){let p=iso(x,y),h=z==="winter"?25:22;ctx.fillStyle="#76604d";ctx.fillRect(p.x-2,p.y-13,4,14);let col=z==="winter"?"#54766b":z==="spring"?"#efb5bd":z==="summer"?"#648e58":"#c47742";ctx.fillStyle=col;ctx.beginPath();ctx.arc(p.x,p.y-18,8+(i%3),0,Math.PI*2);ctx.fill();if(z==="winter"){ctx.fillStyle="#f8fbfc";ctx.beginPath();ctx.arc(p.x-3,p.y-22,4,0,Math.PI*2);ctx.fill()}}
-function building(x,y,z,w=1,h=1,kind="house"){let p=iso(x,y),bw=TW*.72*w,bh=TH*.65*w,wall={winter:"#d7dce0",spring:"#e8d9ca",summer:"#e5c99f",autumn:"#c99f7f",coast:"#f0e6d5"}[z],roof={winter:"#60747d",spring:"#b66e70",summer:"#c16f50",autumn:"#795d50",coast:"#5d8790"}[z];let left={x:p.x-bw/2,y:p.y-bh/2},right={x:p.x+bw/2,y:p.y-bh/2},back={x:p.x,y:p.y-bh};
-poly([{x:left.x,y:left.y},{x:p.x,y:p.y+bh*.35},{x:p.x,y:p.y+bh*.35-TH*h},{x:left.x,y:left.y-TH*h}],wall);
-poly([{x:p.x,y:p.y+bh*.35},{x:right.x,y:right.y},{x:right.x,y:right.y-TH*h},{x:p.x,y:p.y+bh*.35-TH*h}],wall);
-poly([{x:left.x,y:left.y-TH*h},{x:p.x,y:p.y-bh/2-TH*h},{x:p.x+bw/2,y:p.y-bh/2-TH*h},{x:right.x,y:right.y-TH*h}],roof);
-poly([{x:left.x,y:left.y-TH*h},{x:p.x,y:p.y-bh/2-TH*h-12*w},{x:p.x+bw/2,y:p.y-bh/2-TH*h}],roof);
-ctx.fillStyle="#665b54";ctx.fillRect(p.x-4,p.y-13,7,13);ctx.fillStyle="#f3d9a2";ctx.fillRect(p.x-15,p.y-TH*h+8,6,8);ctx.fillRect(p.x+7,p.y-TH*h+8,6,8);
-if(kind==="tower"){ctx.fillStyle="#d6c6a4";ctx.fillRect(p.x-10,p.y-TH*3,20,TH*3);ctx.fillStyle="#6f5c4e";ctx.fillRect(p.x-8,p.y-TH*3-12,16,12);ctx.fillStyle="#f7edcf";ctx.beginPath();ctx.arc(p.x,p.y-TH*2.1,5,0,Math.PI*2);ctx.fill();ctx.fillStyle="#4e514e";ctx.fillRect(p.x-1,p.y-TH*2.1-4,2,5)}
-if(kind==="arena"){ctx.fillStyle="#b98155";ctx.beginPath();ctx.ellipse(p.x,p.y-9,26,13,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#e0b88e";ctx.beginPath();ctx.ellipse(p.x,p.y-12,19,8,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#8b6049";ctx.beginPath();ctx.ellipse(p.x,p.y-13,10,4,0,0,Math.PI*2);ctx.fill()}
-}
-function drawMap(){if(!canvas.width)return;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle="#b8d5dc";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.setTransform(scale,0,0,scale,ox,oy);
-for(let y=0;y<H;y++)for(let x=0;x<W;x++){let z=zone(x);tile(x,y,z)}
-// beach edge and sea foam
-for(let y=0;y<H;y++){let p=iso(29,y);ctx.strokeStyle="#f4ead0";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(p.x+TW/2,p.y+TH/2);ctx.lineTo(p.x+TW/2+8,p.y+TH/2+TH);ctx.stroke()}
-spots=[];
-for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){let z=zone(x);let seed=(x*17+y*31)%23;if(seed===2||seed===8)tree(x,y,z,seed);if(seed===5||seed===15)building(x,y,z,1,1)}
-// named landmark buildings
-building(12,13,"spring",1.7,3,"tower");building(24,13,"autumn",2.1,1.1,"arena");
-// piers and beach huts
-for(let i=0;i<4;i++){let p=iso(31+i%2,16+i*2);ctx.fillStyle="#9b785f";ctx.fillRect(p.x-12,p.y-3,24,5);building(32,5+i*4,"coast",.7,.7)}
-// region labels
-const labels=[["FROSTWOOD",4,3],["SPRING GARDENS",12,3],["SUNMARKET",19,21],["OLD AUTUMN QUARTER",24,3],["THE COAST",32,3]];
-ctx.textAlign="center";ctx.font="bold 12px Arial";for(let [t,x,y] of labels){let p=iso(x,y);ctx.fillStyle="rgba(255,255,255,.78)";ctx.fillText(t,p.x,p.y-20)}
-for(let a of places){let p=iso(a.x,a.y);spots.push({x:p.x,y:p.y,place:a});ctx.fillStyle=a.kind==="landmark"?"#fff8e7":"#fffdf6";ctx.strokeStyle="#786b5d";ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(p.x,p.y-25,7,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle="#51463f";ctx.font="11px Arial";ctx.textAlign="center";ctx.fillText(a.name,p.x,p.y-38)}
+function poly(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=.8;ctx.stroke()}}
+function groundTile(x,y,z){let p=iso(x,y),c={winter:"#dce7e8",spring:"#b9d3ad",summer:"#d9c58f",autumn:"#c99c75",coast:"#e8d3a1"}[z];if(z==="coast"&&x>=37)c="#8dbbc6";poly([{x:p.x,y:p.y},{x:p.x+TW/2,y:p.y+TH/2},{x:p.x,y:p.y+TH},{x:p.x-TW/2,y:p.y+TH/2}],c,"rgba(85,75,65,.10)")}
+function roadTile(x,y){let p=iso(x,y);poly([{x:p.x,y:p.y},{x:p.x+TW/2,y:p.y+TH/2},{x:p.x,y:p.y+TH},{x:p.x-TW/2,y:p.y+TH/2}],"#b7aaa0","rgba(255,255,255,.18)");ctx.strokeStyle="#e7d9c8";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x-9,p.y+TH/2);ctx.lineTo(p.x+9,p.y+TH/2);ctx.stroke()}
+function parkTile(x,y,z){let p=iso(x,y);poly([{x:p.x,y:p.y},{x:p.x+TW/2,y:p.y+TH/2},{x:p.x,y:p.y+TH},{x:p.x-TW/2,y:p.y+TH/2}],z==="spring"?"#9fca9c":z==="autumn"?"#c7a477":"#91b58b","rgba(255,255,255,.2)")}
+function tree(x,y,z,i){let p=iso(x,y),col=z==="winter"?"#54776c":z==="spring"?"#e7aab6":z==="summer"?"#5c8959":"#c47742";ctx.fillStyle="#78604c";ctx.fillRect(p.x-2,p.y-12,4,14);ctx.fillStyle=col;ctx.beginPath();ctx.arc(p.x,p.y-18,8+(i%3),0,Math.PI*2);ctx.fill();ctx.fillStyle="rgba(255,255,255,.22)";ctx.beginPath();ctx.arc(p.x-3,p.y-21,3,0,Math.PI*2);ctx.fill();if(z==="winter"){ctx.fillStyle="#f8fbfc";ctx.beginPath();ctx.arc(p.x+3,p.y-23,4,0,Math.PI*2);ctx.fill()}}
+function house(x,y,z,variant=0){let p=iso(x,y),w=variant%3===0?27:23,h=variant%3===1?35:28;let walls=[["#d4dce0","#e7ecec"],["#e8d7c7","#f4e6d8"],["#e5c99c","#f2dfba"],["#bd9276","#d6ae8e"],["#eee2ce","#f8efdf"]],roofs=["#60717a","#a95f61","#b66b4e","#76584d","#63858a"];let c=walls[z==="winter"?0:z==="spring"?1:z==="summer"?2:z==="autumn"?3:4],r=roofs[z==="winter"?0:z==="spring"?1:z==="summer"?2:z==="autumn"?3:4];let a={x:p.x-w/2,y:p.y-6},b={x:p.x+w/2,y:p.y-6};poly([{x:a.x,y:a.y},{x:p.x,y:p.y+8},{x:p.x,y:p.y-h+8},{x:a.x,y:a.y-h}],c[0]);poly([{x:p.x,y:p.y+8},{x:b.x,y:b.y},{x:b.x,y:b.y-h},{x:p.x,y:p.y-h+8}],c[1]);poly([{x:a.x,y:a.y-h},{x:p.x,y:p.y-h-13},{x:b.x,y:b.y-h},{x:p.x,y:p.y-h+8}],r);ctx.fillStyle="#594b43";ctx.fillRect(p.x-4,p.y-17,7,17);ctx.fillStyle="#f6d99f";ctx.fillRect(p.x-14,p.y-h+5,6,8);ctx.fillRect(p.x+7,p.y-h+5,6,8);ctx.strokeStyle="rgba(80,60,50,.35)";ctx.strokeRect(p.x-14,p.y-h+5,6,8);ctx.strokeRect(p.x+7,p.y-h+5,6,8);if(variant%4===0){ctx.fillStyle=r;ctx.fillRect(p.x+10,p.y-h-7,5,12)}}
+function landmark(x,y,kind){let p=iso(x,y);if(kind==="clock"){house(x,y,"spring",2);ctx.fillStyle="#d5c19c";ctx.fillRect(p.x-9,p.y-105,18,79);ctx.fillStyle="#9d7d60";ctx.beginPath();ctx.moveTo(p.x-12,p.y-105);ctx.lineTo(p.x,p.y-123);ctx.lineTo(p.x+12,p.y-105);ctx.fill();ctx.fillStyle="#fff0c9";ctx.beginPath();ctx.arc(p.x,p.y-83,6,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#66554a";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(p.x,p.y-83);ctx.lineTo(p.x+3,p.y-87);ctx.stroke()}else{ctx.fillStyle="#b97e54";ctx.beginPath();ctx.ellipse(p.x,p.y-14,38,20,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#e0b38b";ctx.beginPath();ctx.ellipse(p.x,p.y-18,29,14,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#80604d";ctx.beginPath();ctx.ellipse(p.x,p.y-20,17,8,0,0,Math.PI*2);ctx.fill();for(let i=-2;i<=2;i++){ctx.fillStyle="#6e5141";ctx.fillRect(p.x+i*11-3,p.y-28,6,13)}}}
+function drawMap(){if(!canvas.width)return;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle="#a9cbd2";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.setTransform(scale,0,0,scale,ox,oy);
+for(let y=0;y<H;y++)for(let x=0;x<W;x++)groundTile(x,y,zone(x));
+// A connected street grid with small irregular side lanes.
+for(let y=0;y<H;y++)for(let x=0;x<W;x++){if([4,10,16,22,28].includes(y)||[3,9,15,21,27,33,39].includes(x))roadTile(x,y)}
+// public gardens and squares
+for(let y=5;y<9;y++)for(let x=11;x<14;x++)parkTile(x,y,"spring");
+for(let y=18;y<22;y++)for(let x=18;x<22;x++)parkTile(x,y,"summer");
+for(let y=5;y<9;y++)for(let x=29;x<32;x++)parkTile(x,y,"autumn");
+// buildings placed deliberately inside city blocks
+for(let y=1;y<H-2;y++)for(let x=1;x<W-2;x++){let road=[4,10,16,22,28].includes(y)||[3,9,15,21,27,33,39].includes(x);let park=(x>=11&&x<=14&&y>=5&&y<=9)||(x>=18&&x<=22&&y>=18&&y<=22)||(x>=29&&x<=32&&y>=5&&y<=9);let coast=x>=37;if(!road&&!park&&((x+y*3)%4!==0)){if(coast&&x>39)continue;house(x,y,zone(x),(x*7+y*11)%7)}}
+// trees in parks, boulevards and seasonal streets
+for(let i=0;i<13;i++){tree(11+i%3,5+Math.floor(i/3),"spring",i);tree(18+i%4,18+Math.floor(i/4),"summer",i);tree(29+i%3,5+Math.floor(i/3),"autumn",i)}
+for(let y=1;y<H-1;y+=3){tree(1,y,"winter",y);tree(7,y,"winter",y+1);tree(35,y,"autumn",y)}
+// Central civic square and two major landmarks
+landmark(15,13,"clock");landmark(29,15,"arena");
+// Waterfront: promenade, piers, beach and harbour buildings
+for(let y=0;y<H;y++){let p=iso(37,y);ctx.strokeStyle="#f8edcf";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(p.x+TW/2,p.y+TH/2);ctx.lineTo(p.x+TW/2+4,p.y+TH/2+TH);ctx.stroke()}
+for(let i=0;i<4;i++){let p=iso(39,5+i*5);ctx.fillStyle="#98785d";ctx.fillRect(p.x-3,p.y-2,47,5);house(40,4+i*5,"coast",i)}
+// district signboards
+const labels=[["FROSTWOOD",4,2],["SPRING GARDENS",13,2],["SUNMARKET",22,25],["OLD AUTUMN QUARTER",30,2],["THE COAST",40,2]];
+ctx.textAlign="center";ctx.font="bold 13px Georgia";for(let [t,x,y] of labels){let p=iso(x,y);ctx.fillStyle="rgba(255,250,238,.9)";ctx.fillRect(p.x-65,p.y-30,130,22);ctx.fillStyle="#594e47";ctx.fillText(t,p.x,p.y-14)}
+spots=[];for(let a of places){let p=iso(a.x,a.y);spots.push({x:p.x,y:p.y,place:a});ctx.fillStyle="#fff6df";ctx.strokeStyle="#806b58";ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y-26,7,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle="#4d453e";ctx.font="12px Georgia";ctx.textAlign="center";ctx.fillText(a.name,p.x,p.y-41)}
 }
 function resizeMap(){let r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);canvas.width=r.width*dpr;canvas.height=r.height*dpr;const worldW=(W+H)*TW/2,worldH=(W+H)*TH/2;scale=Math.min(canvas.width/(worldW+180),canvas.height/(worldH+120))*1.65;scale=Math.max(.48,Math.min(scale,1.05));ox=(canvas.width-worldW*scale)/2+20;oy=(canvas.height-worldH*scale)/2+15;drawMap()}
 function canvasPoint(e){let r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}}
