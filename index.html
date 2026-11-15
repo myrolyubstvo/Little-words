@@ -72,7 +72,7 @@ p{color:#64717a;line-height:1.7}
 <div class="layout"><nav class="nav" aria-label="Game sections"><button class="active" data-page="home">Home</button><button data-page="city">Explore the city</button><button data-page="people">People</button><button data-page="life">Daily life</button><button data-page="journal">Journal</button></nav><main>
 <section id="home"><div class="panel hero"><div><div class="eyebrow">Your story starts here</div><h2>A city with a life of its own.</h2><p>Wander sunlit streets, find hidden courtyards and meet the people who call it home.</p><button class="button" data-go="city">Enter the city</button></div></div><div class="panel"><div class="eyebrow">A note for today</div><h2>There is no rush.</h2><p>Wander, meet people and make a life that feels like yours. Exploring is always free.</p></div></section>
 <section id="city" class="hidden">
-<div class="city-heading"><div><div class="eyebrow">A Mediterranean city, made for wandering</div><h2>Wish & Wander</h2></div><div class="note">One continuous coastal city · Drag, pinch and twist to explore</div></div>
+<div class="city-heading"><div><div class="eyebrow">A Mediterranean city, made for wandering</div><h2>Wish & Wander</h2></div><div class="note">Three times the original city · Drag, pinch and twist to explore</div></div>
 <div class="map-shell" id="map-shell"><svg id="city-art" viewBox="0 0 19800 13860" role="img" aria-label="Pixel-art Mediterranean city with Barcelona-inspired architecture, scattered seasonal gardens, beach, plazas and walking residents">
 <defs>
 <pattern id="sand" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#e6d0a8"/><path d="M3 5h3M15 17h4M8 21h2" stroke="#c9b184" stroke-width="2"/></pattern>
@@ -134,7 +134,7 @@ p{color:#64717a;line-height:1.7}
 </svg></div>
 <div class="map-legend"><span class="legend-chip">❄ Snowy gardens</span><span class="legend-chip">✿ Spring blossom</span><span class="legend-chip">☀ Sunlit plazas</span><span class="legend-chip">🍂 Autumn courtyards</span><span class="legend-chip">♧ Mediterranean coast</span></div>
 <div class="place-card" id="place-card"><strong>Welcome to Wish & Wander</strong><p>One connected city of winding streets, old squares, seasonal gardens, a river, a harbour and a long sandy beach. Tap a place marker to explore.</p></div>
-<p class="map-help">Drag with one finger to move around the city. Pinch two fingers to zoom and twist them to rotate. Tap a marker to discover a place.</p>
+<p class="map-help">Drag with one finger to explore the larger city, including 16 new neighbourhoods to the east and south. Pinch two fingers to zoom, twist to rotate, and tap markers to discover places.</p>
 </section>
 <section id="people" class="hidden">
 <div class="city-heading"><div><div class="eyebrow">The residents of Wish & Wander</div><h2>People & stories</h2><p>Get to know the people who make the city feel alive.</p></div><div class="note">CHARACTER COLLECTION · 01 RESIDENT</div></div>
@@ -517,7 +517,7 @@ newPlaces.forEach((p,i)=>{const g=el("g",{transform:"translate("+p.x+" "+p.y+")"
 let tick=0;function animatePeople(){tick+=1;sprites.forEach((s,i)=>{const r=s.route,phase=(tick*s.speed+s.offset)%(r.length*2),back=phase>r.length,dist=back?r.length*2-phase:phase,x=r.x+(r.dx?dist*r.dx:0),y=r.y+(r.dy?dist*r.dy:0);s.g.setAttribute("transform","translate("+x+" "+y+")"+(back?" scale(-1 1)":""));const leg=(Math.floor(tick/5+i)%2)?1:-1;s.g.children[5].setAttribute("x",-3+leg);s.g.children[6].setAttribute("x",2-leg)});requestAnimationFrame(animatePeople)}requestAnimationFrame(animatePeople);
 // Map camera: directly manipulated by touch or mouse, with no on-screen controls.
 let view={x:0,y:0,w:19800,h:13860},rotation=0;
-const WORLD_W=19800,WORLD_H=13860;
+const WORLD_W=33600,WORLD_H=24600,CAMERA_RATIO=13860/19800;
 function clampView(){
  view.x=Math.max(0,Math.min(WORLD_W-view.w,view.x));
  view.y=Math.max(0,Math.min(WORLD_H-view.h,view.y));
@@ -551,7 +551,7 @@ function focusOnWorldPoint(anchor,clientX,clientY){
 function zoomAt(f,clientX,clientY){
  const anchor=pointInWorld(clientX,clientY);
  view.w=Math.max(520,Math.min(WORLD_W,view.w*f));
- view.h=view.w*WORLD_H/WORLD_W;
+ view.h=view.w*CAMERA_RATIO;
  focusOnWorldPoint(anchor,clientX,clientY);
 }
 // Mouse drag and wheel zoom for laptops and desktop browsers.
@@ -620,7 +620,7 @@ function moveTouch(e){
   if(!touchMoved)return;
   const ratio=d/g.d;
   view={...g.view,w:Math.max(520,Math.min(WORLD_W,g.view.w/ratio))};
-  view.h=view.w*WORLD_H/WORLD_W;
+  view.h=view.w*CAMERA_RATIO;
   rotation=g.rotation+da*180/Math.PI;
   focusOnWorldPoint(g.anchor,mx,my);
  }
@@ -639,4 +639,6 @@ mapShell.addEventListener("touchcancel",endTouch,{passive:false});
 svg.addEventListener("dblclick",e=>e.preventDefault());
  for(const name of ["gesturestart","gesturechange","gestureend"]){svg.addEventListener(name,e=>e.preventDefault(),{passive:false})}
  save();renderTasks();
-</script></body></html>
+</script>
+<script src="./city-expansion.js?v=3"></script>
+</body></html>
