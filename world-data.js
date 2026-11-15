@@ -186,6 +186,20 @@ for(let by=8;by<N-8;by+=10){
   }
  }
 }
+// Street-facing infill keeps the compact town composed as neighbourhoods, not isolated houses.
+let infillCount=0;
+for(let y=7;y<N-8;y+=5)for(let x=7;x<N-8;x+=5){
+ if(infillCount>=200||hash(x,y,601)>.74)continue;
+ const bw=3,bh=3;
+ if(!clearFootprint(x,y,bw,bh))continue;
+ let park=false;for(let yy=y;yy<y+bh;yy++)for(let xx=x;xx<x+bw;xx++)if(terrain[coord(xx,yy)]===TERRAIN.PARK)park=true;
+ if(park)continue;
+ const door=doorFor({x,y,w:bw,h:bh});
+ if(Math.abs(door.x-(x+bw/2))+Math.abs(door.y-(y+bh))>5)continue;
+ const r=hash(x,y,602),kind=r<.45?"house":r<.67?"cafe":r<.83?"shop":"bakery";
+ const name=labels[kind][Math.floor(hash(x,y,603)*labels[kind].length)];
+ occupy({x,y,w:bw,h:bh,kind,name,door,biome:biomes[coord(x,y)],description:kind==="house"?"A lovingly kept home with flowering balconies and a quiet little courtyard.":"An independent neighbourhood shop with a welcoming doorway and a sunlit display.",enterable:true,landmark:false});infillCount++;
+}
 // Deterministic independent ground objects: rocks, flowers, trees, palms, benches and lamps.
 for(let y=3;y<N-3;y+=2){
  for(let x=3;x<N-3;x+=2){
@@ -222,6 +236,11 @@ for(let y=4;y<N-4;y+=2)for(let x=4;x<N-4;x+=2){
  const k=coord(x,y),t=terrain[k],biome=biomes[k],r=hash(x,y,181);
  if(occupied[k]>=0||t===TERRAIN.WATER||t===TERRAIN.RIVER||t===TERRAIN.BRIDGE)continue;
  const winter=biome===B.WINTER,warm=biome===B.SUMMER||biome===B.COAST;
+ if(t===TERRAIN.ROAD||t===TERRAIN.PATH){
+  const edge=[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>inBounds(x+dx,y+dy)&&!isStreet(x+dx,y+dy));
+  if(!edge||r>.09)continue;
+  objects.push({x,y,kind:r<.035?"lantern":r<.065?"planter":"bench",biome,variant:Math.floor(hash(x,y,182)*4)});continue;
+ }
  const paved=t===TERRAIN.ROAD||t===TERRAIN.PATH||t===TERRAIN.PLAZA;
  let kind;
  if(paved){
@@ -298,7 +317,7 @@ function findPath(ax,ay,bx,by){
  for(let p=g;p>=0;p=prev[p]){route.push({x:p%N,y:(p/N)|0});if(p===s)break}
  route.reverse();return route;
 }
-const initial=closestWalkable(156*designScale,164*designScale,true)||closestWalkable(156*designScale,164*designScale);
+const initial=closestWalkable(145*designScale,175*designScale,true)||closestWalkable(145*designScale,175*designScale);
 const seasonCounts=[0,0,0,0,0];
 for(let i=0;i<LENGTH;i++)if(terrain[i]!==TERRAIN.WATER)seasonCounts[biomes[i]]++;
 window.LWWorldData={

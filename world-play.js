@@ -10,15 +10,21 @@ hud.className="lw-hud";hud.append(levelBadge,questBadge);stage.append(hud);
 const regionNav=document.createElement("div");regionNav.className="lw-regions";
 regionNav.setAttribute("aria-label","Explore climate regions");
 const regionLabel=document.createElement("span");regionLabel.className="lw-region-label";
-for(const [label,x,y] of [["☀ Barcelona quarter",156,164],["❄ Frostglass",45,48],["❄ Snowbell",165,248],["☀ Mediterranean coast",270,185]]){
+for(const [label,x,y] of [["☀ Barcelona quarter",145,175],["❄ Frostglass",45,48],["❄ Snowbell",165,248],["☀ Mediterranean coast",270,185]]){
  const button=document.createElement("button");button.type="button";button.textContent=label;
  button.addEventListener("click",e=>{
-  e.stopPropagation();cam.x=Math.round(x*W.designScale)*T+T/2;cam.y=Math.round(y*W.designScale)*T+T/2;cam.zoom=.7;pop.hidden=true;R.markDirty();
+  e.stopPropagation();player.path=[];
+  cam.x=Math.round(x*W.designScale)*T+T/2;cam.y=Math.round(y*W.designScale)*T+T/2;cam.zoom=R.initialZoom;cam.rotation=0;
+  const place=label.includes("Frostglass")?W.landmarks.find(l=>l.name==="Frostglass Lodge"):label.includes("Snowbell")?W.landmarks.find(l=>l.name==="Snowbell Square"):null;
+  if(place){cam.x=(place.x+place.w/2)*T;cam.y=(place.y+place.h*.65)*T;}
+  for(const b of regionNav.querySelectorAll("button"))b.setAttribute("aria-pressed",String(b===button));pop.hidden=true;R.markDirty();
  });regionNav.append(button);
 }
 const overviewButton=document.createElement("button");overviewButton.type="button";overviewButton.textContent="Whole map";
 overviewButton.addEventListener("click",e=>{
- e.stopPropagation();cam.x=W.SIZE/2;cam.y=W.SIZE/2;
+ e.stopPropagation();player.path=[];
+ for(const b of regionNav.querySelectorAll("button"))b.setAttribute("aria-pressed",String(b===overviewButton));
+ cam.x=W.SIZE/2;cam.y=W.SIZE/2;
  cam.zoom=Math.min(screen.w,screen.h)/W.SIZE*.94;cam.rotation=0;pop.hidden=true;R.markDirty();
 });
 regionNav.append(overviewButton,regionLabel);stage.append(regionNav);
