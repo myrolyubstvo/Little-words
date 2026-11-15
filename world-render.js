@@ -192,20 +192,48 @@ function worldAt(x,y){
  return{x:camera.x+dx*c+dy*s,y:camera.y-dx*s+dy*c};
 }
 function keepAt(world,x,y,zoom=camera.zoom,rotation=camera.rotation){
- camera.zoom=Math.max(.085,Math.min(2.4,zoom));camera.rotation=rotation;
+ camera.zoom=Math.max(.045,Math.min(2.4,zoom));camera.rotation=rotation;
  const dx=(x-screen.w/2)/camera.zoom,dy=(y-screen.h/2)/camera.zoom;
  const c=Math.cos(rotation),s=Math.sin(rotation);
  camera.x=Math.max(0,Math.min(S,world.x-dx*c-dy*s));
  camera.y=Math.max(0,Math.min(S,world.y+dx*s-dy*c));dirty=true;
 }
 function visibleRadius(){return Math.hypot(screen.w,screen.h)/camera.zoom*.55;}
+let overview=null;
+function overviewArt(){
+ if(overview)return overview;
+ overview=document.createElement("canvas");overview.width=1280;overview.height=1280;
+ const c=overview.getContext("2d",{alpha:false}),unit=4;
+ for(let y=0;y<w.N;y++)for(let x=0;x<w.N;x++){
+  const k=w.coord(x,y),b=w.biomes[k],t=w.terrain[k],p=paints[b];
+  const col=t===TT.WATER?"#519cac":t===TT.RIVER?"#76b2bb":
+   t===TT.SAND?"#e9d09d":t===TT.PLAZA?"#d3b99d":
+   t===TT.ROAD||t===TT.PATH?"#ddc9a8":
+   t===TT.PARK?p.c:t===TT.BRIDGE?"#ac8b68":p.a;
+  rect(c,x*unit,y*unit,unit,unit,col);
+ }
+ for(const b of w.buildings){
+  const roof=paints[b.biome].roof[0];
+  rect(c,b.x*unit,b.y*unit,b.w*unit,b.h*unit,roof);
+  rect(c,b.x*unit+2,b.y*unit+2,Math.max(1,b.w*unit-4),Math.max(1,b.h*unit-4),paints[b.biome].roof[1]);
+ }
+ for(const o of w.objects){
+  if(o.kind!=="tree"&&o.kind!=="palm")continue;
+  rect(c,o.x*unit,o.y*unit,4,4,paints[o.biome].d);
+ }
+ return overview;
+}
 function draw(){
  if(!screen.w||!screen.h)return;
  ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle="#569cac";ctx.fillRect(0,0,ground.width,ground.height);setup(ctx);
  const radius=visibleRadius();
- const minX=Math.max(0,Math.floor((camera.x-radius)/CP)),maxX=Math.min(maxCh-1,Math.floor((camera.x+radius)/CP));
- const minY=Math.max(0,Math.floor((camera.y-radius)/CP)),maxY=Math.min(maxCh-1,Math.floor((camera.y+radius)/CP));
- for(let cy=minY;cy<=maxY;cy++)for(let cx=minX;cx<=maxX;cx++)ctx.drawImage(chunk(cx,cy),cx*CP,cy*CP);
+ if(camera.zoom<.2){
+  ctx.drawImage(overviewArt(),0,0,S,S);
+ }else{
+  const minX=Math.max(0,Math.floor((camera.x-radius)/CP)),maxX=Math.min(maxCh-1,Math.floor((camera.x+radius)/CP));
+  const minY=Math.max(0,Math.floor((camera.y-radius)/CP)),maxY=Math.min(maxCh-1,Math.floor((camera.y+radius)/CP));
+  for(let cy=minY;cy<=maxY;cy++)for(let cx=minX;cx<=maxX;cx++)ctx.drawImage(chunk(cx,cy),cx*CP,cy*CP);
+ }
  for(const l of w.landmarks){
   const x=(l.x+l.w/2)*T,y=(l.y+l.h/2)*T;if(Math.hypot(x-camera.x,y-camera.y)>radius+140)continue;
   ctx.fillStyle="#fff2d8";ctx.strokeStyle="#725d49";ctx.lineWidth=7;
