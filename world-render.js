@@ -84,6 +84,19 @@ function artTile(c,x,y){
   if(b===B.SPRING&&h>.6)rect(c,xx+12,yy+23,6,5,"#e4a9b7");
   if(b===B.AUTUMN&&h>.5)rect(c,xx+27,yy+16,6,4,"#d38c4b");
  }
+ if(t!==TT.WATER&&t!==TT.RIVER){
+  for(let j=0;j<12;j++){
+   const px=xx+R(x,y,j+510)*46,py=yy+R(x,y,j+540)*46;
+   rect(c,px,py,1+j%2,1,b===B.WINTER?"#adcbd044":t===TT.GRASS||t===TT.PARK?"#3e754226":"#986a4824");
+  }
+ }
+ if(t===TT.ROAD||t===TT.PATH){
+  if(h>.91){
+   oval(c,xx+24,yy+24,10,8,"#9c8872");oval(c,xx+24,yy+23,8,6,"#bdac90");
+   for(let j=0;j<3;j++)rect(c,xx+19,yy+20+j*3,10,1,"#827d6d");
+  }
+ }
+
  if(b===B.WINTER&&t!==TT.WATER&&t!==TT.RIVER&&t!==TT.BRIDGE){
   if(t===TT.GRASS||t===TT.PARK){
    rect(c,xx+3,yy+5,29,5,"#f7ffff");rect(c,xx+19,yy+28,24,7,"#f7ffff");
@@ -227,6 +240,18 @@ function artBuilding(c,b){
    const a=j*Math.PI/6,px=cx+Math.cos(a)*W*.32,py=cy+Math.sin(a)*H*.3;
    ellipse(px,py,18,13,"#4e915e");ellipse(px-3,py-4,12,9,"#8bc86b");
   }
+  // Inlaid paths, planted flower beds and seating fill the civic garden.
+  for(let ring=0;ring<3;ring++){
+   c.strokeStyle=ring%2?"#c8aa7e":"#e3c493";c.lineWidth=2;c.beginPath();c.ellipse(cx,cy,W*(.16+ring*.075),H*(.15+ring*.07),0,0,Math.PI*2);c.stroke();
+  }
+  for(let j=0;j<12;j++){
+   const a=j*Math.PI/6,px=cx+Math.cos(a)*W*.32,py=cy+Math.sin(a)*H*.3;
+   for(let k=0;k<5;k++)rect(c,px-11+k*5,py-4+(k%2)*5,3,3,j%2?"#ffd991":"#e99d9a");
+   if(j%3===0){rect(c,px-19,py+20,38,4,"#8c6246");rect(c,px-19,py+26,38,4,"#b28c5c");rect(c,px-15,py+30,4,7,"#5e5645");rect(c,px+11,py+30,4,7,"#5e5645");}
+  }
+  oval(c,cx,cy+H*.24,30,17,"#a99574");oval(c,cx,cy+H*.24-3,27,15,"#f5ddb0");oval(c,cx,cy+H*.24-4,21,10,"#51b7ae");
+  rect(c,cx-3,cy+H*.24-29,6,25,"#d5c298");oval(c,cx,cy+H*.24-24,12,5,"#f6dfb0");
+  c.lineWidth=1;
   rect(c,cx-38,cy-52,76,116,"#493b38");rect(c,cx-32,cy-48,64,105,"#dea578");
   rect(c,cx-24,cy+20,48,37,"#9d7356");rect(c,cx-42,cy+55,84,10,"#f3cf96");
   c.beginPath();c.moveTo(cx-48,cy-48);c.lineTo(cx,cy-91);c.lineTo(cx+48,cy-48);c.closePath();c.fillStyle="#326d67";c.fill();
@@ -294,6 +319,34 @@ function artBuilding(c,b){
   rect(c,px,y+H-20,13,16,"#a65e44");rect(c,px-2,y+H-23,17,5,"#e69a6b");
   rect(c,px-2,y+H-32,17,11,"#438754");rect(c,px+3,y+H-37,8,9,"#81ba58");
   rect(c,px+1,y+H-30,4,4,"#ffd679");
+ }
+ // Extra craftsmanship: gutters, rivets, windowsills, doorplates and wall lanterns.
+ rect(c,x+W-11,front+12,4,H-roofH-18,"#786755");
+ rect(c,x+W-10,front+12,1,H-roofH-18,"#bdc0a1");
+ for(let yy=front+18;yy<y+H-10;yy+=18)rect(c,x+W-12,yy,7,2,"#4d5147");
+ rect(c,d+21,y+H-38,12,9,"#fce3a6");
+ c.fillStyle=ink;c.font="bold 6px monospace";c.textAlign="center";c.fillText(String(b.id+1),d+27,y+H-31);c.textAlign="start";
+ rect(c,d-26,y+H-47,3,16,ink);rect(c,d-30,y+H-45,10,12,ink);rect(c,d-28,y+H-43,6,7,"#ffdb86");
+ for(let xx=x+19;xx<x+W-30;xx+=52){
+  rect(c,xx,front+50,32,7,"#9d604a");rect(c,xx+2,front+48,28,4,"#4e854d");
+  for(let j=0;j<4;j++)rect(c,xx+4+j*7,front+45-(j%2)*2,4,4,j%2?"#f9cb76":"#e3a1a0");
+  rect(c,xx+4,front+29,6,1,"#ffffffa0");
+ }
+ // Moss and tiny chips soften the repeated roof tiles.
+ for(let j=0;j<18;j++){
+  const px=x+7+R(b.x,b.y,j+410)*(W-17),py=y+10+R(b.x,b.y,j+440)*(roofH-23);
+  rect(c,px,py,3+j%3,2,j%3?roofs[2]:"#7f8d64");
+ }
+ if(commercial){
+  // Pastries, cups and produce appear in the display windows.
+  for(let xx=x+20;xx<x+W-30;xx+=52){
+   rect(c,xx+1,front+42,23,3,"#cfaa70");
+   for(let j=0;j<3;j++)oval(c,xx+5+j*7,front+39,3,3,b.kind==="bakery"?"#e3ad58":j%2?"#ebce85":"#d98366");
+  }
+ }else if(b.id%3===0){
+  // Roof hatch with a framed glass pane and glint.
+  rect(c,x+W*.66,y+roofH*.5,22,24,ink);rect(c,x+W*.66+3,y+roofH*.5+3,16,18,"#77aaa6");
+  rect(c,x+W*.66+5,y+roofH*.5+4,3,13,"#e5f4d3");
  }
  // Regional architecture and small roof/facade details.
  for(let j=0;j<8;j++){
@@ -372,7 +425,7 @@ function visibleRadius(){return Math.hypot(screen.w,screen.h)/camera.zoom*.55;}
 let overview=null;
 function overviewArt(){
  if(overview)return overview;
- overview=document.createElement("canvas");overview.width=1280;overview.height=1280;
+ overview=document.createElement("canvas");overview.width=w.N*4;overview.height=w.N*4;
  const c=overview.getContext("2d",{alpha:false}),unit=4;
  for(let y=0;y<w.N;y++)for(let x=0;x<w.N;x++){
   const k=w.coord(x,y),b=w.biomes[k],t=w.terrain[k],p=paints[b];

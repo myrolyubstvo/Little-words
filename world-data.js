@@ -1,10 +1,10 @@
 /* Little Worlds: Wish & Wander — real, editable top-down game-world data.
-   Square 320x320 walkable tile grid, 48px tiles: 15,360 x 15,360 world.
+   Compact 226x226 walkable tile grid, 48px tiles: half the original area.
    Terrain, streets, buildings, landmarks, collision and paths are independent
    of any concept illustration. Deterministically generated for reproducibility. */
 (() => {
 "use strict";
-const N=320, T=48, LENGTH=N*N;
+const N=226, T=48, LENGTH=N*N, designScale=N/320;
 const TERRAIN={GRASS:0,ROAD:1,SAND:2,WATER:3,PARK:4,RIVER:5,BRIDGE:6,PLAZA:7,PATH:8};
 const B={SUMMER:0,SPRING:1,AUTUMN:2,WINTER:3,COAST:4};
 const terrain=new Uint8Array(LENGTH), biomes=new Uint8Array(LENGTH);
@@ -50,19 +50,19 @@ function street(x,y){
 }
 function rivX(y){return 111+16*Math.sin(y*.055)+8*Math.cos(y*.025)+y*.075}
 for(let y=0;y<N;y++)for(let x=0;x<N;x++){
- const k=coord(x,y),d=deltaSea(x,y);
- let biome=nearestBiome(x,y);
+ const k=coord(x,y),d=deltaSea(x/designScale,y/designScale)*designScale;
+ let biome=nearestBiome(x/designScale,y/designScale);
  if(d>-13)biome=B.COAST;
  biomes[k]=biome;
  let t=TERRAIN.GRASS;
- const isStreet=street(x,y);
+ const isStreet=street(x/designScale,y/designScale);
  if(d>0)t=TERRAIN.WATER;
  else if(d>-7)t=TERRAIN.SAND;
- else if(circleIn(x,y,plazas))t=TERRAIN.PLAZA;
- else if(circleIn(x,y,parks))t=TERRAIN.PARK;
+ else if(circleIn(x/designScale,y/designScale,plazas))t=TERRAIN.PLAZA;
+ else if(circleIn(x/designScale,y/designScale,parks))t=TERRAIN.PARK;
  else if(isStreet)t=TERRAIN.ROAD;
  // A long river threads the old quarter, with functional crossing bridges.
- if(y<225&&d<=-10&&Math.abs(x-rivX(y))<2.0){
+ if(y<225*designScale&&d<=-7&&Math.abs(x-rivX(y/designScale)*designScale)<1.65){
   t=(t===TERRAIN.ROAD||t===TERRAIN.PLAZA)?TERRAIN.BRIDGE:TERRAIN.RIVER;
  }
  // Walkable promenades follow the curved coastline.
@@ -138,7 +138,8 @@ function findBuildingPlot(x,y,w,h,allowPlaza=false){
  }
  return null;
 }
-for(const [name,kind,x,y,w,h,description] of landmarkSeeds){
+for(const [name,kind,seedX,seedY,w,h,description] of landmarkSeeds){
+ const x=Math.round(seedX*designScale),y=Math.round(seedY*designScale);
  const scenic=["beach","lighthouse","harbour"].includes(kind);
  const plot=scenic?(closestWalkable(x,y)||{x,y}):findBuildingPlot(x,y,w,h,true);
  if(!plot)continue;
@@ -161,8 +162,8 @@ const labels={
  bakery:["Forn de la Rosa","Panadería Sol","Forn del Raval","La Crosta Daurada"]
 };
 let created=0;
-for(let by=8;by<304;by+=12){
- for(let bx=8;bx<304;bx+=12){
+for(let by=8;by<N-8;by+=10){
+ for(let bx=8;bx<N-8;bx+=10){
   for(let q=0;q<4;q++){
    const r=hash(bx,by,q+17);
    if(r<.15)continue;
@@ -207,7 +208,7 @@ for(let y=3;y<N-3;y+=2){
    else if(r<.28)objects.push({x,y,kind:"shell",biome:B.COAST});
    continue;
   }
-  const nearCity=Math.hypot(x-155,y-150)<105;
+  const nearCity=Math.hypot(x-155*designScale,y-150*designScale)<105*designScale;
   const dense=t===TERRAIN.PARK?.34:nearCity?.13:.30;
   if(r<dense)objects.push({x,y,kind:"tree",biome:biomes[k],variant:Math.floor(hash(x,y,97)*4)});
   else if(r<dense+.11)objects.push({x,y,kind:"bush",biome:biomes[k]});
@@ -239,6 +240,15 @@ for(let y=4;y<N-4;y+=2)for(let x=4;x<N-4;x+=2){
   else if(r<.23)kind="lantern";
  }
  if(kind)objects.push({x,y,kind,biome,variant:Math.floor(hash(x,y,182)*4)});
+}
+for(const b of buildings){
+ for(const [dx,dy,kind] of [[-1,1,"planter"],[b.w,1,"garden"],[1,b.h,"signpost"],[b.w-1,-1,"fence"]]){
+  const x=b.x+dx,y=b.y+dy;
+  if(!inBounds(x,y))continue;
+  const k=coord(x,y);
+  if(occupied[k]>=0||![TERRAIN.GRASS,TERRAIN.PARK].includes(terrain[k]))continue;
+  objects.push({x,y,kind:b.biome===B.WINTER&&kind==="garden"?"logpile":kind,biome:b.biome,variant:b.id%4});
+ }
 }
 const streetCells=roadCells.filter(k=>{
  const x=k%N,y=(k/N)|0;return isStreet(x,y);
@@ -288,11 +298,11 @@ function findPath(ax,ay,bx,by){
  for(let p=g;p>=0;p=prev[p]){route.push({x:p%N,y:(p/N)|0});if(p===s)break}
  route.reverse();return route;
 }
-const initial=closestWalkable(156,164,true)||closestWalkable(156,164);
+const initial=closestWalkable(156*designScale,164*designScale,true)||closestWalkable(156*designScale,164*designScale);
 const seasonCounts=[0,0,0,0,0];
 for(let i=0;i<LENGTH;i++)if(terrain[i]!==TERRAIN.WATER)seasonCounts[biomes[i]]++;
 window.LWWorldData={
- N,T,SIZE:N*T,TERRAIN,B,terrain,biomes,occupied,buildings,landmarks,objects,streetCells,
+ N,T,designScale,SIZE:N*T,TERRAIN,B,terrain,biomes,occupied,buildings,landmarks,objects,streetCells,
  initial,seasonCounts,hash,coord,inBounds,isWalkable,isStreet,closestWalkable,findPath,
  info:{square:true,regionCount:5,buildings:buildings.length,landmarks:landmarks.length,
  tileCount:LENGTH,worldArea:N*T*N*T,previousArtArea:11200*8200}

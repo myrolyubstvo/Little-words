@@ -13,7 +13,7 @@ const regionLabel=document.createElement("span");regionLabel.className="lw-regio
 for(const [label,x,y] of [["☀ Barcelona quarter",156,164],["❄ Frostglass",45,48],["❄ Snowbell",165,248],["☀ Mediterranean coast",270,185]]){
  const button=document.createElement("button");button.type="button";button.textContent=label;
  button.addEventListener("click",e=>{
-  e.stopPropagation();cam.x=x*T+T/2;cam.y=y*T+T/2;cam.zoom=.7;pop.hidden=true;R.markDirty();
+  e.stopPropagation();cam.x=Math.round(x*W.designScale)*T+T/2;cam.y=Math.round(y*W.designScale)*T+T/2;cam.zoom=.7;pop.hidden=true;R.markDirty();
  });regionNav.append(button);
 }
 regionNav.append(regionLabel);stage.append(regionNav);
