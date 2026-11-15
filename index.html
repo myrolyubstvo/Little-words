@@ -4,6 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f4e9d6">
 <title>Little Worlds: Wish & Wander</title>
+<link rel="preload" as="image" href="./assets/wish-wander-map.png" type="image/png">
 <style>
 :root{--ink:#39352f;--muted:#81776b;--paper:#f5efe5;--panel:#fffaf1;--line:#e4d8c7;--terracotta:#b96f57;--sea:#82b9c0}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Georgia,serif}button{font:inherit;cursor:pointer}
@@ -640,6 +641,5 @@ svg.addEventListener("dblclick",e=>e.preventDefault());
  for(const name of ["gesturestart","gesturechange","gestureend"]){svg.addEventListener(name,e=>e.preventDefault(),{passive:false})}
  save();renderTasks();
 </script>
-<script src="./city-expansion.js?v=3"></script>
-<script src="./illustrated-map.js?v=1"></script>
+<script src="./illustrated-map.js?v=2"></script>
 </body></html>
