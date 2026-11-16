@@ -1,9 +1,9 @@
-/* Little Worlds: Wish & Wander — expanded, editable 112x112 top-down island.
+/* Little Worlds: Wish & Wander — expanded, editable 140x140 top-down island.
    Terrain, streets, buildings, landmarks, collision and paths are independent
    of any concept illustration. Deterministically generated for reproducibility. */
 (() => {
 "use strict";
-const N=112, T=48, LENGTH=N*N, designScale=N/320,layoutScale=N/160;
+const N=140, T=48, LENGTH=N*N, designScale=N/320,layoutScale=N/160;
 const TERRAIN={GRASS:0,ROAD:1,SAND:2,WATER:3,PARK:4,RIVER:5,BRIDGE:6,PLAZA:7,PATH:8,FIELD:9,ORCHARD:10,CLIFF:11,MEADOW:12};
 const B={SUMMER:0,SPRING:1,AUTUMN:2,WINTER:3,COAST:4};
 const terrain=new Uint8Array(LENGTH), biomes=new Uint8Array(LENGTH);
@@ -298,7 +298,7 @@ for(const d of [...newDesigns].sort((a,b)=>b.w*b.h-a.w*a.h)){
  designPlacements.push({id:d.id,buildingId:b.id});
 }
 let countryBuildings=0,fillerCount=0;
-for(let i=0;i<9000&&fillerCount<58;i++){
+for(let i=0;i<15000&&fillerCount<95;i++){
  const x=5+Math.floor(hash(i,620,1)*(N-13)),y=5+Math.floor(hash(i,620,2)*(N-13));
  const district=districts[coord(x,y)],w=3+(hash(i,620,3)>.75?1:0),h=3+(hash(i,620,4)>.65?1:0);
  if(!clearFootprint(x,y,w,h))continue;
@@ -312,7 +312,7 @@ for(let i=0;i<9000&&fillerCount<58;i++){
  addNeighbourhoodBuilding(x,y,w,h,kind,name,district===D.COUNTRY?"country":"village");fillerCount++;
 }
 // Small, uneven storefronts fill gaps along the old town lanes and station quarter.
-for(let i=0;i<6500&&fillerCount<88;i++){
+for(let i=0;i<11000&&fillerCount<160;i++){
  const x=8+Math.floor(hash(i,634,1)*(N-18)),y=8+Math.floor(hash(i,634,2)*(N-18)),district=districts[coord(x,y)];
  if(![D.TOWN,D.METRO,D.HARBOUR].includes(district)||!clearFootprint(x,y,2,2))continue;
  const d=doorFor({x,y,w:2,h:2});if(Math.abs(d.x-x-1)+Math.abs(d.y-y-2)>3)continue;
