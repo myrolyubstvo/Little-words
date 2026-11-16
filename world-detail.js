@@ -68,6 +68,27 @@ A.tile=function(c,x,y){
   c.fillStyle=b===W.B.WINTER?"#bdcdd0":"#b8b29b";c.fillRect(xx,yy,T+.5,T+.5);
   for(let j=0;j<3;j++)A.line(c,[[xx+3,yy+10+j*14],[xx+16,yy+7+j*14],[xx+35,yy+11+j*14],[xx+47,yy+7+j*14]],b===W.B.WINTER?"#93aeb7":"#8d8e7b",1.2);
  }
+ if(t===TT.PARK){
+  // Park lawns have broad soft planting beds and little leaf-shadow variation.
+  for(let j=0;j<3;j++){
+   const px=xx+W.hash(x,y,1101+j)*T,py=yy+W.hash(x,y,1111+j)*T;
+   A.ellipse(c,px,py,8+W.hash(x,y,1121+j)*10,4+W.hash(x,y,1131+j)*5,j===1?"#547a4a18":"#e5edc32a");
+  }
+  if(h>.68){
+   const fx=xx+8+W.hash(x,y,1141)*32,fy=yy+8+W.hash(x,y,1151)*32;
+   for(let j=0;j<7;j++){const a=j*Math.PI*2/7;A.ellipse(c,fx+Math.cos(a)*4,fy+Math.sin(a)*4,2.3,2.8,j%2?"#e8a9b6":"#f0d78d");}
+   A.ellipse(c,fx,fy,2,2,"#bd9858");
+  }
+ }
+ if(t===TT.PLAZA){
+  // Irregular stone setts create public squares without a visible tile grid.
+  for(let row=0;row<4;row++)for(let col=0;col<4;col++){
+   const px=xx+col*12+(row%2)*5+W.hash(x+col,y+row,1161)*2;
+   const py=yy+row*12+W.hash(x+col,y+row,1171)*2;
+   A.rounded(c,px,py,9+W.hash(x+col,y+row,1181)*2,8,1,
+    W.hash(x+col,y+row,1191)>.5?"#f0dfbf40":"#887e6a22","#6f705d18",.5);
+  }
+ }
  if(district===W.D.METRO&&[TT.ROAD,TT.PATH,TT.PLAZA,TT.GRASS].includes(t)){
   c.fillStyle=t===TT.GRASS?"#acb09a":"#c1c0a8";c.fillRect(xx,yy,T+.5,T+.5);
   for(let row=0;row<3;row++)for(let col=0;col<3;col++){
