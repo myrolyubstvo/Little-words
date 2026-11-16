@@ -117,6 +117,45 @@ function topDownBuilding(c,b){
 }
 A.buildingMetrics=b=>({width:b.w*T+24,height:b.h*T+24,base:(b.y+b.h)*T+3});
 A.building=function(c,b){topDownBuilding(c,b);};
+function topDownScenic(c,l){
+ const x=l.x*T,y=l.y*T,w=l.w*T,h=l.h*T,cx=x+w/2,cy=y+h/2;
+ A.ellipse(c,cx+5,cy+9,w*.46,h*.42,"#34483a35");
+ if(l.kind==="lighthouse"){
+  const r=Math.min(w,h)*.36;
+  A.ellipse(c,cx,cy,r+12,r+12,"#b7a17c","#74634f",2);
+  A.ellipse(c,cx,cy,r+5,r+5,"#f0e4c7","#8a7458",2);
+  A.ellipse(c,cx,cy,r*.82,r*.82,"#b96655","#754e43",2);
+  A.ellipse(c,cx,cy,r*.62,r*.62,"#f0d7a5","#795d4b",2);
+  A.ellipse(c,cx,cy,r*.39,r*.39,"#78a99c","#4d746d",2);
+  A.ellipse(c,cx,cy,r*.2,r*.2,"#f5e5b7","#6c5b49",1.4);
+  for(let j=0;j<8;j++){const a=j*Math.PI/4,ix=cx+Math.cos(a)*r*.68,iy=cy+Math.sin(a)*r*.68,ox=cx+Math.cos(a)*(r+10),oy=cy+Math.sin(a)*(r+10);A.line(c,[[ix,iy],[ox,oy]],"#fff0b27a",2);}
+  for(let j=0;j<4;j++){const a=j*Math.PI/2;A.ellipse(c,cx+Math.cos(a)*r*.9,cy+Math.sin(a)*r*.9,4,4,"#6d8b68","#f1dfbd",1);}
+ }else if(l.kind==="harbour"){
+  const dockX=x+w*.12,dockY=y+h*.35,dockW=w*.76,dockH=h*.5;
+  A.rounded(c,dockX+5,dockY+6,dockW,dockH,7,"#5d4e3d45");
+  A.rounded(c,dockX,dockY,dockW,dockH,6,"#a9875e","#735d46",2);
+  for(let yy=dockY+8;yy<dockY+dockH-4;yy+=13)A.line(c,[[dockX+5,yy],[dockX+dockW-5,yy]],"#70583e99",1.5);
+  for(let xx=dockX+12;xx<dockX+dockW-6;xx+=27)A.line(c,[[xx,dockY+4],[xx,dockY+dockH-4]],"#e3c3976b",1);
+  for(let j=0;j<4;j++){
+   const px=dockX+15+j*(dockW-30)/3;
+   A.rounded(c,px,dockY-8,8,dockH+16,3,"#8e714f","#624e3e",1);
+   A.ellipse(c,px+4,dockY-8,5,3,"#d2b78d");
+   A.ellipse(c,px+4,dockY+dockH+8,5,3,"#d2b78d");
+  }
+  for(let j=0;j<3;j++)A.object(c,{x:l.x+1+j*2.4,y:l.y+1,kind:"boat",biome:W.B.COAST,variant:j});
+  for(let j=0;j<3;j++)A.object(c,{x:l.x+1+j*2.4,y:l.y+l.h-1,kind:"boat",biome:W.B.COAST,variant:j+1});
+  A.object(c,{x:l.x+1,y:l.y+l.h-2,kind:"crate",biome:W.B.COAST});
+ }else{
+  A.rounded(c,x+5,y+5,w-10,h-10,Math.min(18,w*.12),"#e9cc96","#c2a477",1.5);
+  for(let j=0;j<5;j++){
+   const px=x+w*(.16+j*.16),py=y+h*(.28+(j%2)*.36);
+   A.object(c,{x:px/T-.5,y:py/T-.5,kind:"umbrella",biome:W.B.COAST,variant:j});
+   A.object(c,{x:px/T-.1,y:(py+34)/T-.5,kind:"lounger",biome:W.B.COAST,variant:j});
+  }
+  for(let j=0;j<7;j++)A.object(c,{x:l.x+.6+j*1.1,y:l.y+l.h-.8,kind:"shell",biome:W.B.COAST,variant:j});
+ }
+}
+A.scenic=topDownScenic;
 A.object=function(c,o){
  if(!["warmLamp","flowerbed","fairyLights"].includes(o.kind)){oldObject(c,o);return;}
  const key=o.kind+":"+(o.variant%3),x=o.x*T+T/2+(o.ox||0),y=o.y*T+T/2+(o.oy||0);let can=decorCache.get(key);
