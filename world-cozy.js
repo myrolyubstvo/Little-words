@@ -15,9 +15,9 @@ function topDownBuilding(c,b){
  const x=b.x*T+5,y=b.y*T+5,w=Math.max(42,b.w*T-10),h=Math.max(42,b.h*T-10);
  const seed=W.hash(b.id,b.x,b.y),kind=b.kind||"house",biome=b.biome||0;
  const palette=roofSets[biome]||roofSets[0],base=palette[seed>.72?1:0],edge=palette[2],light=palette[3];
- const commercial=["cafe","restaurant","shop","bakery","market","bookshop","cinema","theatre"].includes(kind);
- const civic=["hospital","clinic","school","library","museum","townhall","station","church"].includes(kind);
- const rural=["farm","barn","greenhouse"].includes(kind);
+ const commercial=["cafe","restaurant","shop","bakery","market","bookshop","cinema","theatre","gelateria","teahouse","florist","recordshop","workshop"].includes(kind);
+ const civic=["hospital","clinic","pharmacy","firestation","postoffice","school","university","library","museum","townhall","station","church","chapel"].includes(kind);
+ const rural=["farm","barn","greenhouse","watermill","windmill"].includes(kind);
  const flat=civic||["skyscraper","apartment","hotel","office","factory"].includes(kind)||seed>.58;
  c.save();
  // A genuine overhead footprint: ground shadow, perimeter walls and roof plane.
@@ -76,6 +76,42 @@ function topDownBuilding(c,b){
    A.rounded(c,x+w*.31,y+h*.3,w*.38,h*.36,5,civic?"#c8b995":"#8e9a87","#665b4b88",1);
    A.rounded(c,x+w*.35,y+h*.34,w*.3,h*.28,3,civic?"#e6d6b5":"#aab99a",null);
   }
+ }
+ // Landmark and civic roof plans carry readable silhouettes at normal zoom.
+ const cx=x+w/2,cy=y+h/2;
+ if(kind==="chapel"){
+  const r=Math.min(w,h)*.23;
+  A.ellipse(c,cx,cy,r+7,r+7,"#b9a17c",edge,2);
+  A.ellipse(c,cx,cy,r,r,"#d9c7a0","#79654d",1.5);
+  A.ellipse(c,cx,cy,r*.65,r*.65,"#a67a5d","#715740",1.2);
+  A.line(c,[[cx,cy-r*.4],[cx,cy+r*.4]],"#f1e4c8",3);
+  A.line(c,[[cx-r*.4,cy],[cx+r*.4,cy]],"#f1e4c8",3);
+ }else if(kind==="hospital"||kind==="clinic"){
+  const arm=Math.min(15,w*.12,h*.12);
+  A.rounded(c,cx-arm/2,cy-arm*1.8,arm,arm*3.6,2,"#e7e2d2","#8b8373",.8);
+  A.rounded(c,cx-arm*1.8,cy-arm/2,arm*3.6,arm,2,"#e7e2d2","#8b8373",.8);
+  A.rounded(c,cx-arm*.28,cy-arm*.28,arm*.56,arm*.56,1,"#b85f55",null);
+ }else if(kind==="station"){
+  for(let j=0;j<3;j++){
+   const yy=y+h*(.24+j*.25);
+   A.rounded(c,x+w*.13,yy,w*.74,h*.13,3,j===1?"#b7c7bd":"#d3c3a2","#746d5b",1);
+   A.line(c,[[x+w*.17,yy+h*.065],[x+w*.83,yy+h*.065]],"#6d7770",1.3);
+  }
+ }else if(kind==="hotel"){
+  const pw=Math.min(w*.32,44),ph=Math.min(h*.23,28);
+  A.rounded(c,x+w*.12,y+h*.16,pw,ph,5,"#6eaaa7","#e5d7b8",1.2);
+  A.line(c,[[x+w*.12+4,y+h*.16+ph*.5],[x+w*.12+pw-4,y+h*.16+ph*.5]],"#d8f1e5",1);
+ }else if(kind==="windmill"){
+  const blade=Math.min(w,h)*.32;
+  A.ellipse(c,cx,cy,Math.max(8,blade*.18),Math.max(8,blade*.18),"#b18b68",edge,1.2);
+  for(let j=0;j<4;j++){const a=j*Math.PI/2+.35,ex=cx+Math.cos(a)*blade,ey=cy+Math.sin(a)*blade;A.line(c,[[cx,cy],[ex,ey]],"#e6d5b3",4);A.ellipse(c,ex,ey,3,3,"#8d6d50");}
+ }else if(kind==="watermill"){
+  const wx=x+w*.8,wy=y+h*.54,r=Math.min(w,h)*.19;
+  A.ellipse(c,wx,wy,r+4,r+4,"#7daaa0","#705d49",2);
+  A.ellipse(c,wx,wy,r*.55,r*.55,"#c3a078","#705d49",1.2);
+  for(let j=0;j<8;j++){const a=j*Math.PI/4;A.line(c,[[wx,wy],[wx+Math.cos(a)*r,wy+Math.sin(a)*r]],"#725c46",2.4);}
+ }else if(kind==="farm"||kind==="barn"){
+  for(let j=0;j<3;j++){const px=x+w*(.22+j*.25),py=y+h*.72;A.ellipse(c,px,py,Math.min(7,w*.07),Math.min(5,h*.08),j%2?"#c7a45f":"#d7b66d","#92764e",.8);}
  }
  // Individual rooftop equipment, solar panels, skylights and gardens.
  const unitW=Math.max(10,Math.min(21,w*.16)),unitH=Math.max(9,Math.min(17,h*.15));
