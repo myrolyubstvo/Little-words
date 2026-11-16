@@ -189,7 +189,7 @@ function doorFor(b){
   [b.x-1,b.y+Math.floor(b.h/2)],[b.x+b.w,b.y+Math.floor(b.h/2)]
  ];
  for(const [cx,cy] of candidates){
-  for(let oy=-7;oy<=7;oy++)for(let ox=-7;ox<=7;ox++){
+  for(let oy=-14;oy<=14;oy++)for(let ox=-14;ox<=14;ox++){
    const x=cx+ox,y=cy+oy;
    if(!isStreet(x,y))continue;
    const dist=Math.abs(ox)+Math.abs(oy);
