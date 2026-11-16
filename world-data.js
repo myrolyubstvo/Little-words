@@ -120,7 +120,7 @@ const routes=[
 function stampRoad(x,y,r,kind){
  for(let yy=Math.floor(y-r-1);yy<=Math.ceil(y+r+1);yy++)for(let xx=Math.floor(x-r-1);xx<=Math.ceil(x+r+1);xx++){
   if(!inBounds(xx,yy)||Math.hypot(xx-x,yy-y)>r+.2)continue;
-  const k=coord(xx,yy);if(shoreDistance[k]>0)continue;
+  const k=coord(xx,yy);if(shoreDistance[k]>0||terrain[k]===TERRAIN.WATER)continue;
   const old=terrain[k];terrain[k]=old===TERRAIN.RIVER?TERRAIN.BRIDGE:old===TERRAIN.PLAZA?old:kind;
  }
 }
