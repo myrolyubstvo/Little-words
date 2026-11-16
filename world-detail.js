@@ -91,9 +91,10 @@ A.tile=function(c,x,y){
  }
  if(district===W.D.METRO&&[TT.ROAD,TT.PATH,TT.PLAZA,TT.GRASS].includes(t)){
   c.fillStyle=t===TT.GRASS?"#acb09a":"#c1c0a8";c.fillRect(xx,yy,T+.5,T+.5);
-  for(let row=0;row<3;row++)for(let col=0;col<3;col++){
-   const color=["#b1baa540","#e2d2a44d","#829f9c40","#a7a29333"][Math.floor(W.hash(x+col,y+row,938)*4)];
-   A.rounded(c,xx+col*16+.5,yy+row*16+.5,15,15,1,color,"#7b80642b",.65);
+  for(let j=0;j<4;j++){
+   const px=xx+W.hash(x,y,938+j)*T,py=yy+W.hash(x,y,948+j)*T;
+   A.ellipse(c,px,py,5+W.hash(x,y,958+j)*8,2+W.hash(x,y,968+j)*4,
+    ["#b1baa526","#e2d2a42d","#829f9c22","#a7a29320"][j]);
   }
   if(h>.65)A.path(c,[[xx+5,yy+30],[xx+16,yy+22],[xx+28,yy+24],[xx+37,yy+39],[xx+14,yy+43]],"#627c4d23",null);
   if(h>.88)A.line(c,[[xx+4,yy+8],[xx+14,yy+14],[xx+17,yy+25],[xx+31,yy+29]],"#626a5945",.8);
@@ -114,8 +115,10 @@ function roadTexture(c,color,metro){
  const key=color+metro;if(roadTextures.has(key))return roadTextures.get(key);
  const can=document.createElement("canvas");can.width=can.height=96;const cc=can.getContext("2d");cc.fillStyle=color;cc.fillRect(0,0,96,96);
  for(let j=0;j<60;j++){const x=W.hash(j,950,1)*96,y=W.hash(j,950,2)*96;A.ellipse(cc,x,y,j%4===0?1.5:.5,.45,j%3?"#6e6e4d13":"#fff2d52b");}
- if(metro){for(let y=0;y<96;y+=16)for(let x=0;x<96;x+=24)A.rounded(cc,x+.5+(y%32?8:0),y+.5,23,15,1,"#fff0c608","#72816a27",.7);}
- else for(let j=0;j<5;j++){const x=W.hash(j,951,1)*78,y=W.hash(j,951,2)*86;A.path(cc,[[x,y],[x+8,y-1],[x+12,y+3],[x+2,y+5]],"#e8d4ab2b",null);}
+ if(metro){
+  for(let j=0;j<24;j++){const x=W.hash(j,951,1)*92,y=W.hash(j,951,2)*92,r=2+W.hash(j,951,3)*5;A.path(cc,[[x-r,y],[x-r*.4,y-r*.65],[x+r*.8,y-r*.4],[x+r,y+r*.3],[x-r*.2,y+r*.65]],j%3?"#fff0c60c":"#6e76671a",null);}
+  for(let j=0;j<8;j++){const x=W.hash(j,952,1)*88,y=W.hash(j,952,2)*88;A.line(cc,[[x,y],[x+3+W.hash(j,952,3)*8,y-1],[x+7,y+2]],"#69726525",.8);}
+ }else for(let j=0;j<5;j++){const x=W.hash(j,951,1)*78,y=W.hash(j,951,2)*86;A.path(cc,[[x,y],[x+8,y-1],[x+12,y+3],[x+2,y+5]],"#e8d4ab2b",null);}
  const pattern=c.createPattern(can,"repeat");roadTextures.set(key,pattern);return pattern;
 }
 A.roadSurface=function(c,view){
