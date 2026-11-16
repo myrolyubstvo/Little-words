@@ -112,6 +112,27 @@ function topDownBuilding(c,b){
   for(let j=0;j<8;j++){const a=j*Math.PI/4;A.line(c,[[wx,wy],[wx+Math.cos(a)*r,wy+Math.sin(a)*r]],"#725c46",2.4);}
  }else if(kind==="farm"||kind==="barn"){
   for(let j=0;j<3;j++){const px=x+w*(.22+j*.25),py=y+h*.72;A.ellipse(c,px,py,Math.min(7,w*.07),Math.min(5,h*.08),j%2?"#c7a45f":"#d7b66d","#92764e",.8);}
+ }else if(kind==="skyscraper"){
+  const r=Math.min(w,h)*.2;
+  A.ellipse(c,cx,cy,r+4,r+4,"#75847e","#4f5c56",1.5);
+  A.ellipse(c,cx,cy,r-3,r-3,"#9da99a","#e4e0c9",1);
+  A.line(c,[[cx-r*.35,cy],[cx+r*.35,cy]],"#f6f1d9",3);
+  A.line(c,[[cx,cy-r*.35],[cx,cy+r*.35]],"#f6f1d9",3);
+ }else if(kind==="university"||kind==="school"){
+  A.rounded(c,x+w*.23,y+h*.23,w*.54,h*.54,5,"#6f936f","#d6c59f",1.5);
+  A.rounded(c,x+w*.3,y+h*.3,w*.4,h*.4,3,"#9db58a","#e8d8b8",1);
+  for(let j=0;j<4;j++)A.ellipse(c,x+w*(.34+j*.1),y+h*.5,2.5,3,j%2?"#e7b5a4":"#e9d28c");
+ }else if(kind==="firestation"){
+  for(let j=0;j<3;j++){
+   const yy=y+h*(.26+j*.22);
+   A.rounded(c,x+w*.14,yy,w*.72,h*.12,2,j===1?"#bd765f":"#d0b79a","#765a4c",1);
+   A.line(c,[[x+w*.2,yy+h*.06],[x+w*.8,yy+h*.06]],"#f0d6b0",1.5);
+  }
+ }else if(kind==="library"){
+  const r=Math.min(w,h)*.2;
+  A.ellipse(c,cx,cy,r+5,r+5,"#8a9a8c","#5d6e62",1.5);
+  A.ellipse(c,cx,cy,r,r,"#b7d0c1","#e8e1c7",1);
+  A.ellipse(c,cx,cy,r*.45,r*.45,"#e7d9b8","#8a7658",1);
  }
  // Individual rooftop equipment, solar panels, skylights and gardens.
  const unitW=Math.max(10,Math.min(21,w*.16)),unitH=Math.max(9,Math.min(17,h*.15));
