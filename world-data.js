@@ -196,7 +196,7 @@ function doorFor(b){
    if(dist<bestD){bestD=dist;best={x,y};}
   }
  }
- return best||{x:b.x+Math.floor(b.w/2),y:b.y+b.h};
+ return best||closestWalkable(b.x+Math.floor(b.w/2),b.y+b.h,true)||{x:b.x+Math.floor(b.w/2),y:b.y+b.h};
 }
 const landmarkSeeds=[
  ["Clocktower Square","clock",151,150,11,10,"A civic square with a famous clock tower and fountain."],
