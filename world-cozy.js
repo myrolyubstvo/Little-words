@@ -5,11 +5,44 @@ const A=window.LWArt,W=window.LWWorldData,T=W.T,INK="#655640";
 const oldBuilding=A.building,oldObject=A.object,oldMetrics=A.buildingMetrics;
 const decorCache=new Map();
 A.buildingMetrics=b=>b.designId?{width:b.w*T+14,height:b.kind==="skyscraper"?270+b.artFrame*14:b.h*T+70,base:(b.y+b.h)*T-3}:oldMetrics(b);
+function roofFinish(c,b,m,x){
+ // Subtle overhead roof detail: the city remains genuinely top-down, not a tilted façade view.
+ const left=x-m.width*.39,top=m.base-m.height*.82,width=m.width*.78,height=m.height*.66;
+ const seed=W.hash(b.id,Math.floor(b.x),Math.floor(b.y));
+ c.save();
+ c.beginPath();c.roundRect(left,top,width,height,Math.min(13,width*.06));c.clip();
+ // Fine, broken roof courses give each roof texture without imposing a visible square grid.
+ const gap=Math.max(9,Math.min(17,width/13));
+ for(let row=0;row<height;row+=gap){
+  const yy=top+row+4;
+  A.line(c,[[left+5,yy],[left+width-5,yy]],row%2?"#fff1d01b":"#59493618",1);
+  const offset=row%2?gap*.45:0;
+  for(let xx=left+offset+8;xx<left+width-5;xx+=gap*1.55){
+   const skip=W.hash(b.id,Math.round(xx),row+73);
+   if(skip>.28)A.line(c,[[xx,yy+1],[xx+gap*.48,yy+1]],"#604d3820",.8);
+  }
+ }
+ // A few roof fittings, placed deterministically so repeated visits never change the layout.
+ const fitX=left+width*(.2+W.hash(b.id,7,4)*.58);
+ const fitY=top+height*(.22+W.hash(b.id,8,5)*.48);
+ const fittingW=Math.max(8,Math.min(18,width*.11));
+ A.rounded(c,fitX,fitY,fittingW,fittingW*.72,2,"#6d786d70","#514a3c55",.8);
+ A.line(c,[[fitX+2,fitY+2],[fitX+fittingW-2,fitY+2]],"#f4e5c36b",.8);
+ if(b.id%3===0){
+  const cx=left+width*(.69+W.hash(b.id,9,6)*.12),cy=top+height*(.16+W.hash(b.id,10,7)*.2);
+  A.rounded(c,cx,cy,Math.max(9,width*.09),Math.max(8,height*.1),2,"#9a795c","#594b3d99",1);
+  A.line(c,[[cx+2,cy+2],[cx+Math.max(9,width*.09)-2,cy+2]],"#e8cba17a",1);
+ }
+ c.restore();
+ // A quiet roof-edge highlight separates neighbouring buildings at a glance.
+ c.save();c.strokeStyle="#fff1d02b";c.lineWidth=1.2;c.beginPath();c.roundRect(left+1,top+1,width-2,height-2,Math.min(13,width*.06));c.stroke();c.restore();
+}
 A.building=function(c,b){
  if(!b.designId){oldBuilding(c,b);return;}
  const m=A.buildingMetrics(b),x=(b.x+b.w/2)*T;
  A.shadow(c,x,m.base,m.width*.84);
- if(!A.sprite(c,b.artGroup,b.artFrame,x,m.base,m.width,m.height))oldBuilding(c,b);
+ if(!A.sprite(c,b.artGroup,b.artFrame,x,m.base,m.width,m.height)){oldBuilding(c,b);return;}
+ roofFinish(c,b,m,x);
 };
 A.object=function(c,o){
  if(!["warmLamp","flowerbed","fairyLights"].includes(o.kind)){oldObject(c,o);return;}
