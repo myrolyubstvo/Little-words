@@ -23,6 +23,31 @@ A.tile=function(c,x,y){
  const k=W.coord(x,y),stored=W.terrain[k],under=[TT.ROAD,TT.PATH].includes(stored)?W.baseTerrain[k]:stored;
  const t=under===TT.RIVER?TT.GRASS:under,b=W.biomes[k],district=W.districts[k],xx=x*T,yy=y*T,h=W.hash(x,y,911);
  original.tile(c,x,y,t);
+ // Rich, irregular surface detail breaks the flat tile appearance without drawing grid borders.
+ if([TT.GRASS,TT.PARK,TT.MEADOW,TT.SAND].includes(t)){
+  const warm=b===W.B.AUTUMN||b===W.B.COAST,green=b===W.B.WINTER?"#e9f0e7":"#54734d";
+  for(let j=0;j<5;j++){
+   const px=xx+W.hash(x,y,960+j)*T,py=yy+W.hash(x,y,970+j)*T;
+   const rx=4+W.hash(x,y,980+j)*11,ry=2+W.hash(x,y,990+j)*5;
+   A.ellipse(c,px,py,rx,ry,t===TT.SAND?"#b88e5c20":warm?"#f4e3b51e":"#e9f0c51e");
+   if(t!==TT.SAND&&j<4){
+    A.line(c,[[px-2,py+3],[px-4,py-2],[px,py+1],[px+3,py-4]],green+"85",1);
+   }
+  }
+  if(t!==TT.SAND&&h>.38){
+   const fx=xx+10+W.hash(x,y,1001)*28,fy=yy+9+W.hash(x,y,1002)*29;
+   for(let j=0;j<5;j++){
+    const a=j*Math.PI*2/5;
+    A.ellipse(c,fx+Math.cos(a)*3.5,fy+Math.sin(a)*3.5,2.1,2.4,b===W.B.SPRING?"#e8a9bd":j%2?"#f3d88d":"#f4e9ce");
+   }
+   A.ellipse(c,fx,fy,1.7,1.7,"#c59c59");
+  }
+ }else if(t===TT.WATER||t===TT.RIVER){
+  for(let j=0;j<3;j++){
+   const px=xx+W.hash(x,y,1011+j)*T,py=yy+W.hash(x,y,1021+j)*T;
+   A.line(c,[[px-7,py],[px-2,py-1],[px+5,py]],"#e0f3e977",1.2);
+  }
+ }
  if(t===TT.FIELD||t===TT.ORCHARD){
   const f=W.fieldAt(x,y);c.fillStyle=t===TT.ORCHARD?"#9daf76":"#bba16e";c.fillRect(xx,yy,T+.5,T+.5);
   if(f){
@@ -76,16 +101,37 @@ A.roadSurface=function(c,view){
  const segments=[];
  for(const [width,points] of W.routes)for(let i=0;i<points.length-1;i++){
   const p0=points[Math.max(0,i-1)],p1=points[i],p2=points[i+1],p3=points[Math.min(points.length-1,i+2)],radius=Math.max(.58,width)*T+13;
-  if(!inView([p0,p1,p2,p3],radius,view))continue;
+  if(!inView([p0,p1,p2,p3],radius+20,view))continue;
   const px=Math.max(0,Math.min(W.N-1,Math.round(p1[0]))),py=Math.max(0,Math.min(W.N-1,Math.round(p1[1]))),k=W.coord(px,py);
-  segments.push({p0,p1,p2,p3,radius,cold:W.biomes[k]===W.B.WINTER,metro:W.districts[k]===W.D.METRO,trail:width<1.2});
+  segments.push({p0,p1,p2,p3,radius,cold:W.biomes[k]===W.B.WINTER,metro:W.districts[k]===W.D.METRO,trail:width<1.2,major:width>1.45});
  }
  c.save();c.lineCap="round";c.lineJoin="round";
- // Paint all rims first, then their union, so junctions do not show overlapping end circles.
- for(let pass=0;pass<2;pass++)for(const s of segments){
+ // Soft verge, stone curb and road bed create layered edges rather than a single flat stripe.
+ for(const pass of [0,1,2])for(const s of segments){
   curve(c,s.p0,s.p1,s.p2,s.p3);
-  c.strokeStyle=pass===0?s.cold?"#b4c8c6":s.metro?"#929d88":"#a9a276":roadTexture(c,s.cold?"#dbe3db":s.metro?"#c4c2a9":s.trail?"#d8c096":"#e2c69f",s.metro);
-  c.lineWidth=s.radius*2+(pass===0?3:0);c.stroke();
+  if(pass===0){
+   c.strokeStyle=s.metro?"#7e8d83":"#899778";
+   c.lineWidth=s.radius*2+25;
+  }else if(pass===1){
+   c.strokeStyle=pass===1?(s.cold?"#b7c7c4":s.metro?"#777f70":"#a38d70"):"#000";
+   c.lineWidth=s.radius*2+7;
+  }else{
+   c.strokeStyle=roadTexture(c,s.cold?"#dbe3db":s.metro?"#c4c2a9":s.trail?"#d8c096":"#e2c69f",s.metro);
+   c.lineWidth=s.radius*2;
+  }
+  c.stroke();
+ }
+ // Fine centre markings only on wider streets; paths and village lanes stay unmarked.
+ for(const s of segments)if(s.major&&s.metro){
+  curve(c,s.p0,s.p1,s.p2,s.p3);
+  c.strokeStyle="#f4e8c080";c.lineWidth=1.8;c.setLineDash([10,13]);c.stroke();c.setLineDash([]);
+ }
+ // Crosswalk bars near junctions give the town centre a readable, finished street language.
+ for(const s of segments)if(s.major&&s.metro&&W.hash(Math.round(s.p1[0]*10),Math.round(s.p1[1]*10),1051)>.76){
+  const x=s.p1[0]*T+T/2,y=s.p1[1]*T+T/2;
+  c.save();c.translate(x,y);c.rotate(Math.atan2(s.p2[1]-s.p1[1],s.p2[0]-s.p1[0]));
+  for(let j=-3;j<=3;j++)A.rounded(c,-5,j*7,10,4,1,"#f4e8c0a8");
+  c.restore();
  }
  c.restore();
 };
