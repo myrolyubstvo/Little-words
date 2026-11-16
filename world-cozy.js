@@ -2,53 +2,98 @@
 (()=>{
 "use strict";
 const A=window.LWArt,W=window.LWWorldData,T=W.T,INK="#655640";
-const oldBuilding=A.building,oldObject=A.object,oldMetrics=A.buildingMetrics;
+const oldObject=A.object,oldMetrics=A.buildingMetrics;
 const decorCache=new Map();
-A.buildingMetrics=b=>b.designId?{width:b.w*T+14,height:b.kind==="skyscraper"?270+b.artFrame*14:b.h*T+70,base:(b.y+b.h)*T-3}:oldMetrics(b);
-function roofFinish(c,b,m,x){
- // Distinct, clearly readable overhead roof treatments; all details stay in the roof plane.
- const left=x-m.width*.43,top=m.base-m.height*.91,width=m.width*.86,height=m.height*.79;
- const seed=W.hash(b.id,Math.floor(b.x),Math.floor(b.y));
- const radius=Math.min(15,width*.075);
+const roofSets=[
+ ["#b66e55","#d9946d","#774b40","#f0c69b"],
+ ["#a75e55","#d78c70","#6d4744","#f3c9a7"],
+ ["#8e6654","#bd9475","#59483f","#ead0a8"],
+ ["#87999a","#b6c9c7","#526b70","#eef1e4"],
+ ["#a66b55","#d69b72","#68483e","#f2d1a4"]
+];
+function topDownBuilding(c,b){
+ const x=b.x*T+5,y=b.y*T+5,w=Math.max(42,b.w*T-10),h=Math.max(42,b.h*T-10);
+ const seed=W.hash(b.id,b.x,b.y),kind=b.kind||"house",biome=b.biome||0;
+ const palette=roofSets[biome]||roofSets[0],base=palette[seed>.72?1:0],edge=palette[2],light=palette[3];
+ const commercial=["cafe","restaurant","shop","bakery","market","bookshop","cinema","theatre"].includes(kind);
+ const civic=["hospital","clinic","school","library","museum","townhall","station","church"].includes(kind);
+ const rural=["farm","barn","greenhouse"].includes(kind);
+ const flat=civic||["skyscraper","apartment","hotel","office","factory"].includes(kind)||seed>.58;
  c.save();
- c.beginPath();c.roundRect(left,top,width,height,radius);c.clip();
- // Base roof wash and a clear perimeter make the roof silhouette legible at normal zoom.
- c.fillStyle=b.biome===3?"#657a7c":b.biome===2?"#8b594b":b.biome===1?"#9a6655":b.biome===4?"#8c7770":"#925c4c";
- c.globalAlpha=.16;c.fillRect(left,top,width,height);c.globalAlpha=1;
- c.strokeStyle="#f7e4c27a";c.lineWidth=2.2;c.strokeRect(left+2,top+2,width-4,height-4);
- // Roof courses are now deliberately visible rather than nearly transparent.
- const gap=Math.max(13,Math.min(21,width/9));
- for(let row=gap;row<height-gap/2;row+=gap){
-  const yy=top+row;
-  c.strokeStyle=row%2?"#f8dfb16b":"#493a315c";c.lineWidth=1.7;
-  c.beginPath();c.moveTo(left+5,yy);c.lineTo(left+width-5,yy);c.stroke();
-  const shift=row%2?gap*.48:0;
-  for(let xx=left+shift+8;xx<left+width-7;xx+=gap*1.45){
-   c.strokeStyle="#f4d9ad66";c.lineWidth=1.2;
-   c.beginPath();c.moveTo(xx,yy+2);c.lineTo(xx+gap*.62,yy+2);c.stroke();
+ // A genuine overhead footprint: ground shadow, perimeter walls and roof plane.
+ A.rounded(c,x+5,y+8,w,h,Math.min(12,w*.09), "#34433a35");
+ A.rounded(c,x,y,w,h,Math.min(10,w*.08),edge,"#493f36",1.8);
+ const inset=4;
+ A.rounded(c,x+inset,y+inset,w-inset*2,h-inset*2,Math.min(8,w*.06),base,"#f4d7ad88",1);
+ // Fine material texture changes with the building type instead of one generic roof overlay.
+ if(rural&&kind==="greenhouse"){
+  A.rounded(c,x+8,y+8,w-16,h-16,4,"#8db9a4","#526e62",1.4);
+  for(let xx=x+15;xx<x+w-8;xx+=Math.max(12,w/7))A.line(c,[[xx,y+9],[xx,y+h-9]],"#e6f1d7c9",2);
+  for(let yy=y+17;yy<y+h-8;yy+=Math.max(12,h/6))A.line(c,[[x+9,yy],[x+w-9,yy]],"#e6f1d78c",1.5);
+  for(let j=0;j<Math.min(6,Math.floor((w-20)/18));j++){const px=x+15+j*18;A.ellipse(c,px,y+h*.52,4,7,j%2?"#5c956b":"#77a87b");}
+ }else if(!flat){
+  const vertical=(seed>.5);
+  const ridge=vertical?x+w*(.43+seed*.14):y+h*(.43+seed*.14);
+  if(vertical){
+   A.rounded(c,x+7,y+7,w*.42-5,h-14,3,base,null);
+   A.rounded(c,x+w*.5,y+7,w*.42-5,h-14,3,seed>.4?palette[1]:base,null);
+   for(let yy=y+12;yy<y+h-8;yy+=11){A.line(c,[[x+7,yy],[x+w-7,yy]],"#f8dcb46b",1.2);A.line(c,[[x+7,yy+2],[x+w-7,yy+2]],"#533d3430",.8);}
+   A.line(c,[[ridge,y+7],[ridge,y+h-7]],edge,3);
+   A.line(c,[[ridge-2,y+8],[ridge-2,y+h-8]],light,1);
+  }else{
+   for(let yy=y+7;yy<y+h-7;yy+=11){A.line(c,[[x+8,yy],[x+w-8,yy]],"#f8dcb46b",1.2);A.line(c,[[x+8,yy+2],[x+w-8,yy+2]],"#533d3430",.8);}
+   A.line(c,[[x+7,ridge],[x+w-7,ridge]],edge,3);
+   A.line(c,[[x+8,ridge-2],[x+w-8,ridge-2]],light,1);
+  }
+ }else{
+  // Flat commercial and civic roofs have parapets, roof machinery and varied surfaces.
+  A.rounded(c,x+8,y+8,w-16,h-16,4,seed>.48?"#9d9b83":"#b3a58d","#665b4b99",1);
+  for(let yy=y+15;yy<y+h-12;yy+=18)A.line(c,[[x+10,yy],[x+w-10,yy]],"#f4e1c54c",1);
+  if(w>105&&h>105){
+   A.rounded(c,x+w*.31,y+h*.3,w*.38,h*.36,5,civic?"#c8b995":"#8e9a87","#665b4b88",1);
+   A.rounded(c,x+w*.35,y+h*.34,w*.3,h*.28,3,civic?"#e6d6b5":"#aab99a",null);
   }
  }
- // Each property gets a small, deterministic rooftop feature: skylight, vent or planted roof patch.
- const fx=left+width*(.2+seed*.45),fy=top+height*(.27+W.hash(b.id,8,5)*.36);
- const fw=Math.max(13,Math.min(26,width*.17)),fh=Math.max(10,Math.min(19,height*.13));
- c.fillStyle="#514b43b8";c.beginPath();c.roundRect(fx,fy,fw,fh,3);c.fill();
- c.fillStyle="#b9d2c5";c.beginPath();c.roundRect(fx+2,fy+2,fw-4,fh-4,2);c.fill();
- c.strokeStyle="#fff4d6";c.lineWidth=1.3;c.strokeRect(fx+2,fy+2,fw-4,fh-4);
- if(b.id%3===0){
-  const gx=left+width*.62,gy=top+height*.64,gw=Math.max(17,width*.2),gh=Math.max(12,height*.12);
-  c.fillStyle="#547653";c.beginPath();c.roundRect(gx,gy,gw,gh,4);c.fill();
-  for(let j=0;j<5;j++){c.fillStyle=j%2?"#e9b7a0":"#f3d78d";c.beginPath();c.arc(gx+4+j*(gw-8)/4,gy+gh*.5,2.2,0,Math.PI*2);c.fill();}
+ // Individual rooftop equipment, solar panels, skylights and gardens.
+ const unitW=Math.max(10,Math.min(21,w*.16)),unitH=Math.max(9,Math.min(17,h*.15));
+ const ux=x+w*(.18+W.hash(b.id,4,9)*.42),uy=y+h*(.17+W.hash(b.id,5,8)*.48);
+ if(flat){
+  A.rounded(c,ux+2,uy+3,unitW,unitH,2,"#4a4b46a8");
+  A.rounded(c,ux,uy,unitW,unitH,2,"#b8c8bd","#5f716b",1);
+  A.line(c,[[ux+3,uy+3],[ux+unitW-3,uy+3]],"#fff3d6",1);
+ }else{
+  const cw=Math.max(12,Math.min(24,w*.2)),ch=Math.max(10,Math.min(19,h*.17));
+  A.rounded(c,ux,uy,cw,ch,2,"#526b68","#4b4a40",1);
+  A.rounded(c,ux+2,uy+2,cw-4,ch-4,1,"#b8d0c4","#f2e7c6",.7);
  }
+ if(b.id%4===0&&w>75&&h>70){
+  const sx=x+w*.59,sy=y+h*.2,pw=Math.min(w*.27,42),ph=Math.min(h*.28,38);
+  A.rounded(c,sx,sy,pw,ph,2,"#385f69","#d2d8c2",1);
+  for(let j=1;j<3;j++)A.line(c,[[sx+j*pw/3,sy+2],[sx+j*pw/3,sy+ph-2]],"#b7d6d0a8",.8);
+  A.line(c,[[sx+2,sy+ph/2],[sx+pw-2,sy+ph/2]],"#b7d6d0a8",.8);
+ }
+ if((b.id%5===0||kind==="cafe"||kind==="hotel")&&w>85&&h>75){
+  const gx=x+w*.57,gy=y+h*.59,gw=Math.min(w*.34,52),gh=Math.min(h*.25,34);
+  A.rounded(c,gx,gy,gw,gh,4,"#557b56","#d4c39b",1);
+  for(let j=0;j<5;j++){const px=gx+5+j*(gw-10)/4;A.ellipse(c,px,gy+gh*.48,3.1,3.7,j%2?"#e8b4a4":"#f2d58c");}
+  A.ellipse(c,gx+gw*.5,gy+gh*.5,4,4,"#b9c9a1");
+ }
+ if(commercial&&w>75){
+  // Awnings/terrace elements are shown as overhead stripes beside the roof, not as a façade.
+  const awnY=y+h-13;
+  for(let j=0;j<Math.min(7,Math.floor((w-16)/12));j++){
+   const ax=x+9+j*12;
+   A.rounded(c,ax,awnY,9,5,1,j%2?"#f0d6b1":"#b76f60",null);
+  }
+ }
+ if(biome===3){A.ellipse(c,x+w*.82,y+h*.17,Math.min(10,w*.1),3,"#f6ffffc9");A.ellipse(c,x+w*.18,y+h*.82,Math.min(8,w*.08),2.5,"#f6ffffa8");}
+ // Strong inset roofline and tiny corner highlights separate every footprint at normal zoom.
+ A.rounded(c,x+1.5,y+1.5,w-3,h-3,Math.min(8,w*.06), "rgba(0,0,0,0)","#f8e8c5b8",1.2);
+ A.ellipse(c,x+8,y+8,2,2,"#fff0d9");A.ellipse(c,x+w-8,y+8,2,2,"#fff0d9");
  c.restore();
- c.save();c.strokeStyle="#fff0d08c";c.lineWidth=1.6;c.beginPath();c.roundRect(left+1,top+1,width-2,height-2,radius);c.stroke();c.restore();
 }
-A.building=function(c,b){
- if(!b.designId){oldBuilding(c,b);return;}
- const m=A.buildingMetrics(b),x=(b.x+b.w/2)*T;
- A.shadow(c,x,m.base,m.width*.84);
- if(!A.sprite(c,b.artGroup,b.artFrame,x,m.base,m.width,m.height)){oldBuilding(c,b);return;}
- roofFinish(c,b,m,x);
-};
+A.buildingMetrics=b=>({width:b.w*T+24,height:b.h*T+24,base:(b.y+b.h)*T+3});
+A.building=function(c,b){topDownBuilding(c,b);};
 A.object=function(c,o){
  if(!["warmLamp","flowerbed","fairyLights"].includes(o.kind)){oldObject(c,o);return;}
  const key=o.kind+":"+(o.variant%3),x=o.x*T+T/2+(o.ox||0),y=o.y*T+T/2+(o.oy||0);let can=decorCache.get(key);
