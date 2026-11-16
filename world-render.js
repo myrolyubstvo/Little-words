@@ -78,15 +78,59 @@ function keepAt(world,x,y,zoom=camera.zoom,rotation=camera.rotation){
 }
 function bounds(){const corners=[[0,0],[screen.w,0],[0,screen.h],[screen.w,screen.h]].map(([x,y])=>worldAt(x,y));return{x0:Math.min(...corners.map(p=>p.x))-160,y0:Math.min(...corners.map(p=>p.y))-180,x1:Math.max(...corners.map(p=>p.x))+160,y1:Math.max(...corners.map(p=>p.y))+180};}
 function visibleRadius(){return Math.hypot(screen.w,screen.h)/camera.zoom*.55;}
+function smoothGround(c,cx,cy){
+ // Rasterise a continuous colour field at quarter-tile resolution. Terrain
+ // boundaries are interpolated between cell centres instead of painted as
+ // 48px rectangles, eliminating the visible checkerboard/tile seams.
+ const scale=4,side=CP/scale,can=document.createElement("canvas");
+ can.width=can.height=side;
+ const cc=can.getContext("2d"),img=cc.createImageData(side,side),data=img.data;
+ const hexCache=new Map();
+ function rgb(hex){
+  if(hexCache.has(hex))return hexCache.get(hex);
+  const h=hex.replace("#","");const v=[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];
+  hexCache.set(hex,v);return v;
+ }
+ function sample(ix,iy){
+  ix=Math.max(0,Math.min(w.N-1,ix));iy=Math.max(0,Math.min(w.N-1,iy));
+  const k=w.coord(ix,iy),stored=w.terrain[k];
+  let t=stored;
+  if(t===TT.ROAD||t===TT.PATH)t=w.baseTerrain[k];
+  const x=ix*T+T/2,y=iy*T+T/2,sea=w.shoreAt(x/T,y/T);
+  if(sea>0)t=TT.WATER;
+  else if(sea>-.95&&t!==TT.WATER&&t!==TT.RIVER)t=TT.SAND;
+  return rgb(A.groundColor(t,w.biomes[k]));
+ }
+ for(let py=0;py<side;py++)for(let px=0;px<side;px++){
+  const wx=(cx*CP+px*scale)/T-.5,wy=(cy*CP+py*scale)/T-.5;
+  const x0=Math.floor(wx),y0=Math.floor(wy),fx=wx-x0,fy=wy-y0;
+  const a=sample(x0,y0),b=sample(x0+1,y0),d=sample(x0,y0+1),e=sample(x0+1,y0+1);
+  const idx=(py*side+px)*4;
+  for(let q=0;q<3;q++){
+   const top=a[q]+(b[q]-a[q])*fx,bot=d[q]+(e[q]-d[q])*fx;
+   let value=top+(bot-top)*fy;
+   const noise=(w.hash(cx*side+px,cy*side+py,733)-.5)*2.1;
+   value=Math.max(0,Math.min(255,value+noise));
+   data[idx+q]=value;
+  }
+  data[idx+3]=255;
+ }
+ cc.putImageData(img,0,0);
+ c.drawImage(can,cx*CP,cy*CP,CP,CP);
+}
 function chunk(cx,cy){
  const key=cx+","+cy;if(cache.has(key)){const can=cache.get(key);cache.delete(key);cache.set(key,can);return can;}
  const can=document.createElement("canvas");can.width=can.height=CP;
- const c=can.getContext("2d",{alpha:false});c.fillStyle="#64aaa5";c.fillRect(0,0,CP,CP);c.translate(-cx*CP,-cy*CP);
- for(let y=cy*CH;y<Math.min(w.N,(cy+1)*CH);y++)for(let x=cx*CH;x<Math.min(w.N,(cx+1)*CH);x++)A.tile(c,x,y);
+ const c=can.getContext("2d",{alpha:false});
+ c.fillStyle="#64aaa5";c.fillRect(0,0,CP,CP);
+ c.translate(-cx*CP,-cy*CP);
+ smoothGround(c,cx,cy);
  const view={x0:cx*CP,y0:cy*CP,x1:(cx+1)*CP,y1:(cy+1)*CP};
  A.riverSurface(c,view);A.roadSurface(c,view);
- for(let y=cy*CH;y<Math.min(w.N,(cy+1)*CH);y++)for(let x=cx*CH;x<Math.min(w.N,(cx+1)*CH);x++){if(w.terrain[w.coord(x,y)]===TT.BRIDGE)A.bridge(c,x,y);A.streetMarks(c,x,y);}
- // Include approaches in every intersecting chunk to prevent seams across chunk borders.
+ for(let y=cy*CH;y<Math.min(w.N,(cy+1)*CH);y++)for(let x=cx*CH;x<Math.min(w.N,(cx+1)*CH);x++){
+  if(w.terrain[w.coord(x,y)]===TT.BRIDGE)A.bridge(c,x,y);
+  A.streetMarks(c,x,y);
+ }
  const group=buckets.get(key)||[];
  for(const n of group)if(n.type==="building")A.decal(c,n.item);
  cache.set(key,can);if(cache.size>CACHE_LIMIT)cache.delete(cache.keys().next().value);return can;
