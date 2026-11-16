@@ -14,7 +14,12 @@ const roofSets=[
 function topDownBuilding(c,b){
  const x=b.x*T+5,y=b.y*T+5,w=Math.max(42,b.w*T-10),h=Math.max(42,b.h*T-10);
  const seed=W.hash(b.id,b.x,b.y),kind=b.kind||"house",biome=b.biome||0;
- const palette=roofSets[biome]||roofSets[0],base=palette[seed>.72?1:0],edge=palette[2],light=palette[3];
+ const palette=roofSets[biome]||roofSets[0],architecture=(b.architecture||"").toLowerCase();
+ const base=architecture.includes("limestone")||architecture.includes("stone")?"#b8b3a2":
+  architecture.includes("timber")?"#a96e50":architecture.includes("copper")?"#87988b":
+  civic?(seed>.5?"#c0b7a4":"#a7a89a"):rural?(seed>.5?"#b58a59":"#a56b4d"):
+  commercial?(seed>.5?palette[1]:"#a96d59"):palette[seed>.72?1:0];
+ const edge=palette[2],light=palette[3];
  const commercial=["cafe","restaurant","shop","bakery","market","bookshop","cinema","theatre","gelateria","teahouse","florist","recordshop","workshop"].includes(kind);
  const civic=["hospital","clinic","pharmacy","firestation","postoffice","school","university","library","museum","townhall","station","church","chapel"].includes(kind);
  const rural=["farm","barn","greenhouse","watermill","windmill"].includes(kind);
@@ -70,7 +75,7 @@ function topDownBuilding(c,b){
   }
  }else{
   // Flat commercial and civic roofs have parapets, roof machinery and varied surfaces.
-  A.rounded(c,x+8,y+8,w-16,h-16,4,seed>.48?"#9d9b83":"#b3a58d","#665b4b99",1);
+  A.rounded(c,x+8,y+8,w-16,h-16,4,civic?"#bcb6a5":commercial?"#ad9277":seed>.48?"#9d9b83":"#b3a58d","#665b4b99",1);
   for(let yy=y+15;yy<y+h-12;yy+=18)A.line(c,[[x+10,yy],[x+w-10,yy]],"#f4e1c54c",1);
   if(w>105&&h>105){
    A.rounded(c,x+w*.31,y+h*.3,w*.38,h*.36,5,civic?"#c8b995":"#8e9a87","#665b4b88",1);
