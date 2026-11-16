@@ -211,7 +211,13 @@ const landmarkSeeds=[
  ["La Rambla Market","market",115,161,10,7,"Lively pedestrian arcades, produce markets and little bakeries."],
  ["Snowbell Square","lodge",162,244,8,7,"Pines, white paths and a cosy mountain inn."],
  ["Petal Gardens","greenhouse",244,230,9,8,"Spring flowers, fountains and soft pink blossom."],
- ["Sunset Lighthouse","lighthouse",277,112,6,7,"A lighthouse overlooking the warm eastern shore."]
+ ["Sunset Lighthouse","lighthouse",277,112,6,7,"A lighthouse overlooking the warm eastern shore."],
+ ["Willowmere Gardens","greenhouse",177,132,11,9,"A botanical garden of winding paths, glasshouses, rose beds and quiet fountains."],
+ ["The Old Watermill","mill",83,220,9,8,"A restored riverside mill beside a little stone bridge and flower meadow."],
+ ["Grand Central Station","station",205,82,12,9,"A grand railway station with a broad forecourt, clock and busy platforms."],
+ ["Sunflower Farm","farm",54,252,10,8,"A family farm surrounded by golden fields, orchards and country lanes."],
+ ["Seaglass Pier","harbour",294,188,10,8,"A wooden pier with fishing boats, seaside cafés and views across the bay."],
+ ["Rosewater Baths","greenhouse",254,224,9,8,"A warm glass-roofed bathhouse set among Mediterranean gardens."]
 ];
 function findBuildingPlot(x,y,w,h,allowPlaza=false){
  for(let radius=0;radius<=35;radius++){
@@ -343,6 +349,21 @@ for(let y=3;y<N-3;y+=2){
   else if(r<dense+.23)objects.push({x,y,kind:"flowers",biome:biomes[k]});
   else if(r<dense+.27)objects.push({x,y,kind:"stone",biome:biomes[k]});
  }
+}
+// Hand-placed focal details give the parks and squares recognisable centres.
+const focalDecor=[
+ [77,74,"fountain"],[101,45,"fountain"],[119,91,"fruitstall"],
+ [53,33,"bench"],[30,75,"lantern"],[88,119,"bench"],
+ [145,118,"planter"],[77,78,"bench"],[104,48,"flowers"],
+ [120,94,"boat"],[90,34,"flowers"],[25,79,"bench"]
+];
+for(const [ox,oy,kind] of focalDecor){
+ const x=Math.round(ox*layoutScale),y=Math.round(oy*layoutScale);
+ if(!inBounds(x,y)||occupied[coord(x,y)]>=0)continue;
+ const k=coord(x,y),t=terrain[k];
+ if(t===TERRAIN.WATER||t===TERRAIN.RIVER)continue;
+ for(let i=objects.length-1;i>=0;i--)if(Math.hypot(objects[i].x-x,objects[i].y-y)<1.35)objects.splice(i,1);
+ objects.push({x,y,kind,biome:biomes[k],variant:hash(x,y,887)*4|0});
 }
 // Regional street dressing stays outside building footprints and leaves routes open.
 // Decorative objects never alter collision or pathfinding.
