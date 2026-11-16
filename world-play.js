@@ -116,7 +116,7 @@ const hairs=["#473832","#805946","#c19a68","#302e35","#a16b44"];
 const skins=["#e4b28e","#9a7155","#efc9a5","#bd9071"];
 // Keep the arrival neighbourhood busy, with crowds at landmarks and across town.
 // Spread residents across distinct tiles so they are visible as individuals.
-const spawnCells=new Set(),npcCount=240;
+const spawnCells=new Set(),npcCount=300;
 function spawnNear(cx,cy,radius,i){
  const angle=W.hash(i,36,14)*Math.PI*2,distance=Math.sqrt(W.hash(i,57,15))*radius;
  return W.closestWalkable(cx+Math.cos(angle)*distance,cy+Math.sin(angle)*distance,true);
