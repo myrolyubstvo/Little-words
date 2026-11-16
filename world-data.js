@@ -213,7 +213,7 @@ const landmarkSeeds=[
  ["Petal Gardens","greenhouse",244,230,9,8,"Spring flowers, fountains and soft pink blossom."],
  ["Sunset Lighthouse","lighthouse",277,112,6,7,"A lighthouse overlooking the warm eastern shore."],
  ["Willowmere Gardens","greenhouse",177,132,11,9,"A botanical garden of winding paths, glasshouses, rose beds and quiet fountains."],
- ["The Old Watermill","mill",83,220,9,8,"A restored riverside mill beside a little stone bridge and flower meadow."],
+ ["The Old Watermill","watermill",83,220,9,8,"A restored riverside mill beside a little stone bridge and flower meadow."],
  ["Grand Central Station","station",205,116,12,9,"A grand railway station with a broad forecourt, clock and busy platforms."],
  ["Sunflower Farm","farm",54,252,10,8,"A family farm surrounded by golden fields, orchards and country lanes."],
  ["Seaglass Pier","harbour",294,188,10,8,"A wooden pier with fishing boats, seaside cafés and views across the bay."],
