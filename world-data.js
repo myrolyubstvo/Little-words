@@ -1,5 +1,4 @@
-/* Little Worlds: Wish & Wander — real, editable top-down game-world data.
-   Pocket 80x80 world: exactly half the previous width and half the previous height.
+/* Little Worlds: Wish & Wander — expanded, editable 112x112 top-down island.
    Terrain, streets, buildings, landmarks, collision and paths are independent
    of any concept illustration. Deterministically generated for reproducibility. */
 (() => {
