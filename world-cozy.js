@@ -14,15 +14,15 @@ const roofSets=[
 function topDownBuilding(c,b){
  const x=b.x*T+5,y=b.y*T+5,w=Math.max(42,b.w*T-10),h=Math.max(42,b.h*T-10);
  const seed=W.hash(b.id,b.x,b.y),kind=b.kind||"house",biome=b.biome||0;
+ const commercial=["cafe","restaurant","shop","bakery","market","bookshop","cinema","theatre","gelateria","teahouse","florist","recordshop","workshop"].includes(kind);
+ const civic=["hospital","clinic","pharmacy","firestation","postoffice","school","university","library","museum","townhall","station","church","chapel"].includes(kind);
+ const rural=["farm","barn","greenhouse","watermill","windmill"].includes(kind);
  const palette=roofSets[biome]||roofSets[0],architecture=(b.architecture||"").toLowerCase();
  const base=architecture.includes("limestone")||architecture.includes("stone")?"#b8b3a2":
   architecture.includes("timber")?"#a96e50":architecture.includes("copper")?"#87988b":
   civic?(seed>.5?"#c0b7a4":"#a7a89a"):rural?(seed>.5?"#b58a59":"#a56b4d"):
   commercial?(seed>.5?palette[1]:"#a96d59"):palette[seed>.72?1:0];
  const edge=palette[2],light=palette[3];
- const commercial=["cafe","restaurant","shop","bakery","market","bookshop","cinema","theatre","gelateria","teahouse","florist","recordshop","workshop"].includes(kind);
- const civic=["hospital","clinic","pharmacy","firestation","postoffice","school","university","library","museum","townhall","station","church","chapel"].includes(kind);
- const rural=["farm","barn","greenhouse","watermill","windmill"].includes(kind);
  const flat=civic||["skyscraper","apartment","hotel","office","factory"].includes(kind)||seed>.58;
  c.save();
  // A genuine overhead footprint: ground shadow, perimeter walls and roof plane.
