@@ -6,36 +6,41 @@ const oldBuilding=A.building,oldObject=A.object,oldMetrics=A.buildingMetrics;
 const decorCache=new Map();
 A.buildingMetrics=b=>b.designId?{width:b.w*T+14,height:b.kind==="skyscraper"?270+b.artFrame*14:b.h*T+70,base:(b.y+b.h)*T-3}:oldMetrics(b);
 function roofFinish(c,b,m,x){
- // Subtle overhead roof detail: the city remains genuinely top-down, not a tilted façade view.
- const left=x-m.width*.39,top=m.base-m.height*.82,width=m.width*.78,height=m.height*.66;
+ // Distinct, clearly readable overhead roof treatments; all details stay in the roof plane.
+ const left=x-m.width*.43,top=m.base-m.height*.91,width=m.width*.86,height=m.height*.79;
  const seed=W.hash(b.id,Math.floor(b.x),Math.floor(b.y));
+ const radius=Math.min(15,width*.075);
  c.save();
- c.beginPath();c.roundRect(left,top,width,height,Math.min(13,width*.06));c.clip();
- // Fine, broken roof courses give each roof texture without imposing a visible square grid.
- const gap=Math.max(9,Math.min(17,width/13));
- for(let row=0;row<height;row+=gap){
-  const yy=top+row+4;
-  A.line(c,[[left+5,yy],[left+width-5,yy]],row%2?"#fff1d01b":"#59493618",1);
-  const offset=row%2?gap*.45:0;
-  for(let xx=left+offset+8;xx<left+width-5;xx+=gap*1.55){
-   const skip=W.hash(b.id,Math.round(xx),row+73);
-   if(skip>.28)A.line(c,[[xx,yy+1],[xx+gap*.48,yy+1]],"#604d3820",.8);
+ c.beginPath();c.roundRect(left,top,width,height,radius);c.clip();
+ // Base roof wash and a clear perimeter make the roof silhouette legible at normal zoom.
+ c.fillStyle=b.biome===3?"#657a7c":b.biome===2?"#8b594b":b.biome===1?"#9a6655":b.biome===4?"#8c7770":"#925c4c";
+ c.globalAlpha=.16;c.fillRect(left,top,width,height);c.globalAlpha=1;
+ c.strokeStyle="#f7e4c27a";c.lineWidth=2.2;c.strokeRect(left+2,top+2,width-4,height-4);
+ // Roof courses are now deliberately visible rather than nearly transparent.
+ const gap=Math.max(13,Math.min(21,width/9));
+ for(let row=gap;row<height-gap/2;row+=gap){
+  const yy=top+row;
+  c.strokeStyle=row%2?"#f8dfb16b":"#493a315c";c.lineWidth=1.7;
+  c.beginPath();c.moveTo(left+5,yy);c.lineTo(left+width-5,yy);c.stroke();
+  const shift=row%2?gap*.48:0;
+  for(let xx=left+shift+8;xx<left+width-7;xx+=gap*1.45){
+   c.strokeStyle="#f4d9ad66";c.lineWidth=1.2;
+   c.beginPath();c.moveTo(xx,yy+2);c.lineTo(xx+gap*.62,yy+2);c.stroke();
   }
  }
- // A few roof fittings, placed deterministically so repeated visits never change the layout.
- const fitX=left+width*(.2+W.hash(b.id,7,4)*.58);
- const fitY=top+height*(.22+W.hash(b.id,8,5)*.48);
- const fittingW=Math.max(8,Math.min(18,width*.11));
- A.rounded(c,fitX,fitY,fittingW,fittingW*.72,2,"#6d786d70","#514a3c55",.8);
- A.line(c,[[fitX+2,fitY+2],[fitX+fittingW-2,fitY+2]],"#f4e5c36b",.8);
+ // Each property gets a small, deterministic rooftop feature: skylight, vent or planted roof patch.
+ const fx=left+width*(.2+seed*.45),fy=top+height*(.27+W.hash(b.id,8,5)*.36);
+ const fw=Math.max(13,Math.min(26,width*.17)),fh=Math.max(10,Math.min(19,height*.13));
+ c.fillStyle="#514b43b8";c.beginPath();c.roundRect(fx,fy,fw,fh,3);c.fill();
+ c.fillStyle="#b9d2c5";c.beginPath();c.roundRect(fx+2,fy+2,fw-4,fh-4,2);c.fill();
+ c.strokeStyle="#fff4d6";c.lineWidth=1.3;c.strokeRect(fx+2,fy+2,fw-4,fh-4);
  if(b.id%3===0){
-  const cx=left+width*(.69+W.hash(b.id,9,6)*.12),cy=top+height*(.16+W.hash(b.id,10,7)*.2);
-  A.rounded(c,cx,cy,Math.max(9,width*.09),Math.max(8,height*.1),2,"#9a795c","#594b3d99",1);
-  A.line(c,[[cx+2,cy+2],[cx+Math.max(9,width*.09)-2,cy+2]],"#e8cba17a",1);
+  const gx=left+width*.62,gy=top+height*.64,gw=Math.max(17,width*.2),gh=Math.max(12,height*.12);
+  c.fillStyle="#547653";c.beginPath();c.roundRect(gx,gy,gw,gh,4);c.fill();
+  for(let j=0;j<5;j++){c.fillStyle=j%2?"#e9b7a0":"#f3d78d";c.beginPath();c.arc(gx+4+j*(gw-8)/4,gy+gh*.5,2.2,0,Math.PI*2);c.fill();}
  }
  c.restore();
- // A quiet roof-edge highlight separates neighbouring buildings at a glance.
- c.save();c.strokeStyle="#fff1d02b";c.lineWidth=1.2;c.beginPath();c.roundRect(left+1,top+1,width-2,height-2,Math.min(13,width*.06));c.stroke();c.restore();
+ c.save();c.strokeStyle="#fff0d08c";c.lineWidth=1.6;c.beginPath();c.roundRect(left+1,top+1,width-2,height-2,radius);c.stroke();c.restore();
 }
 A.building=function(c,b){
  if(!b.designId){oldBuilding(c,b);return;}
