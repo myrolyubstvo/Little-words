@@ -4,7 +4,7 @@
    of any concept illustration. Deterministically generated for reproducibility. */
 (() => {
 "use strict";
-const N=80, T=48, LENGTH=N*N, designScale=N/320,layoutScale=N/160;
+const N=112, T=48, LENGTH=N*N, designScale=N/320,layoutScale=N/160;
 const TERRAIN={GRASS:0,ROAD:1,SAND:2,WATER:3,PARK:4,RIVER:5,BRIDGE:6,PLAZA:7,PATH:8,FIELD:9,ORCHARD:10,CLIFF:11,MEADOW:12};
 const B={SUMMER:0,SPRING:1,AUTUMN:2,WINTER:3,COAST:4};
 const terrain=new Uint8Array(LENGTH), biomes=new Uint8Array(LENGTH);
@@ -70,6 +70,30 @@ for(let y=0;y<N;y++)for(let x=0;x<N;x++){
  }
  terrain[k]=t;
 }
+// Distinct green rooms are sculpted into the island before the street network is laid.
+const parkPatches=[
+ [77,74,11,8,-.25],[101,45,8,7,.42],[119,91,7,5,-.35],
+ [53,33,7,8,.2],[30,75,7,10,-.18],[88,119,9,5,.3],[145,118,5,7,.4]
+];
+for(const [cx,cy,rx,ry,angle] of parkPatches){
+ const c=Math.cos(angle),sn=Math.sin(angle);
+ for(let y=Math.max(0,Math.floor((cy-ry-2)*layoutScale));y<Math.min(N,Math.ceil((cy+ry+2)*layoutScale));y++)
+ for(let x=Math.max(0,Math.floor((cx-rx-2)*layoutScale));x<Math.min(N,Math.ceil((cx+rx+2)*layoutScale));x++){
+  const k=coord(x,y),t=terrain[k],ox=x/layoutScale-cx,oy=y/layoutScale-cy;
+  const u=ox*c+oy*sn,v=-ox*sn+oy*c,edge=(u/rx)**2+(v/ry)**2;
+  if(edge<.82&&[TERRAIN.GRASS,TERRAIN.PARK,TERRAIN.MEADOW].includes(t))terrain[k]=TERRAIN.PARK;
+  else if(edge<1.08&&t===TERRAIN.GRASS&&hash(x,y,126)>.48)terrain[k]=TERRAIN.MEADOW;
+ }
+}
+const lakes=[[91,34,3.6,2.5],[25,79,3.1,2.4],[119,112,2.8,2.2]];
+for(const [cx,cy,rx,ry] of lakes){
+ for(let y=Math.max(0,Math.floor((cy-ry-1.5)*layoutScale));y<Math.min(N,Math.ceil((cy+ry+1.5)*layoutScale));y++)
+ for(let x=Math.max(0,Math.floor((cx-rx-1.5)*layoutScale));x<Math.min(N,Math.ceil((cx+rx+1.5)*layoutScale));x++){
+  const k=coord(x,y),ox=x/layoutScale-cx,oy=y/layoutScale-cy,q=(ox/rx)**2+(oy/ry)**2;
+  if(q<1&&terrain[k]!==TERRAIN.WATER&&terrain[k]!==TERRAIN.RIVER)terrain[k]=TERRAIN.WATER;
+  else if(q<1.45&&terrain[k]===TERRAIN.GRASS)terrain[k]=TERRAIN.SAND;
+ }
+}
 const baseTerrain=terrain.slice();
 // Catmull-Rom roads form an uneven connected network instead of a repeating grid.
 const routes=[
@@ -109,6 +133,25 @@ for(const [width,points] of routes)for(let i=0;i<points.length-1;i++){
   stampRoad(value(0),value(1),width,width<1.2?TERRAIN.PATH:TERRAIN.ROAD);
  }
 }
+// Secondary lanes make every district feel like a connected neighbourhood.
+routes.push(
+ [1.05,[[22,30],[35,27],[48,31],[53,33],[59,43],[51,48]]],
+ [.9,[[30,54],[42,58],[51,48],[63,51],[69,65]]],
+ [1.0,[[53,33],[63,39],[72,42],[83,39],[91,32]]],
+ [1.15,[[71,26],[77,35],[88,40],[101,45],[108,59]]],
+ [.9,[[84,62],[92,55],[101,52],[108,59]]],
+ [1.0,[[96,80],[91,91],[96,103],[109,114]]],
+ [.9,[[74,94],[68,101],[63,111],[63,121]]],
+ [1.0,[[47,103],[57,96],[63,84],[69,65]]],
+ [1.1,[[112,83],[116,96],[129,104],[139,103],[145,111]]],
+ [.9,[[125,92],[137,88],[146,92],[151,103]]],
+ [1.0,[[129,119],[140,125],[151,122],[155,112]]],
+ [.85,[[22,110],[34,118],[41,129],[54,132]]],
+ [.9,[[39,90],[31,83],[22,83],[17,91]]],
+ [.85,[[114,45],[128,42],[140,48],[145,58]]],
+ [.9,[[128,69],[139,73],[148,81],[151,92]]],
+ [1.0,[[84,123],[91,137],[103,143],[117,145],[129,139]]]
+);
 // Short farm approaches and an orchard lane connect to the country road.
 for(const f of fields){const road=routes[8][1].reduce((best,p)=>Math.hypot(p[0]-f.x,p[1]-f.y)<Math.hypot(best[0]-f.x,best[1]-f.y)?p:best,routes[8][1][0]);for(let j=0;j<=30;j++)stampRoad(f.x+(road[0]-f.x)*j/30,f.y+(road[1]-f.y)*j/30,.65,TERRAIN.PATH);routes.push([.65,[[f.x,f.y],road]]);}
 for(let y=0;y<N;y++)for(let x=0;x<N;x++){const k=coord(x,y);if([TERRAIN.ROAD,TERRAIN.PLAZA,TERRAIN.PATH,TERRAIN.BRIDGE].includes(terrain[k]))roadCells.push(k);}
@@ -250,7 +293,7 @@ for(const d of [...newDesigns].sort((a,b)=>b.w*b.h-a.w*a.h)){
  designPlacements.push({id:d.id,buildingId:b.id});
 }
 let countryBuildings=0,fillerCount=0;
-for(let i=0;i<5000&&fillerCount<22;i++){
+for(let i=0;i<9000&&fillerCount<58;i++){
  const x=5+Math.floor(hash(i,620,1)*(N-13)),y=5+Math.floor(hash(i,620,2)*(N-13));
  const district=districts[coord(x,y)],w=3+(hash(i,620,3)>.75?1:0),h=3+(hash(i,620,4)>.65?1:0);
  if(!clearFootprint(x,y,w,h))continue;
@@ -264,7 +307,7 @@ for(let i=0;i<5000&&fillerCount<22;i++){
  addNeighbourhoodBuilding(x,y,w,h,kind,name,district===D.COUNTRY?"country":"village");fillerCount++;
 }
 // Small, uneven storefronts fill gaps along the old town lanes and station quarter.
-for(let i=0;i<3500&&fillerCount<28;i++){
+for(let i=0;i<6500&&fillerCount<88;i++){
  const x=8+Math.floor(hash(i,634,1)*(N-18)),y=8+Math.floor(hash(i,634,2)*(N-18)),district=districts[coord(x,y)];
  if(![D.TOWN,D.METRO,D.HARBOUR].includes(district)||!clearFootprint(x,y,2,2))continue;
  const d=doorFor({x,y,w:2,h:2});if(Math.abs(d.x-x-1)+Math.abs(d.y-y-2)>3)continue;
