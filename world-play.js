@@ -28,11 +28,17 @@ overviewButton.addEventListener("click",e=>{
  cam.zoom=Math.min(screen.w,screen.h)/W.SIZE*.94;cam.rotation=0;pop.hidden=true;R.markDirty();
 });
 const placeSelect=document.createElement("select");placeSelect.className="lw-place-select";placeSelect.setAttribute("aria-label","Find a new building");
-const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Find one of 50 new places…";placeSelect.append(placeholder);
-for(const b of W.buildings.filter(b=>b.designId).sort((a,b)=>a.name.localeCompare(b.name))){const option=document.createElement("option");option.value=String(b.id);option.textContent=b.name;placeSelect.append(option);}
+const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Find a building or landmark…";placeSelect.append(placeholder);
+const searchablePlaces=[
+ ...W.buildings.filter(b=>b.designId).map(b=>({key:"b:"+b.id,name:b.name,place:b})),
+ ...W.landmarks.map((b,i)=>({key:"l:"+i,name:b.name,place:b}))
+].sort((a,b)=>a.name.localeCompare(b.name));
+for(const entry of searchablePlaces){const option=document.createElement("option");option.value=entry.key;option.textContent=entry.name;placeSelect.append(option);}
 placeSelect.addEventListener("pointerdown",e=>e.stopPropagation());
 placeSelect.addEventListener("change",()=>{
- if(placeSelect.value==="")return;const b=W.buildings[Number(placeSelect.value)];
+ if(!placeSelect.value)return;
+ const [type,index]=placeSelect.value.split(":"),b=type==="b"?W.buildings[Number(index)]:W.landmarks[Number(index)];
+ if(!b)return;
  player.path=[];cam.x=(b.x+b.w/2)*T;cam.y=(b.y+b.h*.65)*T;cam.zoom=R.initialZoom;cam.rotation=0;pop.hidden=true;R.markDirty();
 });
 regionNav.append(overviewButton,placeSelect,regionLabel);stage.append(regionNav);
