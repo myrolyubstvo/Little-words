@@ -98,7 +98,7 @@ function overviewArt(){
  const c=overview.getContext("2d",{alpha:false}),scale=overview.width/S;c.scale(scale,scale);c.imageSmoothingEnabled=true;
  for(let y=0;y<w.N;y++)for(let x=0;x<w.N;x++){if(Math.abs(w.shoreDistance[w.coord(x,y)])<1.4)A.tile(c,x,y);else{const t=w.terrain[w.coord(x,y)],under=[TT.ROAD,TT.PATH].includes(t)?w.baseTerrain[w.coord(x,y)]:t;c.fillStyle=A.groundColor(under===TT.RIVER?TT.GRASS:under,w.biomes[w.coord(x,y)]);c.fillRect(x*T,y*T,T+.5,T+.5);}}
  A.riverSurface(c);A.roadSurface(c);
- for(const b of w.buildings)A.decal(c,b);
+ for(const b of w.buildings){A.decal(c,b);A.building(c,b);}
  // Tiny ground ornaments are below a pixel here; preserve architecture and tree silhouettes.
  const silhouettes=new Set(["tree","pine","palm","bush","citrus","fountain","fruitstall","terrace"]);
  for(const n of [...nodes].sort((a,b)=>a.depth-b.depth))if(n.type!=="object"||silhouettes.has(n.item.kind))drawNode(c,n);
