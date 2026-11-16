@@ -25,8 +25,31 @@ function topDownBuilding(c,b){
  A.rounded(c,x,y,w,h,Math.min(10,w*.08),edge,"#493f36",1.8);
  const inset=4;
  A.rounded(c,x+inset,y+inset,w-inset*2,h-inset*2,Math.min(8,w*.06),base,"#f4d7ad88",1);
- // Fine material texture changes with the building type instead of one generic roof overlay.
- if(rural&&kind==="greenhouse"){
+ // Signature landmarks have their own unmistakable overhead silhouettes.
+ if(kind==="clock"){
+  const cx=x+w/2,cy=y+h/2,r=Math.min(w,h)*.37;
+  A.ellipse(c,cx+3,cy+5,r+5,r+5,"#3b40343b");
+  A.ellipse(c,cx,cy,r+4,r+4,"#c8b38d",edge,3);
+  A.ellipse(c,cx,cy,r-5,r-5,"#e2d2ac","#78644d",2);
+  A.ellipse(c,cx,cy,r*.72,r*.72,"#a96e55","#765346",2);
+  A.ellipse(c,cx,cy,r*.55,r*.55,"#e8d9b5","#765e4a",1.5);
+  for(let j=0;j<12;j++){const a=j*Math.PI/6,ix=cx+Math.cos(a)*r*.62,iy=cy+Math.sin(a)*r*.62,ox=cx+Math.cos(a)*r*.76,oy=cy+Math.sin(a)*r*.76;A.line(c,[[ix,iy],[ox,oy]],"#6e5945",2);}
+  A.line(c,[[cx,cy],[cx,cy-r*.3]],"#655744",2.5);A.line(c,[[cx,cy],[cx+r*.22,cy+r*.08]],"#655744",2.5);
+ }else if(kind==="pisa"){
+  const cx=x+w/2,cy=y+h/2,r=Math.min(w,h)*.38;
+  A.ellipse(c,cx,cy,r+3,r+3,"#c5a77f",edge,2);
+  A.ellipse(c,cx,cy,r-5,r-5,"#d9c49b","#7b624b",2);
+  for(let j=0;j<4;j++)A.ellipse(c,cx,cy,r-13-j*8,r-13-j*8,"rgba(0,0,0,0)","#8e7457",2);
+  A.ellipse(c,cx,cy,Math.max(8,r*.24),Math.max(8,r*.24),"#9b795a","#6f5944",1.5);
+ }else if(kind==="roman"){
+  const cx=x+w/2,cy=y+h/2,rx=w*.43,ry=h*.36;
+  A.ellipse(c,cx,cy,rx,ry,"#a98564",edge,2.5);
+  A.ellipse(c,cx,cy,rx-8,ry-8,"#d5b58a","#80684e",2);
+  A.ellipse(c,cx,cy,rx*.72,ry*.68,"#a58a68","#80684e",2);
+  A.ellipse(c,cx,cy,rx*.52,ry*.48,"#c7a77e","#80684e",1.5);
+  A.ellipse(c,cx,cy,rx*.28,ry*.27,"#8e785c","#6e5b47",1);
+  for(let j=0;j<24;j++){const a=j*Math.PI/12,px=cx+Math.cos(a)*rx*.85,py=cy+Math.sin(a)*ry*.85;A.ellipse(c,px,py,3.2,3.2,"#e5d1a9","#846d52",.7);}
+ }else if(rural&&kind==="greenhouse"){
   A.rounded(c,x+8,y+8,w-16,h-16,4,"#8db9a4","#526e62",1.4);
   for(let xx=x+15;xx<x+w-8;xx+=Math.max(12,w/7))A.line(c,[[xx,y+9],[xx,y+h-9]],"#e6f1d7c9",2);
   for(let yy=y+17;yy<y+h-8;yy+=Math.max(12,h/6))A.line(c,[[x+9,yy],[x+w-9,yy]],"#e6f1d78c",1.5);
